@@ -17,7 +17,6 @@
 
 	if (navigator.getMedia) {
 
-		// Call the getUserMedia method here
 		video = document.createElement( 'video' );
 		video.autoplay = true;
 
@@ -25,20 +24,23 @@
 
 		video.addEventListener('loadeddata', function readyListener( event ) {
 			
-			check();
+			findVideoSize();
 
-			function check() {
+			function findVideoSize() {
 
 				if(video.videoWidth > 0 && video.videoHeight > 0) {
+
 					init(video.videoWidth, video.videoHeight);
+
 				} else {
 					
 					if(attempts < 10) {
 						attempts++;
-						setTimeout(check, 500);
+						setTimeout(findVideoSize, 500);
 					} else {
 						init(640, 480);
 					}
+
 				}
 			}
 		});
@@ -51,12 +53,12 @@
 			}
 			video.play();
 		}, function (error) {
-			// TODO handle
+			// TODO error ui
 			console.log(error);
 		});
 
 	} else {
-		// TODO handle
+		// TODO error ui
 		console.log('Native device media streaming (getUserMedia) not supported in this browser.');
 	}
 
@@ -70,37 +72,33 @@
 		canvas.height = height;
 		document.body.appendChild(canvas);
 
-		gl = initWebGL(canvas);
+		try {
 
-		if (gl) {
+			gl = initWebGL(canvas);
 			initWebGLBuffers();
 			initTexture();
 			initShaders();
+			
+			document.body.appendChild(video);
 			render();
+
+		} catch(e) {
+			// TODO error ui
+			console.log(e.message);
 		}
 		
-		document.body.appendChild(video);
-
 	}
 
 	function initWebGL(canvas) {
 
 		var gl = null;
 
-		try {
-			gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-			gl.viewportWidth = canvas.width;
-			gl.viewportHeight = canvas.height;
-			
-			gl.enable(gl.DEPTH_TEST);
-			gl.depthFunc(gl.LEQUAL);
+		gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+		gl.viewportWidth = canvas.width;
+		gl.viewportHeight = canvas.height;
 
-		} catch(e) {}
-
-		// If we don't have a GL context, give up now
-		if (!gl) {
-			alert("Unable to initialize WebGL. Your browser may not support it.");
-		}
+		gl.enable(gl.DEPTH_TEST);
+		gl.depthFunc(gl.LEQUAL);
 
 		return gl;
 
@@ -146,7 +144,7 @@
 	function getShader(glContext, id) {
 		var shaderScript = document.getElementById(id);
 		if (!shaderScript) {
-			return null;
+			throw new Error('Shader with id = ' + id + ' could not be found');
 		}
 
 		var str = "";
@@ -164,15 +162,14 @@
 		} else if (shaderScript.type == "x-shader/x-vertex") {
 			shader = glContext.createShader(gl.VERTEX_SHADER);
 		} else {
-			return null;
+			throw new Error('Unrecognised shader type, id = ' + id);
 		}
 
 		glContext.shaderSource(shader, str);
 		glContext.compileShader(shader);
 
 		if (!glContext.getShaderParameter(shader, glContext.COMPILE_STATUS)) {
-			alert(glContext.getShaderInfoLog(shader));
-			return null;
+			throw new Error('Shader could not be compiled\n' + glContext.getShaderInfoLog(shader));
 		}
 
 		return shader;
@@ -189,7 +186,7 @@
 		gl.linkProgram(shaderProgram);
 
 		if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-			alert('Could not initialise shaders');
+			throw new Error('Shaders could not be linked');
 		}
 
 		gl.useProgram(shaderProgram);
@@ -211,8 +208,6 @@
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, video);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-		//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-		//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR_MIPMAP_NEAREST);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 		gl.bindTexture(gl.TEXTURE_2D, null);

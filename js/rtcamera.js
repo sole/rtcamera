@@ -9,7 +9,7 @@
 
 	// ---
 
-	var video;
+	var video = null, webcamStream = null;
 	var gl;
 	var shaderProgram;
 	var vertexPositionBuffer, uvBuffer, mvMatrix, pMatrix;
@@ -23,13 +23,13 @@
 		var attempts = 0;
 
 		video.addEventListener('loadeddata', function readyListener( event ) {
-			
 			findVideoSize();
 
 			function findVideoSize() {
-
+				
 				if(video.videoWidth > 0 && video.videoHeight > 0) {
 
+					video.removeEventListener('loadeddata', readyListener);
 					init(video.videoWidth, video.videoHeight);
 
 				} else {
@@ -51,15 +51,34 @@
 			} else {
 				video.src = window.URL.createObjectURL(stream);
 			}
+			webcamStream = stream;
 			video.play();
 		}, function (error) {
-			// TODO error ui
-			console.log(error);
+			reportError(error);
 		});
 
 	} else {
-		// TODO error ui
-		console.log('Native device media streaming (getUserMedia) not supported in this browser.');
+		reportError('Native device media streaming (getUserMedia) not supported in this browser.');
+	}
+
+	function reportError(message) {
+
+		console.error(message);
+
+		var error = document.createElement('div');
+		error.className = 'error';
+		error.innerHTML = message;
+		document.body.appendChild(error);
+
+		if(webcamStream !== null) {
+			webcamStream.stop();
+		}
+
+		if(video !== null) {
+			video.pause();
+			video.src = null;
+		}
+
 	}
 
 	function init(width, height) {
@@ -71,7 +90,7 @@
 		canvas.width = width;
 		canvas.height = height;
 		document.body.appendChild(canvas);
-
+console.log('init');
 		try {
 
 			gl = initWebGL(canvas);
@@ -83,8 +102,7 @@
 			render();
 
 		} catch(e) {
-			// TODO error ui
-			console.log(e.message);
+			reportError(e.message);
 		}
 		
 	}
@@ -176,7 +194,6 @@
 	}
 
 	function initShaders() {
-
 		var fragmentShader = getShader(gl, 'fs');
 		var vertexShader = getShader(gl, 'vs');
 
@@ -202,7 +219,6 @@
 	}
 
 	function updateTexture(texture, video) {
-		
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, video);
@@ -214,7 +230,6 @@
 	}
 
 	function render() {
-
 		requestAnimationFrame( render );
 
 		if( video.readyState === video.HAVE_ENOUGH_DATA ) {
@@ -229,7 +244,6 @@
 		mat4.ortho(pMatrix, -1, 1, -1, 1, 0.1, 1000);
 		
         mat4.identity(mvMatrix);
-
 		mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -1.0]);
 
 		gl.activeTexture(gl.TEXTURE0);

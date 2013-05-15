@@ -66,8 +66,8 @@
 		console.error(message);
 
 		var error = document.createElement('div');
-		error.className = 'error';
-		error.innerHTML = message;
+		error.className = 'modal error';
+		error.innerHTML = message.replace(/\n/g, '<br />');
 		document.body.appendChild(error);
 
 		if(webcamStream !== null) {
@@ -90,7 +90,7 @@
 		canvas.width = width;
 		canvas.height = height;
 		document.body.appendChild(canvas);
-console.log('init');
+		
 		try {
 
 			gl = initWebGL(canvas);
@@ -98,7 +98,6 @@ console.log('init');
 			initTexture();
 			initShaders();
 			
-			document.body.appendChild(video);
 			render();
 
 		} catch(e) {
@@ -187,14 +186,14 @@ console.log('init');
 		glContext.compileShader(shader);
 
 		if (!glContext.getShaderParameter(shader, glContext.COMPILE_STATUS)) {
-			throw new Error('Shader could not be compiled\n' + glContext.getShaderInfoLog(shader));
+			throw new Error('Shader <strong>' + id + '</strong> could not be compiled\n' + glContext.getShaderInfoLog(shader));
 		}
 
 		return shader;
 	}
 
 	function initShaders() {
-		var fragmentShader = getShader(gl, 'fs');
+		var fragmentShader = getShader(gl, 'fs_bw');
 		var vertexShader = getShader(gl, 'vs');
 
 		shaderProgram = gl.createProgram();
@@ -238,7 +237,6 @@ console.log('init');
 
 		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 		gl.clearColor(1.0, 0.0, 0.0, 1.0);
-		
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 		mat4.ortho(pMatrix, -1, 1, -1, 1, 0.1, 1000);
@@ -258,7 +256,6 @@ console.log('init');
 		
 		gl.uniformMatrix4fv(shaderProgram.projectionMatrixUniform, false, pMatrix);
 		gl.uniformMatrix4fv(shaderProgram.modelViewMatrixUniform, false, mvMatrix);
-
         
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertexPositionBuffer.numItems);
 	}

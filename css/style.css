@@ -1,0 +1,22 @@
+* {
+	margin: 0;
+	padding: 0;
+	-moz-box-sizing: border-box; 
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.modal {
+	display: block;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.error {
+	border: 3px solid red;
+	padding: 2rem;
+	font-family: "Courier New", Courier, Monospace, mono;
+	background: #ffefef;
+}

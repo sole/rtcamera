@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>real time camera</title>
+		<link rel="stylesheet" href="css/style.css" type="text/css" />
 	</head>
 	<body>
 		<script id="vs" type="x-shader/x-vertex">
@@ -20,10 +21,7 @@
 
 				vUv = uv;
 
-				vec4 color = texture2D( map, vUv );
-
 				vec4 pos = vec4( position.xy, 0.0, 1.0 );
-				//vec4 pos = vec4( position.xyz, 1.0 );
 
 				gl_Position = projectionMatrix * modelViewMatrix * pos;
 
@@ -101,7 +99,28 @@
 				finalRGB.b = find_closest(x, y, rgb.b);
 
 				gl_FragColor = vec4(finalRGB, 1.0);
-				//gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);
+			}
+		</script>
+		<script id="fs_bw" type="x-shader/x-fragment">
+			#ifdef GL_ES
+			precision highp float;
+			#endif
+
+			uniform sampler2D map;
+
+			varying vec2 vUv;
+
+			void main() {
+				vec3 finalRGB;
+				vec3 rgb = texture2D(map, vUv).rgb;
+				float numLevels = 4.0;
+
+				rgb = rgb * numLevels;
+				rgb = floor(rgb);
+				rgb = rgb / numLevels;
+
+
+				gl_FragColor = vec4(rgb, 1.0);
 			}
 		</script>
 		<script src="js/libs/glmatrix.min.js"></script>

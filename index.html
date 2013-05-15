@@ -7,6 +7,11 @@
 	<body>
 		<script id="vs" type="x-shader/x-vertex">
 
+			uniform mat4 modelViewMatrix;
+			uniform mat4 projectionMatrix;
+			attribute vec3 position;
+			attribute vec2 uv;
+
 			uniform sampler2D map;
 
 			varying vec2 vUv;
@@ -18,6 +23,7 @@
 				vec4 color = texture2D( map, vUv );
 
 				vec4 pos = vec4( position.xy, 0.0, 1.0 );
+				//vec4 pos = vec4( position.xyz, 1.0 );
 
 				gl_Position = projectionMatrix * modelViewMatrix * pos;
 
@@ -26,6 +32,9 @@
 		</script>
 
 		<script id="fs" type="x-shader/x-fragment">
+			#ifdef GL_ES
+			precision highp float;
+			#endif
 
 			uniform sampler2D map;
 
@@ -92,8 +101,10 @@
 				finalRGB.b = find_closest(x, y, rgb.b);
 
 				gl_FragColor = vec4(finalRGB, 1.0);
+				//gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);
 			}
 		</script>
+		<script src="js/libs/glmatrix.min.js"></script>
 		<script src="js/rtcamera.js"></script>
 	</body>
 </html>

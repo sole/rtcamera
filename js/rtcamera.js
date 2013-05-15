@@ -63,8 +63,6 @@
 
 	function reportError(message) {
 
-		console.error(message);
-
 		var error = document.createElement('div');
 		error.className = 'modal error';
 		error.innerHTML = message.replace(/\n/g, '<br />');

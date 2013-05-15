@@ -66,7 +66,8 @@
 		var error = document.createElement('div');
 		error.className = 'modal error';
 		error.innerHTML = message.replace(/\n/g, '<br />');
-		document.body.appendChild(error);
+		//document.body.appendChild(error);
+		alert(error);
 
 		if(webcamStream !== null) {
 			webcamStream.stop();

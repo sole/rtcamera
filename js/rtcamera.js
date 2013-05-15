@@ -220,6 +220,8 @@
 
 	function render() {
 
+		requestAnimationFrame( render );
+
 		if( video.readyState === video.HAVE_ENOUGH_DATA ) {
 			updateTexture(texture, video);
 		}

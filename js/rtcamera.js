@@ -229,17 +229,11 @@
 		
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-		mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
-		//left, right, bottom, top, near, far
-		//mat4.ortho(pMatrix, -1, 1, -1, 1, 0.1, 1000);
-		var w = gl.viewportWidth,
-			h = gl.viewportHeight;
+		mat4.ortho(-1, 1, -1, 1, 0.1, 1000, pMatrix);
 		
-		//mat4.ortho(pMatrix, -w/2, w/2, -h/2, h/2, 0.1, 1000);
         mat4.identity(mvMatrix);
 
-		//mat4.translate(mvMatrix, [0.0, 0.0, 0.0]);
-		mat4.translate(mvMatrix, [0.0, 0.0, -2.0]);
+		mat4.translate(mvMatrix, [0.0, 0.0, -1.0]);
 
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);

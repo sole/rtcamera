@@ -229,11 +229,11 @@
 		
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-		mat4.ortho(-1, 1, -1, 1, 0.1, 1000, pMatrix);
+		mat4.ortho(pMatrix, -1, 1, -1, 1, 0.1, 1000);
 		
         mat4.identity(mvMatrix);
 
-		mat4.translate(mvMatrix, [0.0, 0.0, -1.0]);
+		mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -1.0]);
 
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);

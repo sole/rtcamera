@@ -11,6 +11,8 @@
 
 	var video = null, webcamStream = null;
 	var gl;
+	var effects = [],
+		activeEffect = null;
 	var shaderProgram;
 	var vertexPositionBuffer, uvBuffer, mvMatrix, pMatrix;
 	var texture;
@@ -94,7 +96,16 @@
 			gl = initWebGL(canvas);
 			initWebGLBuffers();
 			initTexture();
-			initShaders();
+
+			var ditherEffect = new ImageEffect({ vertexShader: 'vs', fragmentShader: 'fs' });
+			var vertexScript = document.getElementById( 'vs' ).textContent,
+				shaderScript = document.getElementById( 'fs' ).textContent;
+
+			effects.push(ditherEffect);
+			activeEffect = ditherEffect;
+
+			ditherEffect.initialise(gl, vertexScript, shaderScript);
+			//initShaders();
 			
 			render();
 
@@ -111,6 +122,9 @@
 		gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
 		gl.viewportWidth = canvas.width;
 		gl.viewportHeight = canvas.height;
+
+		gl.shadersCache = {};
+		console.log(gl.shadersCache);
 
 		gl.enable(gl.DEPTH_TEST);
 		gl.depthFunc(gl.LEQUAL);
@@ -191,7 +205,7 @@
 	}
 
 	function initShaders() {
-		var fragmentShader = getShader(gl, 'fs_bw');
+		var fragmentShader = getShader(gl, 'fs');
 		var vertexShader = getShader(gl, 'vs');
 
 		shaderProgram = gl.createProgram();
@@ -227,6 +241,44 @@
 	}
 
 	function render() {
+		requestAnimationFrame( render );
+
+		if( video.readyState === video.HAVE_ENOUGH_DATA ) {
+			updateTexture(texture, video);
+		}
+
+		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+		gl.clearColor(1.0, 0.0, 0.0, 1.0);
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+		mat4.ortho(pMatrix, -1, 1, -1, 1, 0.1, 1000);
+		
+        mat4.identity(mvMatrix);
+		mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -1.0]);
+
+		activeEffect.enable(gl);
+		
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+
+		gl.uniform1i(activeEffect.uniforms.map.id, 0);
+
+		gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
+		gl.vertexAttribPointer(activeEffect.attributes.uv.id, uvBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+		gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer);
+		gl.vertexAttribPointer(activeEffect.attributes.position.id, vertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+		
+		gl.uniformMatrix4fv(activeEffect.uniforms.projectionMatrix.id, false, pMatrix);
+		gl.uniformMatrix4fv(activeEffect.uniforms.modelViewMatrix.id, false, mvMatrix);
+        
+		gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertexPositionBuffer.numItems);
+
+		activeEffect.disable(gl);
+		
+	}
+
+	function render2() {
 		requestAnimationFrame( render );
 
 		if( video.readyState === video.HAVE_ENOUGH_DATA ) {

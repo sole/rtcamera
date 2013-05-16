@@ -97,15 +97,33 @@
 			initWebGLBuffers();
 			initTexture();
 
-			var ditherEffect = new ImageEffect({ vertexShader: 'vs', fragmentShader: 'fs' });
-			var vertexScript = document.getElementById( 'vs' ).textContent,
-				shaderScript = document.getElementById( 'fs' ).textContent;
+			var vertexCommonScript = document.getElementById('vs_common').textContent,
+				fragmentCommonScript = document.getElementById('fs_common').textContent,
+				vertexScript = document.getElementById( 'vs' ).textContent,
+				fragmentScript = document.getElementById( 'fs' ).textContent;
+
+			vertexScript = vertexCommonScript + vertexScript;
+			fragmentScript = fragmentCommonScript + fragmentScript;
+
+			var ditherEffect = new ImageEffect({
+				vertexShader: vertexScript,
+				fragmentShader: fragmentScript,
+				attributes: {
+					uv: {},
+					position: {}
+				},
+				uniforms: {
+					projectionMatrix: {},
+					modelViewMatrix: {},
+					map: {}
+				}
+			});
 
 			effects.push(ditherEffect);
 			activeEffect = ditherEffect;
 
-			ditherEffect.initialise(gl, vertexScript, shaderScript);
-			//initShaders();
+			ditherEffect.initialise(gl);
+			
 			
 			render();
 

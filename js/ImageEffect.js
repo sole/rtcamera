@@ -3,58 +3,56 @@ ImageEffect = function(params) {
 	params = params || {};
 
 	var self = this;
-	this.vertexShaderFile = params.vertexShader;
-	this.fragmentShaderFile = params.fragmentShader;
+	this.vertexShaderScript = params.vertexShader;
+	this.fragmentShaderScript = params.fragmentShader;
 	this.shaderProgram = null;
 	this.uniforms = params.uniforms || {};
 	this.attributes = params.attributes || {};
 
 	// ~~~
 	
-	function initShader(gl, type, filename, script) {
-		if( gl.shadersCache[ filename ] === undefined ) {
+	function initShader(gl, type, script) {
+		if( gl.shadersCache[ script ] === undefined ) {
 
 			var shader = gl.createShader( type );
 			gl.shaderSource( shader, script );
 			gl.compileShader( shader );
 
 			if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-				throw new Error('Shader <strong>' + filename + '</strong> could not be compiled\n' + gl.getShaderInfoLog(shader));
+				throw new Error('Shader <strong>' + script + '</strong> could not be compiled\n' + gl.getShaderInfoLog(shader));
 			}
 
-			gl.shadersCache[ filename ] = shader;
+			gl.shadersCache[ script ] = shader;
 
 			return shader;
 
 		}
 
-		return gl.shadersCache[ filename ];
+		return gl.shadersCache[ script ];
 
 	}
 
-	function initUniforms(gl, program, keys) {
-		keys.forEach(function(k) {
-			self.uniforms[k] = {};
-			self.uniforms[k].id = gl.getUniformLocation(program, k);
-		});
+	function initUniforms(gl, program, pairs) {
+		for(var k in pairs) {
+			pairs[k].id = gl.getUniformLocation(program, k);
+		}
 	}
 
-	function initAttributes(gl, program, keys) {
-		keys.forEach(function(k) {
-			self.attributes[k] = {};
-			self.attributes[k].id = gl.getAttribLocation(program, k);
-		});
+	function initAttributes(gl, program, pairs) {
+		for(var k in pairs) {
+			pairs[k].id = gl.getAttribLocation(program, k);
+		}
 	}
 
 	// ~~~
 
-	this.initialise = function(gl, vertexScript, fragmentScript) {
+	this.initialise = function(gl) {
 
 		var vertexShader, fragmentShader;
 		var shaderProgram = gl.createProgram();
 
-		vertexShader = initShader(gl, gl.VERTEX_SHADER, this.vertexShaderFile, vertexScript);
-		fragmentShader = initShader(gl, gl.FRAGMENT_SHADER, this.fragmentShaderFile, fragmentScript);
+		vertexShader = initShader(gl, gl.VERTEX_SHADER, this.vertexShaderScript);
+		fragmentShader = initShader(gl, gl.FRAGMENT_SHADER, this.fragmentShaderScript);
 
 		gl.attachShader(shaderProgram, vertexShader);
 		gl.attachShader(shaderProgram, fragmentShader);
@@ -66,8 +64,8 @@ ImageEffect = function(params) {
 
 		gl.useProgram(shaderProgram);
 
-		initUniforms(gl, shaderProgram, ['projectionMatrix', 'modelViewMatrix', 'map']);
-		initAttributes(gl, shaderProgram, ['uv', 'position']);
+		initUniforms(gl, shaderProgram, this.uniforms);
+		initAttributes(gl, shaderProgram, this.attributes);
 
 		this.shaderProgram = shaderProgram;
 

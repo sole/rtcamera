@@ -96,35 +96,8 @@
 			gl = initWebGL(canvas);
 			initWebGLBuffers();
 			initTexture();
-
-			var vertexCommonScript = document.getElementById('vs_common').textContent,
-				fragmentCommonScript = document.getElementById('fs_common').textContent,
-				vertexScript = document.getElementById( 'vs' ).textContent,
-				fragmentScript = document.getElementById( 'fs' ).textContent;
-
-			vertexScript = vertexCommonScript + vertexScript;
-			fragmentScript = fragmentCommonScript + fragmentScript;
-
-			var ditherEffect = new ImageEffect({
-				vertexShader: vertexScript,
-				fragmentShader: fragmentScript,
-				attributes: {
-					uv: {},
-					position: {}
-				},
-				uniforms: {
-					projectionMatrix: {},
-					modelViewMatrix: {},
-					map: {}
-				}
-			});
-
-			effects.push(ditherEffect);
-			activeEffect = ditherEffect;
-
-			ditherEffect.initialise(gl);
-			
-			
+			initEffects(gl);
+		
 			render();
 
 		} catch(e) {
@@ -142,7 +115,6 @@
 		gl.viewportHeight = canvas.height;
 
 		gl.shadersCache = {};
-		console.log(gl.shadersCache);
 
 		gl.enable(gl.DEPTH_TEST);
 		gl.depthFunc(gl.LEQUAL);
@@ -222,6 +194,50 @@
 		return shader;
 	}
 
+	function initEffects(gl) {
+
+		var effectDefs = {
+			'dithering': { vertex: 'vs', fragment: 'fs' },
+			'posterize': { vertex: 'vs', fragment: 'fs_bw' }
+		};
+
+		var vertexCommonScript = document.getElementById('vs_common').textContent,
+			fragmentCommonScript = document.getElementById('fs_common').textContent;
+
+
+		for(var k in effectDefs) {
+			var def = effectDefs[k];
+			
+			var vertexScript = document.getElementById( def.vertex ).textContent,
+				fragmentScript = document.getElementById( def.fragment ).textContent;
+
+			vertexScript = vertexCommonScript + vertexScript;
+			fragmentScript = fragmentCommonScript + fragmentScript;
+
+			var effect = new ImageEffect({
+				vertexShader: vertexScript,
+				fragmentShader: fragmentScript,
+				attributes: {
+					uv: {},
+					position: {}
+				},
+				uniforms: {
+					projectionMatrix: {},
+					modelViewMatrix: {},
+					map: {}
+				}
+			});
+
+			effects.push(effect);
+			effect.initialise(gl);
+
+		}
+
+		activeEffect = effects[1];
+
+	}
+
+
 	function initShaders() {
 		var fragmentShader = getShader(gl, 'fs');
 		var vertexShader = getShader(gl, 'vs');
@@ -295,37 +311,5 @@
 		activeEffect.disable(gl);
 		
 	}
-
-	function render2() {
-		requestAnimationFrame( render );
-
-		if( video.readyState === video.HAVE_ENOUGH_DATA ) {
-			updateTexture(texture, video);
-		}
-
-		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
-		gl.clearColor(1.0, 0.0, 0.0, 1.0);
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-		mat4.ortho(pMatrix, -1, 1, -1, 1, 0.1, 1000);
-		
-        mat4.identity(mvMatrix);
-		mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -1.0]);
-
-		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.uniform1i(shaderProgram.mapUniform, 0);
 	
-		gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
-		gl.vertexAttribPointer(shaderProgram.uvAttribute, uvBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-		gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer);
-		gl.vertexAttribPointer(shaderProgram.positionAttribute, vertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-		
-		gl.uniformMatrix4fv(shaderProgram.projectionMatrixUniform, false, pMatrix);
-		gl.uniformMatrix4fv(shaderProgram.modelViewMatrixUniform, false, mvMatrix);
-        
-		gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertexPositionBuffer.numItems);
-	}
-
 })();

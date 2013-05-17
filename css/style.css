@@ -26,6 +26,9 @@ body {
 		left: 0;
 		width: 100%;
 		text-align: center;
+		padding: 0.5rem 0;
+		background: #000;
+		background: rgba(0, 0, 0, 0.3);
 	}
 
 	#wrapper > canvas {
@@ -34,6 +37,20 @@ body {
 		display: block;
 		margin: 0 auto;
 	}
+
+	#savedImages {
+		position: absolute;
+		right: 0;
+		top: 0;
+		width: 128px;
+		height: 100%;
+		overflow-y: scroll;
+	}
+
+		#savedImages img {
+			width: 100%;
+			height: auto;
+		}
 
 .modal {
 	display: block;

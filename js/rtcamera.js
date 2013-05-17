@@ -17,6 +17,7 @@
 	var shaderProgram;
 	var vertexPositionBuffer, uvBuffer, mvMatrix, pMatrix;
 	var texture;
+	var animatedGIF, gifDelay = 1000, gifMaxLength = 5000, gifRecordStart, recordGIFTimeout = null;
 
 	if (navigator.getMedia) {
 
@@ -284,6 +285,7 @@
 
 	function initUI() {
 		document.getElementById('btn_save').addEventListener('click', saveImage, false);
+		document.getElementById('btn_record').addEventListener('click', recordVideo, false);
 	}
 	
 	function prevEffect() {
@@ -308,23 +310,81 @@
 		return s;
 	}
 
+	function getTimestamp() {
+		var now = new Date();
+		var parts = [
+			now.getFullYear(),
+			pad(now.getMonth()),
+			pad(now.getDate()),
+			'_',
+			pad(now.getHours()),
+			pad(now.getMinutes()),
+			pad(now.getSeconds())
+				];
+
+		var timestamp = parts.join('');
+
+		return timestamp;
+	}
+
 	function saveImage() {
 		canvas.toBlob(function(blob) {
-			var now = new Date();
-			var parts = [
-				now.getFullYear(),
-				pad(now.getMonth()),
-				pad(now.getDate()),
-				'_',
-				pad(now.getHours()),
-				pad(now.getMinutes()),
-				pad(now.getSeconds())
-			];
-			
-			var timestamp = parts.join('');
-
-			saveAs(blob, timestamp + '.png');
+			saveAs(blob, getTimestamp() + '.png');
 		});
+	}
+
+	function recordVideo() {
+		var btn = this;
+	
+		btn.disabled = true;
+		gifRecordStart = Date.now();
+
+		animatedGIF = new Animated_GIF();
+		animatedGIF.setSize(videoWidth, videoHeight);
+		animatedGIF.setDelay(gifDelay);
+		animatedGIF.setRepeat(true);
+		addFrameToGIF();
+	}
+
+	function addFrameToGIF() {
+
+		// TODO this is severely inefficient! Need to optimise this
+		var img = document.createElement('img');
+		var t = Date.now();
+		img.src = canvas.toDataURL();
+		console.log((Date.now() - t) / 1000, 'secs');
+
+		document.querySelector('#savedImages').appendChild(img);
+
+		setTimeout(function() {
+			animatedGIF.addFrameImage(img);
+		}, 100);
+
+		if(Date.now() - gifRecordStart < gifMaxLength) {
+			recordGIFTimeout = setTimeout(addFrameToGIF, gifDelay);
+		} else {
+			stopRecording();
+		}
+
+	}
+
+
+	function stopRecording() {
+		clearTimeout(recordGIFTimeout);
+		//var gifData = animatedGIF.getGIF();
+		var gifData = animatedGIF.getB64GIF();
+		// saveAs(gifData, getTimestamp() + '.gif');
+		
+		//var blob = new Blob([gifData], { type: "image\/gif" });
+		//saveAs(gifData, getTimestamp() + '.gif');
+		var a = document.createElement('a');
+		a.setAttribute('href', gifData);
+		a.setAttribute('download', getTimestamp() + '.gif');
+		a.innerHTML = 'THE gif';
+		document.body.appendChild(a);
+		a.click();
+
+		document.getElementById('btn_record').disabled = false;
 	}
 
 	function updateTexture(texture, video) {

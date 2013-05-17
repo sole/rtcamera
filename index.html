@@ -10,8 +10,12 @@
 		<div id="wrapper">
 			<div id="controls">
 				<input type="button" id="btn_save" value="Save image" />
+				<input type="button" id="btn_record" value="Record video" />
 			</div>
 			<p id="instructions" class="modal">Swipe left or right to change between effects</p>
+			<div id="savedImages">
+
+			</div>
 		</div>
 		<script id="vs_common" type="x-shader/x-vertex">
 			uniform mat4 modelViewMatrix;
@@ -136,6 +140,10 @@
 		<script src="js/libs/glmatrix.min.js"></script>
 		<script src="js/libs/raf.js"></script>
 		<script src="js/libs/FileSaver.js"></script>
+		<script src="js/libs/NeuQuant.js"></script>
+		<script src="js/libs/LZWEncoder.js"></script>
+		<script src="js/libs/GIFEncoder.js"></script>
+		<script src="js/libs/Animated_GIF.js"></script>
 
 		<script src="js/Swipable.js"></script>
 		<script src="js/ImageEffect.js"></script>

@@ -10,8 +10,17 @@ body {
 	background: #000;
 }
 
-#wrapper {}
+#wrapper {
+	position: relative;
+}
+	
+	#instructions {
+		z-index: 0;
+	}
+
 	#wrapper > canvas {
+		position: relative;
+		z-index: 1;
 		display: block;
 		margin: 0 auto;
 	}

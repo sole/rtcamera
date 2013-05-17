@@ -147,15 +147,15 @@
 		if( gl ) {
 			gl.viewportWidth = newW;
 			gl.viewportHeight = newH;
-			//gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 		}
 	}
 
 	function initWebGL(canvas) {
 
 		var gl = null;
+		var options = { preserveDrawingBuffer: true };
 
-		gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+		gl = canvas.getContext("webgl", options) || canvas.getContext("experimental-webgl", options);
 		gl.viewportWidth = canvas.width;
 		gl.viewportHeight = canvas.height;
 

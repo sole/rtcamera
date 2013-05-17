@@ -109,6 +109,7 @@
 			initWebGLBuffers();
 			initTexture();
 			initEffects(gl);
+			initUI();
 		
 			render();
 
@@ -281,6 +282,10 @@
 
 	}
 
+	function initUI() {
+		document.getElementById('btn_save').addEventListener('click', saveImage, false);
+	}
+	
 	function prevEffect() {
 		var index = effects.indexOf(activeEffect);
 		var newIndex = --index < 0 ? effects.length - 1 : index;
@@ -291,6 +296,35 @@
 		var index = effects.indexOf(activeEffect);
 		var newIndex = ++index % effects.length;
 		activeEffect = effects[newIndex];
+	}
+
+	function pad(v) {
+		var s = String(v);
+
+		if(s.length < 2) {
+			s = '0' + s;
+		}
+
+		return s;
+	}
+
+	function saveImage() {
+		canvas.toBlob(function(blob) {
+			var now = new Date();
+			var parts = [
+				now.getFullYear(),
+				pad(now.getMonth()),
+				pad(now.getDate()),
+				'_',
+				pad(now.getHours()),
+				pad(now.getMinutes()),
+				pad(now.getSeconds())
+			];
+			
+			var timestamp = parts.join('');
+
+			saveAs(blob, timestamp + '.png');
+		});
 	}
 
 	function updateTexture(texture, video) {

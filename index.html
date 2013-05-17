@@ -8,6 +8,9 @@
 	</head>
 	<body>
 		<div id="wrapper">
+			<div id="controls">
+				<input type="button" id="btn_save" value="Save image" />
+			</div>
 			<p id="instructions" class="modal">Swipe left or right to change between effects</p>
 		</div>
 		<script id="vs_common" type="x-shader/x-vertex">
@@ -132,6 +135,7 @@
 		</script>
 		<script src="js/libs/glmatrix.min.js"></script>
 		<script src="js/libs/raf.js"></script>
+		<script src="js/libs/FileSaver.js"></script>
 
 		<script src="js/Swipable.js"></script>
 		<script src="js/ImageEffect.js"></script>

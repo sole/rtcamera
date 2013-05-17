@@ -93,6 +93,11 @@
 		canvas = document.createElement('canvas');
 		canvas.width = width;
 		canvas.height = height;
+		
+		Swipable.call(canvas);
+		canvas.onSwipeRight(nextEffect);
+		canvas.onSwipeLeft(prevEffect);
+
 		document.getElementById('wrapper').appendChild(canvas);
 
 		window.addEventListener('resize', onResize, false);
@@ -274,6 +279,18 @@
 
 		activeEffect = effects[0];
 
+	}
+
+	function prevEffect() {
+		var index = effects.indexOf(activeEffect);
+		var newIndex = --index < 0 ? effects.length - 1 : index;
+		activeEffect = effects[newIndex];
+	}
+
+	function nextEffect() {
+		var index = effects.indexOf(activeEffect);
+		var newIndex = ++index % effects.length;
+		activeEffect = effects[newIndex];
 	}
 
 	function updateTexture(texture, video) {

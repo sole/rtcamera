@@ -9,7 +9,8 @@
 
 	// ---
 
-	var video = null, webcamStream = null;
+	var video = null, videoWidth, videoHeight, webcamStream = null;
+	var canvas;
 	var gl;
 	var effects = [],
 		activeEffect = null;
@@ -83,13 +84,19 @@
 
 	function init(width, height) {
 
+		videoWidth = width;
+		videoHeight = height;
+		
 		video.style.width = width + 'px';
 		video.style.height = height + 'px';
 
-		var canvas = document.createElement('canvas');
+		canvas = document.createElement('canvas');
 		canvas.width = width;
 		canvas.height = height;
-		document.body.appendChild(canvas);
+		document.getElementById('wrapper').appendChild(canvas);
+
+		window.addEventListener('resize', onResize, false);
+		onResize();
 		
 		try {
 
@@ -104,6 +111,39 @@
 			reportError(e.message);
 		}
 		
+	}
+
+	function onResize() {
+		var w = window.innerWidth,
+			h = window.innerHeight,
+			newW,
+			newH;
+
+		if(videoWidth === undefined || videoHeight === undefined) {
+			return;
+		}
+
+		newW = w;
+		newH = newW * videoHeight / videoWidth;
+
+		if(newH > h) {
+			newH = h;
+			newW = newH * videoWidth / videoHeight;
+		}
+
+		newW = Math.floor(newW);
+		newH = Math.floor(newH);
+
+		canvas.width = newW;
+		canvas.height = newH;
+		canvas.style.width = newW + 'px';
+		canvas.style.height = newH + 'px';
+
+		if( gl ) {
+			gl.viewportWidth = newW;
+			gl.viewportHeight = newH;
+			//gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+		}
 	}
 
 	function initWebGL(canvas) {
@@ -204,7 +244,6 @@
 		var vertexCommonScript = document.getElementById('vs_common').textContent,
 			fragmentCommonScript = document.getElementById('fs_common').textContent;
 
-
 		for(var k in effectDefs) {
 			var def = effectDefs[k];
 			
@@ -233,34 +272,8 @@
 
 		}
 
-		activeEffect = effects[1];
+		activeEffect = effects[0];
 
-	}
-
-
-	function initShaders() {
-		var fragmentShader = getShader(gl, 'fs');
-		var vertexShader = getShader(gl, 'vs');
-
-		shaderProgram = gl.createProgram();
-		gl.attachShader(shaderProgram, vertexShader);
-		gl.attachShader(shaderProgram, fragmentShader);
-		gl.linkProgram(shaderProgram);
-
-		if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-			throw new Error('Shaders could not be linked');
-		}
-
-		gl.useProgram(shaderProgram);
-
-		shaderProgram.projectionMatrixUniform = gl.getUniformLocation(shaderProgram, 'projectionMatrix');
-		shaderProgram.modelViewMatrixUniform = gl.getUniformLocation(shaderProgram, 'modelViewMatrix');
-		shaderProgram.mapUniform = gl.getUniformLocation(shaderProgram, 'map');
-		shaderProgram.uvAttribute = gl.getAttribLocation(shaderProgram, 'uv');
-		shaderProgram.positionAttribute = gl.getAttribLocation(shaderProgram, 'position');
-		
-		gl.enableVertexAttribArray(shaderProgram.uvAttribute);
-		gl.enableVertexAttribArray(shaderProgram.positionAttribute);
 	}
 
 	function updateTexture(texture, video) {
@@ -290,6 +303,8 @@
         mat4.identity(mvMatrix);
 		mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -1.0]);
 
+		// For TESTING only 
+		// activeEffect = effects[ Math.floor(effects.length * Math.random()) ];
 		activeEffect.enable(gl);
 		
 		gl.activeTexture(gl.TEXTURE0);

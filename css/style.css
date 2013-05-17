@@ -4,6 +4,18 @@
 	box-sizing: border-box;
 }
 
+body {
+	overflow: hidden;
+	color: #fff;
+	background: #000;
+}
+
+#wrapper {}
+	#wrapper > canvas {
+		display: block;
+		margin: 0 auto;
+	}
+
 .modal {
 	display: block;
 	position: fixed;

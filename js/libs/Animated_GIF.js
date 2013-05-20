@@ -1,54 +1,121 @@
-// A wrapper around antimatter15's jsgif library
-// by sole / http://soledadpenades.com
-// See it live at http://lab.soledadpenades.com/js/animated_gif/
-var Animated_GIF = Animated_GIF || function() {
-	var width = 160, height = 120, canvas = null, ctx = null, encoder, repeat = null, delay = 250;
+// A library/utility for generating GIF files
+// Uses Dean McNamee's omggif library
+// and Anthony Dekker's NeuQuant quantizer (JS 0.3 version with many fixes)
+//
+// @author sole / http://soledadpenades.com
+function Animated_GIF() {
+    var width = 160, height = 120, canvas = null, ctx = null, repeat = 0, delay = 250;
+    var buffer, gifWriter, pixels, numFrames, maxNumFrames = 100;
+    var currentPalette, currentPaletteArray, currentPaletteComponents, maxNumColors = 256;
 
-	this.setSize = function(w, h) {
-		width = w;
-		height = h;
-		canvas = document.createElement('canvas');
-		canvas.width = w;
-		canvas.height = h;
-		ctx = canvas.getContext('2d');
-	};
-	
-	this.setDelay = function(d) {
-		delay = d;
-	};
+    function allocateResources() {
+        var total = maxNumFrames;
 
-	this.setRepeat = function(r) {
-		repeat = r;
-	};
+        numFrames = 0;
+        buffer = new Uint8Array( width * height * total * 5 );
+        gifWriter = new GifWriter( buffer, width, height, { loop: repeat } );
+        pixels = new Uint8Array( width * height );
+        currentPalette = null;
+    }
 
-	this.addFrameImage = function(img) {
-		ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-		encoder.addFrame(ctx);
-	};
+    this.setSize = function(w, h) {
+        width = w;
+        height = h;
+        canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        ctx = canvas.getContext('2d');
+        allocateResources();
+    };
 
-	this.addFrameContext = function(ctx) {
-		encoder.addFrame(ctx);
-	};
+    this.setDelay = function(d) {
+        delay = d;
+    };
 
-	this.reset = function() {
-		encoder = new GIFEncoder();
-		if(repeat !== null) {
-			encoder.setRepeat(repeat);
-		}
-		encoder.setDelay(delay);
-		encoder.start();
-	};
+    this.setRepeat = function(r) {
+        repeat = r;
+    };
 
-	this.getGIF = function() {
-		encoder.finish();
-		return encoder.stream().getData();
-	};
+    this.setMaxNumColors = function(v) {
+        maxNumColors = v;
+    };
 
-	this.getB64GIF = function() {
-		return 'data:image/gif;base64,' + btoa(this.getGIF());
-	};
+    this.addFrame = function(element) {
+        if( numFrames >= maxNumFrames ) {
+            return;
+        }
 
-	this.setSize(100, 100);
-	this.reset();
-};
+        ctx.drawImage(element, 0, 0, width, height);
+        data = ctx.getImageData(0, 0, width, height);
 
+        this.addFrameImageData(data);
+    };
+
+    this.addFrameImageData = function(imageData) {
+        var data = imageData.data;
+        var length = data.length;
+        var numberPixels = length / 4; // 4 components = rgba
+        var sampleInterval = 10;
+        var bgrPixels = [];
+        var offset = 0;
+        var i, r, g, b;
+
+        // extract RGB values into BGR for the quantizer
+        while(offset < length) {
+            r = data[offset++];
+            g = data[offset++];
+            b = data[offset++];
+            bgrPixels.push(b);
+            bgrPixels.push(g);
+            bgrPixels.push(r);
+            
+            offset++;
+        }
+        
+        var nq = new NeuQuant(bgrPixels, bgrPixels.length, sampleInterval);
+
+        var paletteBGR = nq.process(); // create reduced palette
+        var palette = [];
+
+        for(i = 0; i < paletteBGR.length; i+=3) {
+            b = paletteBGR[i];
+            g = paletteBGR[i+1];
+            r = paletteBGR[i+2];
+            palette.push(r << 16 | g << 8 | b);
+        }
+        var paletteArray = new Uint32Array(palette);
+
+        var k = 0;
+        for (var j = 0; j < numberPixels; j++) {
+            b = bgrPixels[k++];
+            g = bgrPixels[k++];
+            r = bgrPixels[k++];
+            var index = nq.map(b, g, r);
+            pixels[j] = index;
+        }
+        
+        gifWriter.addFrame(0, 0, width, height, pixels, { palette: paletteArray, delay: delay });
+
+    };
+
+    this.getGIF = function() {
+        var numberValues = gifWriter.end();
+        var str = '';
+
+        for(var i = 0; i < numberValues; i++) {
+            str += String.fromCharCode( buffer[i] );
+        }
+
+        return str;
+    };
+
+    this.getB64GIF = function() {
+        return 'data:image/gif;base64,' + btoa(this.getGIF());
+    };
+
+
+    // ---
+    
+    this.setSize(width, height);
+
+}

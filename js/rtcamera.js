@@ -17,7 +17,7 @@
 	var shaderProgram;
 	var vertexPositionBuffer, uvBuffer, mvMatrix, pMatrix;
 	var texture;
-	var animatedGIF, gifDelay = 1000, gifMaxLength = 5000, gifRecordStart, recordGIFTimeout = null;
+	var animatedGIF, gifDelay = 10, gifMaxLength = 5000, gifRecordStart, recordGIFTimeout = null;
 
 	if (navigator.getMedia) {
 
@@ -141,15 +141,15 @@
 		newW = Math.floor(newW);
 		newH = Math.floor(newH);
 
-		canvas.width = newW;
-		canvas.height = newH;
-		canvas.style.width = newW + 'px';
-		canvas.style.height = newH + 'px';
+		//canvas.width = newW;
+		//canvas.height = newH;
+		//canvas.style.width = newW + 'px';
+		//canvas.style.height = newH + 'px';
 
-		if( gl ) {
+		/*if( gl ) {
 			gl.viewportWidth = newW;
 			gl.viewportHeight = newH;
-		}
+		}*/
 	}
 
 	function initWebGL(canvas) {
@@ -342,41 +342,27 @@
 		animatedGIF = new Animated_GIF();
 		animatedGIF.setSize(videoWidth, videoHeight);
 		animatedGIF.setDelay(gifDelay);
-		animatedGIF.setRepeat(true);
+		animatedGIF.setRepeat(1);
 		addFrameToGIF();
 	}
 
 	function addFrameToGIF() {
 
-		// TODO this is severely inefficient! Need to optimise this
-		var img = document.createElement('img');
-		var t = Date.now();
-		img.src = canvas.toDataURL();
-		console.log((Date.now() - t) / 1000, 'secs');
-
-		document.querySelector('#savedImages').appendChild(img);
-
-		setTimeout(function() {
-			animatedGIF.addFrameImage(img);
-		}, 100);
+		animatedGIF.addFrame(canvas);
 
 		if(Date.now() - gifRecordStart < gifMaxLength) {
 			recordGIFTimeout = setTimeout(addFrameToGIF, gifDelay);
 		} else {
 			stopRecording();
 		}
-
+	
 	}
 
 
 	function stopRecording() {
 		clearTimeout(recordGIFTimeout);
-		//var gifData = animatedGIF.getGIF();
 		var gifData = animatedGIF.getB64GIF();
-		// saveAs(gifData, getTimestamp() + '.gif');
 		
-		//var blob = new Blob([gifData], { type: "image\/gif" });
-		//saveAs(gifData, getTimestamp() + '.gif');
 		var a = document.createElement('a');
 		a.setAttribute('href', gifData);
 		a.setAttribute('download', getTimestamp() + '.gif');

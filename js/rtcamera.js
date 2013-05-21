@@ -366,9 +366,13 @@
 		var a = document.createElement('a');
 		a.setAttribute('href', gifData);
 		a.setAttribute('download', getTimestamp() + '.gif');
-		a.innerHTML = 'THE gif';
+
+        // Apparently the download won't start unless the anchor element
+        // is in the DOM tree
+        a.style.display = 'none';
 		document.body.appendChild(a);
 		a.click();
+        document.body.removeChild(a);
 
 		document.getElementById('btn_record').disabled = false;
 	}

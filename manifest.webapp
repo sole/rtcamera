@@ -1,0 +1,16 @@
+{
+  "version": "0.1",
+  "name": "rtcamera",
+  "description": "A fun camera app to apply effects on the fly",
+  "launch_path": "/index.html",
+  "icons": {
+    "16": "/img/icons/mortar-16.png",
+    "48": "/img/icons/mortar-48.png",
+    "128": "/img/icons/mortar-128.png"
+  },
+  "developer": {
+    "name": "Mozilla",
+    "url": "http://mozilla.org"
+  },
+  "installs_allowed_from": ["*"]
+}

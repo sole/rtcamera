@@ -284,6 +284,7 @@
 	}
 
 	function initUI() {
+        document.getElementById('controls').style.opacity = '1';
 		document.getElementById('btn_save').addEventListener('click', saveImage, false);
 		document.getElementById('btn_record').addEventListener('click', recordVideo, false);
 	}

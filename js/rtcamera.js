@@ -101,8 +101,8 @@
 
 		document.getElementById('wrapper').appendChild(canvas);
 
-		window.addEventListener('resize', onResize, false);
-		onResize();
+		//window.addEventListener('resize', onResize, false);
+		//onResize();
 		
 		try {
 
@@ -141,15 +141,15 @@
 		newW = Math.floor(newW);
 		newH = Math.floor(newH);
 
-		//canvas.width = newW;
-		//canvas.height = newH;
-		//canvas.style.width = newW + 'px';
-		//canvas.style.height = newH + 'px';
+		canvas.width = newW;
+		canvas.height = newH;
+		canvas.style.width = newW + 'px';
+		canvas.style.height = newH + 'px';
 
-		/*if( gl ) {
+		if( gl ) {
 			gl.viewportWidth = newW;
 			gl.viewportHeight = newH;
-		}*/
+		}
 	}
 
 	function initWebGL(canvas) {

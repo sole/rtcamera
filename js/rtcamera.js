@@ -341,7 +341,7 @@
 		gifRecordStart = Date.now();
         gifLength = 0;
 
-		animatedGIF = new Animated_GIF({ workerPath: 'js/libs/quantizer.js' });
+		animatedGIF = new Animated_GIF({ workerPath: 'js/libs/Animated_GIF/quantizer.js' });
 		animatedGIF.setSize(videoWidth, videoHeight);
 		animatedGIF.setDelay(gifDelay);
 		animatedGIF.setRepeat(1);

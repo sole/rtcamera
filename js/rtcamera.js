@@ -17,7 +17,7 @@
 	var shaderProgram;
 	var vertexPositionBuffer, uvBuffer, mvMatrix, pMatrix;
 	var texture;
-	var animatedGIF, gifDelay = 10, gifMaxLength = 5000, gifRecordStart, recordGIFTimeout = null;
+	var animatedGIF, gifDelay = 100, gifLength = 0, gifMaxLength = 2000, gifRecordStart, recordGIFTimeout = null;
 
 	if (navigator.getMedia) {
 
@@ -339,8 +339,9 @@
 	
 		btn.disabled = true;
 		gifRecordStart = Date.now();
+        gifLength = 0;
 
-		animatedGIF = new Animated_GIF();
+		animatedGIF = new Animated_GIF({ workerPath: 'js/libs/quantizer.js' });
 		animatedGIF.setSize(videoWidth, videoHeight);
 		animatedGIF.setDelay(gifDelay);
 		animatedGIF.setRepeat(1);
@@ -348,34 +349,50 @@
 	}
 
 	function addFrameToGIF() {
-
+        console.log('add frame');
 		animatedGIF.addFrame(canvas);
+        gifLength += gifDelay;
 
-		if(Date.now() - gifRecordStart < gifMaxLength) {
+		if(gifLength < gifMaxLength) {
 			recordGIFTimeout = setTimeout(addFrameToGIF, gifDelay);
 		} else {
 			stopRecording();
 		}
 	
 	}
-
+    
 
 	function stopRecording() {
 		clearTimeout(recordGIFTimeout);
-		var gifData = animatedGIF.getB64GIF();
+
+        var btnRecord = document.getElementById('btn_record');
+
+        animatedGIF.onRenderProgress(function(progress) {
+            if(progress < 1) {
+                btnRecord.value = 'Rendering ' + Math.floor(progress * 100) + '%';
+            } else {
+                btnRecord.value = progress;
+            }
+            console.log(progress);
+        });
 		
-		var a = document.createElement('a');
-		a.setAttribute('href', gifData);
-		a.setAttribute('download', getTimestamp() + '.gif');
+        animatedGIF.getBase64GIF(function(gifData) {
 
-        // Apparently the download won't start unless the anchor element
-        // is in the DOM tree
-        a.style.display = 'none';
-		document.body.appendChild(a);
-		a.click();
-        document.body.removeChild(a);
+            var a = document.createElement('a');
+            a.setAttribute('href', gifData);
+            a.setAttribute('download', getTimestamp() + '.gif');
 
-		document.getElementById('btn_record').disabled = false;
+            // Apparently the download won't start unless the anchor element
+            // is in the DOM tree
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            btnRecord.disabled = false;
+            btnRecord.value = 'Record';
+
+        });
 	}
 
 	function updateTexture(texture, video) {

@@ -3,20 +3,177 @@
 // and Anthony Dekker's NeuQuant quantizer (JS 0.3 version with many fixes)
 //
 // @author sole / http://soledadpenades.com
-function Animated_GIF() {
+function Animated_GIF(options) {
+    'use strict';
+
     var width = 160, height = 120, canvas = null, ctx = null, repeat = 0, delay = 250;
-    var buffer, gifWriter, pixels, numFrames, maxNumFrames = 100;
-    var currentPalette, currentPaletteArray, currentPaletteComponents, maxNumColors = 256;
+    var frames = [];
+    var onRenderCompleteCallback = function() {};
+    var onRenderProgressCallback = function() {};
+    var workers = [], availableWorkers = [], numWorkers, workerPath;
+    var generatingGIF = false;
 
-    function allocateResources() {
-        var total = maxNumFrames;
+    options = options || {};
+    numWorkers = options.numWorkers || 2;
+    workerPath = options.workerPath || 'src/quantizer.js'; // XXX hardcoded path
 
-        numFrames = 0;
-        buffer = new Uint8Array( width * height * total * 5 );
-        gifWriter = new GifWriter( buffer, width, height, { loop: repeat } );
-        pixels = new Uint8Array( width * height );
-        currentPalette = null;
+    for(var i = 0; i < numWorkers; i++) {
+        var w = new Worker(workerPath);
+        workers.push(w);
+        availableWorkers.push(w);
     }
+
+    // ---
+
+    // Return a worker for processing a frame
+    function getWorker() {
+        if(availableWorkers.length === 0) {
+            throw ('No workers left!');
+        }
+
+        return availableWorkers.pop();
+    }
+
+    // Restore a worker to the pool
+    function freeWorker(worker) {
+        availableWorkers.push(worker);
+    }
+
+    // Faster/closurized bufferToString function
+    // (caching the String.fromCharCode values)
+    var bufferToString = (function() {
+        var byteMap = [];
+        for(var i = 0; i < 256; i++) {
+            byteMap[i] = String.fromCharCode(i);
+        }
+
+        return (function(buffer) {
+            var numberValues = buffer.length;
+            var str = '';
+
+            for(var i = 0; i < numberValues; i++) {
+                str += byteMap[ buffer[i] ];
+            }
+
+            return str;
+        });
+    })();
+
+    function startRendering(completeCallback) {
+        var numFrames = frames.length;
+
+        onRenderCompleteCallback = completeCallback;
+
+        for(var i = 0; i < numWorkers && i < frames.length; i++) {
+            processFrame(i);
+        }
+    }
+
+    function processFrame(position) {
+        var frame;
+        var worker;
+
+        frame = frames[position];
+        
+        if(frame.beingProcessed || frame.done) {
+            console.error('Frame already being processed or done!', frame.position);
+            onFrameFinished();
+            return;
+        }
+
+        frame.beingProcessed = true;
+        
+        worker = getWorker();
+
+        worker.onmessage = function(ev) {
+            var data = ev.data;
+
+            // Delete original data, and free memory
+            delete(frame.data);
+
+            // TODO grrr... HACK for object -> Array
+            frame.pixels = Array.prototype.slice.call(data.pixels);
+            frame.palette = Array.prototype.slice.call(data.palette);
+            frame.done = true;
+            frame.beingProcessed = false;
+
+            freeWorker(worker);
+
+            onFrameFinished();
+        };
+
+        
+        // TODO maybe look into transfer objects
+        // for further efficiency
+        var frameData = frame.data;
+        //worker.postMessage(frameData, [frameData]);
+        worker.postMessage(frameData);
+    }
+
+    function processNextFrame() {
+
+        var position = -1;
+
+        for(var i = 0; i < frames.length; i++) {
+            var frame = frames[i];
+            if(!frame.done && !frame.beingProcessed) {
+                position = i;
+                break;
+            }
+        }
+        
+        if(position >= 0) {
+            processFrame(position);
+        }
+    }
+
+    function onFrameFinished() { // ~~~ taskFinished
+
+        // The GIF is not written until we're done with all the frames
+        // because they might not be processed in the same order
+        var allDone = frames.every(function(frame) {
+            return !frame.beingProcessed && frame.done;
+        });
+
+        if(allDone) {
+            if(generatingGIF === false) {
+                generateGIF(frames, onRenderCompleteCallback);
+            }
+        } else {
+            setTimeout(processNextFrame, 1);
+        }
+        
+    }
+
+    // Takes the already processed data in frames and feeds it to a new
+    // GifWriter instance in order to get the binary GIF file
+    function generateGIF(frames, callback) {
+        
+        // TODO: Weird: using a simple JS array instead of a typed array,
+        // the files are WAY smaller o_o. Patches/explanations welcome!
+        var buffer = []; // new Uint8Array(width * height * frames.length * 5);
+        var gifWriter = new GifWriter(buffer, width, height, { loop: repeat });
+
+        generatingGIF = true;
+
+        frames.forEach(function(frame) {
+            onRenderProgressCallback(frame.position * 1.0 / frames.length);
+            gifWriter.addFrame(0, 0, width, height, frame.pixels, {
+                palette: frame.palette, 
+                delay: delay 
+            });
+        });
+
+        gifWriter.end();
+        onRenderProgressCallback(1.0);
+        
+        frames = [];
+        generatingGIF = false;
+
+        callback(buffer);
+    }
+    
+    // ---
 
     this.setSize = function(w, h) {
         width = w;
@@ -25,97 +182,52 @@ function Animated_GIF() {
         canvas.width = w;
         canvas.height = h;
         ctx = canvas.getContext('2d');
-        allocateResources();
     };
 
-    this.setDelay = function(d) {
-        delay = d;
+    // Internally, GIF uses tenths of seconds to store the delay
+    this.setDelay = function(seconds) {
+        delay = seconds * 0.1;
     };
 
+    // From GIF: 0 = loop forever, null = not looping, n > 0 = loop n times and stop
     this.setRepeat = function(r) {
         repeat = r;
     };
 
-    this.setMaxNumColors = function(v) {
-        maxNumColors = v;
-    };
-
     this.addFrame = function(element) {
-        if( numFrames >= maxNumFrames ) {
-            return;
+
+        if(ctx === null) {
+            this.setSize(width, height);
         }
 
         ctx.drawImage(element, 0, 0, width, height);
-        data = ctx.getImageData(0, 0, width, height);
-
-        this.addFrameImageData(data);
+        var data = ctx.getImageData(0, 0, width, height);
+        
+        this.addFrameImageData(data.data);
     };
 
     this.addFrameImageData = function(imageData) {
-        var data = imageData.data;
-        var length = data.length;
-        var numberPixels = length / 4; // 4 components = rgba
-        var sampleInterval = 10;
-        var bgrPixels = [];
-        var offset = 0;
-        var i, r, g, b;
 
-        // extract RGB values into BGR for the quantizer
-        while(offset < length) {
-            r = data[offset++];
-            g = data[offset++];
-            b = data[offset++];
-            bgrPixels.push(b);
-            bgrPixels.push(g);
-            bgrPixels.push(r);
-            
-            offset++;
-        }
-        
-        var nq = new NeuQuant(bgrPixels, bgrPixels.length, sampleInterval);
+        var dataLength = imageData.length,
+            imageDataArray = new Uint8Array(imageData);
 
-        var paletteBGR = nq.process(); // create reduced palette
-        var palette = [];
-
-        for(i = 0; i < paletteBGR.length; i+=3) {
-            b = paletteBGR[i];
-            g = paletteBGR[i+1];
-            r = paletteBGR[i+2];
-            palette.push(r << 16 | g << 8 | b);
-        }
-        var paletteArray = new Uint32Array(palette);
-
-        var k = 0;
-        for (var j = 0; j < numberPixels; j++) {
-            b = bgrPixels[k++];
-            g = bgrPixels[k++];
-            r = bgrPixels[k++];
-            var index = nq.map(b, g, r);
-            pixels[j] = index;
-        }
-        
-        gifWriter.addFrame(0, 0, width, height, pixels, { palette: paletteArray, delay: delay });
-
+        frames.push({ data: imageDataArray, done: false, beingProcessed: false, position: frames.length });
     };
 
-    this.getGIF = function() {
-        var numberValues = gifWriter.end();
-        var str = '';
-
-        for(var i = 0; i < numberValues; i++) {
-            str += String.fromCharCode( buffer[i] );
-        }
-
-        return str;
+    this.onRenderProgress = function(callback) {
+        onRenderProgressCallback = callback;
     };
 
-    this.getB64GIF = function() {
-        return 'data:image/gif;base64,' + btoa(this.getGIF());
+    this.getBase64GIF = function(completeCallback) {
+
+        var onRenderComplete = function(buffer) {
+            var str = bufferToString(buffer);
+            var gif = 'data:image/gif;base64,' + btoa(str);
+            completeCallback(gif);
+        };
+
+        startRendering(onRenderComplete);
+
     };
-
-
-    // ---
-    
-    this.setSize(width, height);
 
 }

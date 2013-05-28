@@ -77,18 +77,18 @@ Swipable.prototype.onMoveCallback = function(e) {
         currentTime = e.timeStamp;
 
     if (
-            this.startTime !== 0 && 
-            currentTime - this.startTime < Swipable.prototype.maxTime && 
-            currentDistance > Swipable.prototype.minDistance
-       ) {
-           if (currentX < this.startX) {
-               this.onSwipeLeftCb();
-           } else if (currentX > this.startX) {
-               this.onSwipeRightCb();
-           }
-           this.startTime = 0;
-           this.startX = 0;
-       }
+        this.startTime > 0 && 
+        currentTime - this.startTime < Swipable.prototype.maxTime && 
+        currentDistance > Swipable.prototype.minDistance
+    ) {
+        if (currentX < this.startX) {
+            this.onSwipeLeftCb();
+        } else {
+            this.onSwipeRightCb();
+        }
+        this.startTime = 0;
+        this.startX = 0;
+    }
 
 };
 

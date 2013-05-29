@@ -11,6 +11,7 @@
 
 	var video = null, videoWidth, videoHeight, webcamStream = null;
 	var canvas;
+    var videoControls, videoProgressBar;
 	var gl;
 	var effects = [],
 		activeEffect = null;
@@ -263,6 +264,9 @@
         var controls = Array.prototype.slice.call(document.querySelectorAll('.controls'));
         controls.forEach(show);
 
+        videoControls = document.getElementById('video_controls');
+        videoProgressBar = document.querySelector('progress');
+
         // Set up event listeners using Hammer touch library (HA HA)
         Hammer(canvas)
             .on('touch', onTouchDown)
@@ -391,7 +395,7 @@
         gifRecordStart = Date.now();
         gifLength = 0;
 
-        show(document.getElementById('video_controls')); // XXX cache
+        show(videoControls);
 
         animatedGIF = new Animated_GIF({ workerPath: 'js/libs/Animated_GIF/quantizer.js' });
         animatedGIF.setSize(videoWidth, videoHeight);
@@ -410,9 +414,8 @@
         gifLength += gifDelay;
 
         if(gifLength < gifMaxLength) {
-            var progressBar = document.querySelector('progress'); // XXX cache
             var recordProgress = gifLength * 1.0 / gifMaxLength;
-            progressBar.value = recordProgress;
+            videoProgressBar.value = recordProgress;
             console.log('recorded amount', recordProgress, Math.floor(recordProgress*100) + '%');
             
             recordGIFTimeout = setTimeout(addFrameToGIF, gifDelay);

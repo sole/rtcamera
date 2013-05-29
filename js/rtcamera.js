@@ -18,6 +18,8 @@
 	var vertexPositionBuffer, uvBuffer, mvMatrix, pMatrix;
 	var texture;
 	var animatedGIF, gifDelay = 100, gifLength = 0, gifMaxLength = 2000, gifRecordStart, recordGIFTimeout = null;
+    var MODE_STATIC = 1, MODE_VIDEO = 2;
+    var mode = MODE_STATIC;
 
 	if (navigator.getMedia) {
 
@@ -268,11 +270,13 @@
         });
 
 
-        // setting up event listeners
-
-        Swipable.call(canvas);
-        canvas.onSwipeRight(nextEffect);
-        canvas.onSwipeLeft(prevEffect);
+        // Set up event listeners using Hammer touch library (HA HA)
+        Hammer(document)
+            .on('touch', onTouchDown)
+            .on('release', onTouchEnd)
+            .on('tap', onClick)
+            .on('swipeleft', prevEffect)
+            .on('swiperight', nextEffect);
 
     }
 	
@@ -290,14 +294,23 @@
 
     function onClick() {
         console.log('click');
+        if(mode === MODE_STATIC) {
+            takePicture();
+        }
     }
 
     function onTouchDown() {
         console.log('touch down');
+        if(mode === MODE_VIDEO) {
+            startVideoRecording();
+        }
     }
 
     function onTouchEnd() {
         console.log('touch end');
+        if(mode === MODE_VIDEO) {
+            pauseVideoRecording();
+        }
     }
 
 	function pad(v) {
@@ -327,11 +340,19 @@
 		return timestamp;
 	}
 
-	function saveImage() {
+	function takePicture() {
 		canvas.toBlob(function(blob) {
 			saveAs(blob, getTimestamp() + '.png');
 		});
 	}
+
+    function startVideoRecording() {
+        console.log('startVideoRecording');
+    }
+
+    function pauseVideoRecording() {
+        console.log('pauseVideoRecording');
+    }
 
 	function recordVideo() {
 		var btn = this;

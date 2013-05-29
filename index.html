@@ -12,7 +12,7 @@
                 <hgroup>
                     <h1>rtcamera</h1>
                     <div class="controls">
-                        <div id="video_controls">[progress bar] [OK]</div>
+                        <div id="video_controls"><input type="button" value="cancel" /> <progress max="1" value="0"></progress> <input type="button" value="done" /></div>
                     </div>
                 </hgroup>
             </header>
@@ -21,7 +21,7 @@
 
             <p id="instructions" class="modal">Swipe left or right to change between effects</p>
             <footer class="controls">
-            <div id="mode_toggle">[STATIC CAMERA] [X TOGGLE] [VIDEO CAMERA]</div>
+            <div id="mode_toggle"></div>
             </footer>
 		</div>
 		<script id="vs_common" type="x-shader/x-vertex">

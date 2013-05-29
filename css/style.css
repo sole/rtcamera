@@ -45,9 +45,14 @@ body {
 
             footer {
                 bottom: 0;
+                height: 2rem;
+                line-height: 2rem;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                user-select: none;
             }
 
-        #wrapper > canvas {
+        #canvasContainer > canvas {
             position: relative;
             z-index: 1;
             display: block;

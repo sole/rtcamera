@@ -18,8 +18,8 @@
 	var vertexPositionBuffer, uvBuffer, mvMatrix, pMatrix;
 	var texture;
 	var animatedGIF, gifDelay = 100, gifLength = 0, gifMaxLength = 2000, gifRecordStart, recordGIFTimeout = null;
-    var MODE_STATIC = 1, MODE_VIDEO = 2;
-    var mode = MODE_STATIC;
+    var MODE_STATIC = 'static', MODE_VIDEO = 'video';
+    var mode;
 
 	if (navigator.getMedia) {
 
@@ -108,7 +108,7 @@
 		canvas.height = height;
 		
 		
-		document.getElementById('wrapper').appendChild(canvas);
+		document.getElementById('canvasContainer').appendChild(canvas);
 
 		
 		try {
@@ -271,12 +271,23 @@
 
 
         // Set up event listeners using Hammer touch library (HA HA)
-        Hammer(document)
+        Hammer(canvas)
             .on('touch', onTouchDown)
             .on('release', onTouchEnd)
             .on('tap', onClick)
             .on('swipeleft', prevEffect)
             .on('swiperight', nextEffect);
+
+        var footer = document.querySelector('footer');
+        Hammer(footer)
+            .on('swipeleft', function() {
+                setMode(MODE_STATIC);
+            })
+            .on('swiperight', function() {
+                setMode(MODE_VIDEO);
+            });
+
+        setMode(MODE_STATIC);
 
     }
 	
@@ -312,6 +323,18 @@
             pauseVideoRecording();
         }
     }
+
+    function setMode(newMode) {
+        var footer = document.querySelector('footer');
+        console.log('SETMODE', newMode);
+        if(newMode === MODE_STATIC) {
+            footer.innerHTML = 'static (swipe right to change)';
+        } else {
+            footer.innerHTML = 'video (swipe left to change)';
+        }
+        mode = newMode;
+    }
+
 
 	function pad(v) {
 		var s = String(v);

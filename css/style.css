@@ -47,6 +47,13 @@ body {
                     display: none;
                     transition: opacity 0.3s;
                 }
+                    #video_controls progress {
+                        border: 1px solid yellow; /* NOTE: horrid colours are intentional */
+                    }
+
+                    .rendering {
+                        border: 1px solid green;
+                    }
 
             footer {
                 bottom: 0;

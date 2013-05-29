@@ -326,16 +326,15 @@
     }
 
     function onTouchDown() {
-        console.log('touch down');
         if(mode === MODE_VIDEO) {
             startVideoRecording();
         }
     }
 
     function onTouchEnd() {
-        console.log('touch end');
         if(mode === MODE_VIDEO) {
-            pauseVideoRecording();
+            // TMP pauseVideoRecording();
+            stopVideoRecording();
         }
     }
 
@@ -347,7 +346,7 @@
             hide(videoControls);
             toggle.innerHTML = 'static (swipe right or tap here to change)';
         } else {
-            show(videoControls);
+            //show(videoControls);
             toggle.innerHTML = 'video (swipe left or tap here to change)';
         }
         mode = newMode;
@@ -389,39 +388,76 @@
 
     function startVideoRecording() {
         console.log('startVideoRecording');
+        gifRecordStart = Date.now();
+        gifLength = 0;
+
+        show(document.getElementById('video_controls')); // XXX cache
+
+        animatedGIF = new Animated_GIF({ workerPath: 'js/libs/Animated_GIF/quantizer.js' });
+        animatedGIF.setSize(videoWidth, videoHeight);
+        animatedGIF.setDelay(gifDelay);
+        animatedGIF.setRepeat(1);
+        addFrameToGIF();
     }
 
     function pauseVideoRecording() {
-        console.log('pauseVideoRecording');
+        console.error('pauseVideoRecording TODO');
     }
 
-	function recordVideo() {
-		var btn = this;
-	
-		btn.disabled = true;
-		gifRecordStart = Date.now();
-        gifLength = 0;
-
-		animatedGIF = new Animated_GIF({ workerPath: 'js/libs/Animated_GIF/quantizer.js' });
-		animatedGIF.setSize(videoWidth, videoHeight);
-		animatedGIF.setDelay(gifDelay);
-		animatedGIF.setRepeat(1);
-		addFrameToGIF();
-	}
-
-	function addFrameToGIF() {
+    function addFrameToGIF() {
         console.log('add frame');
-		animatedGIF.addFrame(canvas);
+        animatedGIF.addFrame(canvas);
         gifLength += gifDelay;
 
-		if(gifLength < gifMaxLength) {
-			recordGIFTimeout = setTimeout(addFrameToGIF, gifDelay);
-		} else {
-			stopRecording();
-		}
-	
-	}
+        if(gifLength < gifMaxLength) {
+            var progressBar = document.querySelector('progress'); // XXX cache
+            var recordProgress = gifLength * 1.0 / gifMaxLength;
+            progressBar.value = recordProgress;
+            console.log('recorded amount', recordProgress, Math.floor(recordProgress*100) + '%');
+            
+            recordGIFTimeout = setTimeout(addFrameToGIF, gifDelay);
+        } else {
+            stopVideoRecording();
+        }
+    }
     
+    function stopVideoRecording() {
+
+        console.log('STOP VIDEO RECORDING');
+
+        clearTimeout(recordGIFTimeout);
+
+        var videoControls = document.getElementById('video_controls'),
+            progressBar = document.querySelector('progress'),
+            progressSpan = progressBar.querySelector('span');
+
+        progressBar.classList.add('rendering');
+        
+        animatedGIF.onRenderProgress(function(progress) {
+            progressSpan.innerHTML = 'rendering ' + Math.floor(progress * 100) + '%';
+            console.log('render progress', progress);
+            progressBar.value = progress;
+        });
+
+        animatedGIF.getBase64GIF(function(gifData) {
+
+            var a = document.createElement('a');
+            a.setAttribute('href', gifData);
+            a.setAttribute('download', getTimestamp() + '.gif');
+
+            // Apparently the download won't start unless the anchor element
+            // is in the DOM tree
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            progressBar.classList.remove('rendering');
+            progressSpan.innerHTML = '';
+            hide(videoControls);
+
+        });
+    }
 
 	function stopRecording() {
 		clearTimeout(recordGIFTimeout);

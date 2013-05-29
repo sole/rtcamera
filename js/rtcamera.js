@@ -363,38 +363,38 @@
     }
 
 
-	function pad(v) {
-		var s = String(v);
+    function pad(v) {
+        var s = String(v);
 
-		if(s.length < 2) {
-			s = '0' + s;
-		}
+        if(s.length < 2) {
+            s = '0' + s;
+        }
 
-		return s;
-	}
+        return s;
+    }
 
-	function getTimestamp() {
-		var now = new Date();
-		var parts = [
-			now.getFullYear(),
-			pad(now.getMonth()),
-			pad(now.getDate()),
-			'_',
-			pad(now.getHours()),
-			pad(now.getMinutes()),
-			pad(now.getSeconds())
-				];
+    function getTimestamp() {
+        var now = new Date();
+        var parts = [
+            now.getFullYear(),
+            pad(now.getMonth() + 1), // months are 0 based!
+            pad(now.getDate()),
+            '_',
+            pad(now.getHours()),
+            pad(now.getMinutes()),
+            pad(now.getSeconds())
+                ];
 
-		var timestamp = parts.join('');
+        var timestamp = parts.join('');
 
-		return timestamp;
-	}
+        return timestamp;
+    }
 
-	function takePicture() {
-		canvas.toBlob(function(blob) {
-			saveAs(blob, getTimestamp() + '.png');
-		});
-	}
+    function takePicture() {
+        canvas.toBlob(function(blob) {
+            saveAs(blob, getTimestamp() + '.png');
+        });
+    }
 
     function startVideoRecording() {
         console.log('startVideoRecording');

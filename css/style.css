@@ -32,8 +32,6 @@ body {
             left: 0;
             width: 100%;
             text-align: center;
-            background: #000;
-            background: rgba(0, 0, 0, 0.3);
         }
 
             header {
@@ -41,16 +39,26 @@ body {
             }
                 h1 {
                     text-shadow: 2px 2px 1px #000;
+                    background: rgba(0, 0, 0, 0.3);
+                }
+
+                #video_controls {
+                    opacity: 0;
+                    display: none;
+                    transition: opacity 0.3s;
                 }
 
             footer {
                 bottom: 0;
-                height: 2rem;
-                line-height: 2rem;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                user-select: none;
             }
+                #mode_toggle {
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    user-select: none;
+                    height: 4rem;
+                    line-height: 4rem;
+                    background: rgba(0, 0, 0, 0.3);
+                }
 
         #canvasContainer > canvas {
             position: relative;

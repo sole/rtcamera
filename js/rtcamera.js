@@ -261,14 +261,7 @@
     function initUI() {
 
         var controls = Array.prototype.slice.call(document.querySelectorAll('.controls'));
-        controls.forEach(function(control) {
-            var style = control.style;
-            style.display = 'block';
-            setTimeout(function() {
-                style.opacity = '1';
-            }, 1);
-        });
-
+        controls.forEach(show);
 
         // Set up event listeners using Hammer touch library (HA HA)
         Hammer(canvas)
@@ -278,19 +271,41 @@
             .on('swipeleft', prevEffect)
             .on('swiperight', nextEffect);
 
-        var footer = document.querySelector('footer');
-        Hammer(footer)
+        var toggle = document.getElementById('mode_toggle');
+        Hammer(toggle)
             .on('swipeleft', function() {
                 setMode(MODE_STATIC);
             })
             .on('swiperight', function() {
                 setMode(MODE_VIDEO);
+            })
+            .on('tap', function() {
+                if(mode === MODE_STATIC) {
+                    setMode(MODE_VIDEO);
+                } else {
+                    setMode(MODE_STATIC);
+                }
             });
 
         setMode(MODE_STATIC);
 
     }
-	
+
+    function hide(element, transitionLength) {
+        transitionLength = transitionLength || 500;
+        element.style.opacity = 0;
+        setTimeout(function() {
+            element.style.display = 'none';
+        }, transitionLength);
+    }
+
+    function show(element) {
+        element.style.display = 'block';
+        setTimeout(function() {
+            element.style.opacity = 1;
+        }, 1);
+    }
+
 	function prevEffect() {
 		var index = effects.indexOf(activeEffect);
 		var newIndex = --index < 0 ? effects.length - 1 : index;
@@ -325,12 +340,15 @@
     }
 
     function setMode(newMode) {
-        var footer = document.querySelector('footer');
-        console.log('SETMODE', newMode);
+        var toggle = document.getElementById('mode_toggle');
+        var videoControls = document.getElementById('video_controls');
+        
         if(newMode === MODE_STATIC) {
-            footer.innerHTML = 'static (swipe right to change)';
+            hide(videoControls);
+            toggle.innerHTML = 'static (swipe right or tap here to change)';
         } else {
-            footer.innerHTML = 'video (swipe left to change)';
+            show(videoControls);
+            toggle.innerHTML = 'video (swipe left or tap here to change)';
         }
         mode = newMode;
     }

@@ -11,14 +11,14 @@
 
 	var video = null, videoWidth, videoHeight, webcamStream = null;
 	var canvas;
-    var videoControls, videoProgressBar;
+    var videoControls, videoProgressBar, btnVideoCancel, btnVideoDone;
 	var gl;
 	var effects = [],
 		activeEffect = null;
 	var shaderProgram;
 	var vertexPositionBuffer, uvBuffer, mvMatrix, pMatrix;
 	var texture;
-	var animatedGIF, gifDelay = 100, gifLength = 0, gifMaxLength = 2000, gifRecordStart, recordGIFTimeout = null;
+	var animatedGIF = null, gifDelay = 100, gifLength = 0, gifMaxLength = 2000, gifRecordStart, recordGIFTimeout = null;
     var MODE_STATIC = 'static', MODE_VIDEO = 'video';
     var mode;
 
@@ -266,8 +266,14 @@
 
         videoControls = document.getElementById('video_controls');
         videoProgressBar = document.querySelector('progress');
+        btnVideoCancel = document.getElementById('btn_cancel');
+        btnVideoDone = document.getElementById('btn_done');
 
-        // Set up event listeners using Hammer touch library (HA HA)
+
+        btnVideoCancel.addEventListener('click', cancelVideoRecording, false);
+        btnVideoDone.addEventListener('click', finishVideoRecording, false);
+
+        // Set up 'gestures' using Hammer touch library (HA HA)
         Hammer(canvas)
             .on('touch', onTouchDown)
             .on('release', onTouchEnd)
@@ -291,7 +297,8 @@
                 }
             });
 
-        setMode(MODE_STATIC);
+        //setMode(MODE_STATIC); // TMP
+        setMode(MODE_VIDEO);
 
     }
 
@@ -337,8 +344,7 @@
 
     function onTouchEnd() {
         if(mode === MODE_VIDEO) {
-            // TMP pauseVideoRecording();
-            stopVideoRecording();
+            pauseVideoRecording();
         }
     }
 
@@ -392,20 +398,24 @@
 
     function startVideoRecording() {
         console.log('startVideoRecording');
-        gifRecordStart = Date.now();
-        gifLength = 0;
+       
+        // We might already have a half-way recorded video
+        if(animatedGIF === null) {
+            gifRecordStart = Date.now();
+            gifLength = 0;
 
-        show(videoControls);
+            show(videoControls);
 
-        animatedGIF = new Animated_GIF({ workerPath: 'js/libs/Animated_GIF/quantizer.js' });
-        animatedGIF.setSize(videoWidth, videoHeight);
-        animatedGIF.setDelay(gifDelay);
-        animatedGIF.setRepeat(1);
+            animatedGIF = new Animated_GIF({ workerPath: 'js/libs/Animated_GIF/quantizer.js' });
+            animatedGIF.setSize(videoWidth, videoHeight);
+            animatedGIF.setDelay(gifDelay);
+            animatedGIF.setRepeat(1);
+        }
         addFrameToGIF();
     }
 
     function pauseVideoRecording() {
-        console.error('pauseVideoRecording TODO');
+        clearTimeout(recordGIFTimeout);
     }
 
     function addFrameToGIF() {
@@ -413,20 +423,20 @@
         animatedGIF.addFrame(canvas);
         gifLength += gifDelay;
 
-        if(gifLength < gifMaxLength) {
+        if(gifLength < gifMaxLength && !animatedGIF.isRendering()) {
             var recordProgress = gifLength * 1.0 / gifMaxLength;
             videoProgressBar.value = recordProgress;
-            console.log('recorded amount', recordProgress, Math.floor(recordProgress*100) + '%');
+            console.log('recorded amnt', recordProgress, Math.floor(recordProgress*100) + '%');
             
             recordGIFTimeout = setTimeout(addFrameToGIF, gifDelay);
         } else {
-            stopVideoRecording();
+            finishVideoRecording();
         }
     }
     
-    function stopVideoRecording() {
+    function finishVideoRecording() {
 
-        console.log('STOP VIDEO RECORDING');
+        console.log('FINISH VIDEO RECORDING');
 
         clearTimeout(recordGIFTimeout);
 
@@ -459,41 +469,19 @@
             progressSpan.innerHTML = '';
             hide(videoControls);
 
+            // we're done with this instance
+            animatedGIF = null;
+
         });
     }
 
-	function stopRecording() {
-		clearTimeout(recordGIFTimeout);
-
-        var btnRecord = document.getElementById('btn_record');
-
-        animatedGIF.onRenderProgress(function(progress) {
-            if(progress < 1) {
-                btnRecord.value = 'Rendering ' + Math.floor(progress * 100) + '%';
-            } else {
-                btnRecord.value = progress;
-            }
-            console.log(progress);
-        });
-		
-        animatedGIF.getBase64GIF(function(gifData) {
-
-            var a = document.createElement('a');
-            a.setAttribute('href', gifData);
-            a.setAttribute('download', getTimestamp() + '.gif');
-
-            // Apparently the download won't start unless the anchor element
-            // is in the DOM tree
-            a.style.display = 'none';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-
-            btnRecord.disabled = false;
-            btnRecord.value = 'Record';
-
-        });
-	}
+    function cancelVideoRecording() {
+        clearTimeout(recordGIFTimeout);
+        // TODO animatedGIF.reset();
+        hide(videoControls);
+        videoProgressBar.value = 0;
+        animatedGIF = null;
+    }
 
 	function updateTexture(texture, video) {
 		gl.bindTexture(gl.TEXTURE_2D, texture);

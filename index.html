@@ -7,12 +7,23 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 	</head>
 	<body>
-		<div id="wrapper">
-			<div id="controls">
+        <div id="wrapper">
+            <header>
+                <hgroup>
+                    <h1>rtcamera</h1>
+                    <div id="video_controls" class="controls">
+                        <div>[progress bar] [OK]</div>
+                    </div>
+                </hgroup>
+            </header>
+			<!--<div id="controls">
 				<input type="button" id="btn_save" value="Save image" />
 				<input type="button" id="btn_record" value="Record video" />
-			</div>
-			<p id="instructions" class="modal">Swipe left or right to change between effects</p>
+            </div>-->
+            <p id="instructions" class="modal">Swipe left or right to change between effects</p>
+            <footer class="controls">
+                [STATIC CAMERA] [X TOGGLE] [VIDEO CAMERA]
+            </footer>
 		</div>
 		<script id="vs_common" type="x-shader/x-vertex">
 			uniform mat4 modelViewMatrix;

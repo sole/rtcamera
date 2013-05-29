@@ -1,72 +1,72 @@
 * {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-	overflow: hidden;
-	color: #fff;
-	background: #000;
+    overflow: hidden;
+    color: #fff;
+    background: #000;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
-#wrapper {
-	position: relative;
-}
-	
-	#instructions {
-		z-index: 0;
-	}
+    #wrapper {
+        position: relative;
+    }
 
-	#controls {
-		z-index: 2;
-		display: block;
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		text-align: center;
-		padding: 0.5rem 0;
-		background: #000;
-		background: rgba(0, 0, 0, 0.3);
-        opacity: 0;
-        transition: opacity 0.5s;
-	}
+        #instructions {
+            z-index: 0;
+        }
 
-	#wrapper > canvas {
-		position: relative;
-		z-index: 1;
-		display: block;
-		margin: 0 auto;
-	}
+        .controls {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
 
-	#savedImages {
-		position: absolute;
-		right: 0;
-		top: 0;
-		width: 128px;
-		height: 100%;
-		overflow-y: scroll;
-	}
+        header, footer {
+            display: block;
+            z-index: 10;
+            position: absolute;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            background: #000;
+            background: rgba(0, 0, 0, 0.3);
+        }
 
-		#savedImages img {
-			width: 100%;
-			height: auto;
-		}
+            header {
+                top: 0;
+            }
+                h1 {
+                    text-shadow: 2px 2px 1px #000;
+                }
 
-.modal {
-	display: block;
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	-webkit-transform: translate(-50%, -50%);
-	transform: translate(-50%, -50%);
-}
+            footer {
+                bottom: 0;
+            }
 
-.error {
-	border: 3px solid red;
-	padding: 2rem;
-    color: #800;
-	font-family: "Courier New", Courier, Monospace, mono;
-	background: #ffefef;
-}
+        #wrapper > canvas {
+            position: relative;
+            z-index: 1;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .modal {
+            display: block;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        .error {
+            border: 3px solid red;
+            padding: 2rem;
+            color: #800;
+            font-family: "Courier New", Courier, Monospace, mono;
+            background: #ffefef;
+        }

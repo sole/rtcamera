@@ -105,14 +105,9 @@
 		canvas.width = width;
 		canvas.height = height;
 		
-		Swipable.call(canvas);
-		canvas.onSwipeRight(nextEffect);
-		canvas.onSwipeLeft(prevEffect);
-
+		
 		document.getElementById('wrapper').appendChild(canvas);
 
-		//window.addEventListener('resize', onResize, false);
-		//onResize();
 		
 		try {
 
@@ -128,38 +123,6 @@
 			reportError(e.message);
 		}
 		
-	}
-
-	function onResize() {
-		var w = window.innerWidth,
-			h = window.innerHeight,
-			newW,
-			newH;
-
-		if(videoWidth === undefined || videoHeight === undefined) {
-			return;
-		}
-
-		newW = w;
-		newH = newW * videoHeight / videoWidth;
-
-		if(newH > h) {
-			newH = h;
-			newW = newH * videoWidth / videoHeight;
-		}
-
-		newW = Math.floor(newW);
-		newH = Math.floor(newH);
-
-		canvas.width = newW;
-		canvas.height = newH;
-		canvas.style.width = newW + 'px';
-		canvas.style.height = newH + 'px';
-
-		if( gl ) {
-			gl.viewportWidth = newW;
-			gl.viewportHeight = newH;
-		}
 	}
 
 	function initWebGL(canvas) {
@@ -293,11 +256,25 @@
 
 	}
 
-	function initUI() {
-        document.getElementById('controls').style.opacity = '1';
-		document.getElementById('btn_save').addEventListener('click', saveImage, false);
-		document.getElementById('btn_record').addEventListener('click', recordVideo, false);
-	}
+    function initUI() {
+
+        var controls = Array.prototype.slice.call(document.querySelectorAll('.controls'));
+        controls.forEach(function(control) {
+            var style = control.style;
+            style.display = 'block';
+            setTimeout(function() {
+                style.opacity = '1';
+            }, 1);
+        });
+
+
+        // setting up event listeners
+
+        Swipable.call(canvas);
+        canvas.onSwipeRight(nextEffect);
+        canvas.onSwipeLeft(prevEffect);
+
+    }
 	
 	function prevEffect() {
 		var index = effects.indexOf(activeEffect);
@@ -310,6 +287,18 @@
 		var newIndex = ++index % effects.length;
 		activeEffect = effects[newIndex];
 	}
+
+    function onClick() {
+        console.log('click');
+    }
+
+    function onTouchDown() {
+        console.log('touch down');
+    }
+
+    function onTouchEnd() {
+        console.log('touch end');
+    }
 
 	function pad(v) {
 		var s = String(v);

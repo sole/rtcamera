@@ -274,15 +274,13 @@
         btnVideoDone.addEventListener('click', finishVideoRecording, false);
 
         // Set up 'gestures' using Hammer touch library (HA HA)
-        Hammer(canvas)
-            .on('touch', onTouchDown)
-            .on('release', onTouchEnd)
-            .on('tap', onClick)
+        Hammer(canvas, { hold_timeout: 300 })
+            .on('release', onRelease)
+            .on('hold', onHold)
             .on('swipeleft', prevEffect)
             .on('swiperight', nextEffect);
 
-        var toggle = document.getElementById('mode_toggle');
-        Hammer(toggle)
+        Hammer(document.getElementById('mode_toggle'))
             .on('swipeleft', function() {
                 setMode(MODE_STATIC);
             })
@@ -329,20 +327,16 @@
 		activeEffect = effects[newIndex];
 	}
 
-    function onClick() {
-        console.log('click');
+    function onHold() {
+        console.log('hold');
         if(mode === MODE_STATIC) {
             takePicture();
-        }
-    }
-
-    function onTouchDown() {
-        if(mode === MODE_VIDEO) {
+        } else {
             startVideoRecording();
         }
     }
 
-    function onTouchEnd() {
+    function onRelease() {
         if(mode === MODE_VIDEO) {
             pauseVideoRecording();
         }
@@ -354,6 +348,7 @@
         
         if(newMode === MODE_STATIC) {
             hide(videoControls);
+            animatedGIF = null;
             toggle.innerHTML = 'static (swipe right or tap here to change)';
         } else {
             //show(videoControls);

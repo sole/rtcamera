@@ -44,12 +44,20 @@ body {
                     transition: opacity 0.3s;
                 }
                     #video_controls progress {
-                        border: 1px solid yellow; /* NOTE: horrid colours are intentional */
+                        border: 2px solid white;
+                        border-radius: 5px;
+                        background: rgba(0, 0, 0, 0.8);
                     }
+                        progress::-moz-progress-bar {
+                            background: #666;
+                            border-radius: 5px;
+                        }
 
-                    .rendering {
-                        border: 1px solid green;
+                    #video_controls progress.rendering {
                     }
+                        progress.rendering::-moz-progress-bar {
+                            background: #800;
+                        }
 
             footer {
                 bottom: 0;

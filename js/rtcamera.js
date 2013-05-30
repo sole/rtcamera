@@ -459,6 +459,8 @@
 
         clearTimeout(recordGIFTimeout);
 
+		videoProgressSpan.innerHTML = 'hold on...';
+		videoProgressBar.value = 0;
         videoProgressBar.classList.add('rendering');
 		rendering = true;
 

@@ -15,10 +15,6 @@ body {
         position: relative;
     }
 
-        #instructions {
-            z-index: 0;
-        }
-
         .controls {
             display: none;
             opacity: 0;
@@ -59,13 +55,21 @@ body {
                 bottom: 0;
             }
                 #mode_toggle {
-                    -webkit-user-select: none;
-                    -moz-user-select: none;
-                    user-select: none;
                     height: 4rem;
                     line-height: 4rem;
                     background: rgba(0, 0, 0, 0.3);
+                    text-shadow: 2px 2px 1px #000;
                 }
+
+        #instructions {
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 1em;
+            padding: 1em;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
 
         #canvasContainer > canvas {
             position: relative;
@@ -89,4 +93,10 @@ body {
             color: #800;
             font-family: "Courier New", Courier, Monospace, mono;
             background: #ffefef;
+        }
+
+        .non_selectable {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
         }

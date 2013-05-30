@@ -118,7 +118,11 @@
 			initWebGLBuffers();
 			initTexture();
 			initEffects(gl);
-			initUI();
+
+			// Display UI after a while-as WebGL takes a bit to set up,
+			// and it's weird to see interface elements over a black screen...
+			setTimeout(initUI, 300);
+			//initUI();
 		
 			render();
 
@@ -297,6 +301,18 @@
 
         //setMode(MODE_STATIC); // TMP
         setMode(MODE_VIDEO);
+
+		// Show "swipe left or right to change effect" instructions text
+		// TODO: maybe do it only once? on the first run?
+		setTimeout(function() {
+			var instructions = document.getElementById('instructions');
+			show(instructions);
+
+			setTimeout(function() {
+				hide(instructions);
+			}, 3000);
+			
+		}, 500);
 
     }
 

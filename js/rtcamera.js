@@ -19,6 +19,7 @@
 	var vertexPositionBuffer, uvBuffer, mvMatrix, pMatrix;
 	var texture;
 	var animatedGIF = null, gifDelay = 100, gifLength = 0, gifMaxLength = 2000, gifRecordStart, recordGIFTimeout = null;
+	var rendering = false;
     var MODE_STATIC = 'static', MODE_VIDEO = 'video';
     var mode;
 
@@ -345,12 +346,17 @@
 	}
 
     function onHold() {
-        console.log('hold');
+		
+		if(rendering) {
+			return;
+		}
+
         if(mode === MODE_STATIC) {
             takePicture();
         } else {
-            startVideoRecording();
+			startVideoRecording();
         }
+
     }
 
     function onRelease() {
@@ -368,7 +374,6 @@
             animatedGIF = null;
             toggle.innerHTML = 'static (swipe right or tap here to change)';
         } else {
-            //show(videoControls);
             toggle.innerHTML = 'video (swipe left or tap here to change)';
         }
         mode = newMode;
@@ -423,6 +428,7 @@
             animatedGIF.setDelay(gifDelay);
             animatedGIF.setRepeat(1);
         }
+
         addFrameToGIF();
     }
 
@@ -454,6 +460,10 @@
         clearTimeout(recordGIFTimeout);
 
         videoProgressBar.classList.add('rendering');
+		rendering = true;
+
+		btnVideoCancel.disabled = true;
+		btnVideoDone.disabled = true;
         
         animatedGIF.onRenderProgress(function(progress) {
             videoProgressSpan.innerHTML = 'rendering ' + Math.floor(progress * 100) + '%';
@@ -477,6 +487,11 @@
             videoProgressBar.classList.remove('rendering');
             videoProgressSpan.innerHTML = '';
             hide(videoControls);
+
+			btnVideoCancel.disabled = false;
+			btnVideoDone.disabled = false;
+
+			rendering = false;
 
             // we're done with this instance
             animatedGIF = null;

@@ -11,7 +11,7 @@
 
 	var video = null, videoWidth, videoHeight, webcamStream = null;
 	var canvas;
-    var videoControls, videoProgressBar, btnVideoCancel, btnVideoDone;
+    var videoControls, videoProgressBar, videoProgressSpan, btnVideoCancel, btnVideoDone;
 	var gl;
 	var effects = [],
 		activeEffect = null;
@@ -270,6 +270,7 @@
 
         videoControls = document.getElementById('video_controls');
         videoProgressBar = document.querySelector('progress');
+		videoProgressSpan = document.getElementById('progress_label');
         btnVideoCancel = document.getElementById('btn_cancel');
         btnVideoDone = document.getElementById('btn_done');
 
@@ -437,7 +438,8 @@
         if(gifLength < gifMaxLength && !animatedGIF.isRendering()) {
             var recordProgress = gifLength * 1.0 / gifMaxLength;
             videoProgressBar.value = recordProgress;
-            console.log('recorded amnt', recordProgress, Math.floor(recordProgress*100) + '%');
+            videoProgressSpan.innerHTML = Math.floor(gifLength / 10) / 100 + 's';
+			console.log('recorded amnt', recordProgress, Math.floor(recordProgress*100) + '%');
             
             recordGIFTimeout = setTimeout(addFrameToGIF, gifDelay);
         } else {
@@ -451,16 +453,12 @@
 
         clearTimeout(recordGIFTimeout);
 
-        var videoControls = document.getElementById('video_controls'),
-            progressBar = document.querySelector('progress'),
-            progressSpan = progressBar.querySelector('span');
-
-        progressBar.classList.add('rendering');
+        videoProgressBar.classList.add('rendering');
         
         animatedGIF.onRenderProgress(function(progress) {
-            progressSpan.innerHTML = 'rendering ' + Math.floor(progress * 100) + '%';
+            videoProgressSpan.innerHTML = 'rendering ' + Math.floor(progress * 100) + '%';
             console.log('render progress', progress);
-            progressBar.value = progress;
+            videoProgressBar.value = progress;
         });
 
         animatedGIF.getBase64GIF(function(gifData) {
@@ -476,8 +474,8 @@
             a.click();
             document.body.removeChild(a);
 
-            progressBar.classList.remove('rendering');
-            progressSpan.innerHTML = '';
+            videoProgressBar.classList.remove('rendering');
+            videoProgressSpan.innerHTML = '';
             hide(videoControls);
 
             // we're done with this instance

@@ -44,7 +44,7 @@
 					
 					if(attempts < 10) {
 						attempts++;
-						setTimeout(findVideoSize, 500);
+						setTimeout(findVideoSize, 200);
 					} else {
 						init(640, 480);
 					}
@@ -102,16 +102,8 @@
 		videoWidth = width;
 		videoHeight = height;
 		
-		video.style.width = width + 'px';
-		video.style.height = height + 'px';
-
 		canvas = document.createElement('canvas');
-		canvas.width = width;
-		canvas.height = height;
-		
-		
-		document.getElementById('canvasContainer').appendChild(canvas);
-
+		canvas.classList.add('modal');
 		
 		try {
 
@@ -120,7 +112,7 @@
 			initTexture();
 			initEffects(gl);
 
-			// Display UI after a while-as WebGL takes a bit to set up,
+			// Display the UI after a while-as WebGL takes a bit to set up,
 			// and it's weird to see interface elements over a black screen...
 			setTimeout(initUI, 300);
 			//initUI();
@@ -275,6 +267,13 @@
         btnVideoCancel = document.getElementById('btn_cancel');
         btnVideoDone = document.getElementById('btn_done');
 
+		// Set up listeners
+		
+		window.addEventListener('resize', onResize, false);
+		onResize();
+		
+		// Adding the canvas once it's been resized first
+		document.getElementById('canvasContainer').appendChild(canvas);
 
         btnVideoCancel.addEventListener('click', cancelVideoRecording, false);
         btnVideoDone.addEventListener('click', finishVideoRecording, false);
@@ -317,6 +316,38 @@
 		}, 500);
 
     }
+
+	function onResize() {
+
+		// videoWidth, videoHeight
+		var w = window.innerWidth,
+			h = window.innerHeight,
+			canvasWidth = videoWidth,
+			canvasHeight = videoHeight;
+
+		// constrain canvas size to be <= window size, and maintain proportions
+		while(canvasWidth > w || canvasHeight > h) {
+			canvasWidth /= 2;
+			canvasHeight /= 2;
+		}
+
+		canvas.width = canvasWidth;
+		canvas.height = canvasHeight;
+
+		gl.viewportWidth = canvasWidth;
+		gl.viewportHeight = canvasHeight;
+
+		// And then reescale it up with CSS style
+		var scaleX = w / canvasWidth;
+		var scaleY = h / canvasHeight;
+		var scaleToFit = Math.min(scaleX, scaleY);
+
+		scaleToFit |= 0;
+
+		canvas.style.width = (canvasWidth * scaleToFit) + 'px';
+		canvas.style.height = (canvasHeight * scaleToFit) + 'px';
+
+	}
 
     function hide(element, transitionLength) {
         transitionLength = transitionLength || 500;

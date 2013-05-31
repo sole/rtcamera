@@ -4,15 +4,23 @@
     box-sizing: border-box;
 }
 
+html {
+    height: 100%;
+}
+
 body {
     overflow: hidden;
     color: #fff;
     background: #000;
     font-family: Helvetica, Arial, sans-serif;
+    position: relative;
+    height: 100%;
 }
 
     #wrapper {
         position: relative;
+        height: 100%;
+        width: 100%;
     }
 
         .controls {
@@ -80,10 +88,14 @@ body {
 
 
         #canvasContainer > canvas {
-            position: relative;
-            z-index: 1;
+            // position: relative;
+            //z-index: 1;
             display: block;
             margin: 0 auto;
+            image-rendering: crisp-edges;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -webkit-optimize-contrast;
+            -ms-interpolation-mode: nearest-neighbor;
         }
 
         .modal {

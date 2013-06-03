@@ -4,8 +4,9 @@
     box-sizing: border-box;
 }
 
-html {
+html, body, #wrapper {
     height: 100%;
+    position: relative;
 }
 
 body {
@@ -13,13 +14,9 @@ body {
     color: #fff;
     background: #000;
     font-family: Helvetica, Arial, sans-serif;
-    position: relative;
-    height: 100%;
 }
 
     #wrapper {
-        position: relative;
-        height: 100%;
         width: 100%;
     }
 

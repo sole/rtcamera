@@ -39,6 +39,7 @@
     var MODE_STATIC = 'static';
     var MODE_VIDEO = 'video';
     var mode;
+    var TRANSITION_LENGTH = 500;
     var attempts = 0;
 
     if (navigator.getMedia) {
@@ -229,7 +230,7 @@
         var str = '';
         var k = shaderScript.firstChild;
         while (k) {
-            if (k.nodeType == 3) {
+            if (k.nodeType === 3) {
                 str += k.textContent;
             }
             k = k.nextSibling;
@@ -237,11 +238,11 @@
 
         var shader;
 
-        if (shaderScript.type == "x-shader/x-fragment") {
+        if (shaderScript.type === 'x-shader/x-fragment') {
 
             shader = glContext.createShader(gl.FRAGMENT_SHADER);
 
-        } else if (shaderScript.type == "x-shader/x-vertex") {
+        } else if (shaderScript.type === 'x-shader/x-vertex') {
 
             shader = glContext.createShader(gl.VERTEX_SHADER);
 
@@ -365,7 +366,7 @@
 
             }, 3000);
 
-        }, 500);
+        }, TRANSITION_LENGTH);
 
     }
 
@@ -404,7 +405,7 @@
 
     function hide(element, transitionLength) {
 
-        transitionLength = transitionLength || 500;
+        transitionLength = transitionLength || TRANSITION_LENGTH;
         element.style.opacity = 0;
 
         setTimeout(function() {
@@ -533,7 +534,7 @@
     function startVideoRecording() {
 
         // We might already have a half-way recorded video
-        if(animatedGIF === null) {
+        if(!animatedGIF) {
 
             gifRecordStart = Date.now();
             gifLength = 0;

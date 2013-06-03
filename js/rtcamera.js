@@ -9,26 +9,41 @@
 
 	// ---
 
-	var video = null, videoWidth, videoHeight, webcamStream = null;
+	var video = null;
+	var videoWidth;
+	var videoHeight;
+	var webcamStream = null;
 	var canvas;
-    var videoControls, videoProgressBar, videoProgressSpan, btnVideoCancel, btnVideoDone;
+    var videoControls;
+	var videoProgressBar;
+	var videoProgressSpan;
+	var btnVideoCancel;
+	var btnVideoDone;
 	var gl;
-	var effects = [],
-		activeEffect = null;
+	var effects = [];
+	var activeEffect = null;
 	var shaderProgram;
-	var vertexPositionBuffer, uvBuffer, mvMatrix, pMatrix;
+	var vertexPositionBuffer;
+	var uvBuffer;
+	var mvMatrix;
+	var pMatrix;
 	var texture;
-	var animatedGIF = null, gifDelay = 100, gifLength = 0, gifMaxLength = 2000, gifRecordStart, recordGIFTimeout = null;
+	var animatedGIF = null;
+	var gifDelay = 100;
+	var gifLength = 0;
+	var gifMaxLength = 2000;
+	var gifRecordStart;
+	var recordGIFTimeout = null;
 	var rendering = false;
-    var MODE_STATIC = 'static', MODE_VIDEO = 'video';
+    var MODE_STATIC = 'static';
+	var MODE_VIDEO = 'video';
     var mode;
+	var attempts = 0;
 
 	if (navigator.getMedia) {
 
 		video = document.createElement( 'video' );
 		video.autoplay = true;
-
-		var attempts = 0;
 
 		video.addEventListener('loadeddata', function readyListener( event ) {
 			findVideoSize();
@@ -221,14 +236,14 @@
 			'posterize': { vertex: 'vs', fragment: 'fs_bw' }
 		};
 
-		var vertexCommonScript = document.getElementById('vs_common').textContent,
-			fragmentCommonScript = document.getElementById('fs_common').textContent;
+		var vertexCommonScript = document.getElementById('vs_common').textContent;
+		var fragmentCommonScript = document.getElementById('fs_common').textContent;
 
 		for(var k in effectDefs) {
 			var def = effectDefs[k];
 			
-			var vertexScript = document.getElementById( def.vertex ).textContent,
-				fragmentScript = document.getElementById( def.fragment ).textContent;
+			var vertexScript = document.getElementById( def.vertex ).textContent;
+			var fragmentScript = document.getElementById( def.fragment ).textContent;
 
 			vertexScript = vertexCommonScript + vertexScript;
 			fragmentScript = fragmentCommonScript + fragmentScript;
@@ -306,8 +321,8 @@
 		// Show "swipe left or right to change effect" instructions text
 		// TODO: maybe do it only once? on the first run?
 		setTimeout(function() {
-			var instructions = document.getElementById('instructions');
-			show(instructions);
+			
+			show(document.getElementById('instructions'));
 
 			setTimeout(function() {
 				hide(instructions);
@@ -319,11 +334,10 @@
 
 	function onResize() {
 
-		// videoWidth, videoHeight
-		var w = window.innerWidth,
-			h = window.innerHeight,
-			canvasWidth = videoWidth,
-			canvasHeight = videoHeight;
+		var w = window.innerWidth;
+		var h = window.innerHeight;
+		var canvasWidth = videoWidth;
+		var canvasHeight = videoHeight;
 
 		// constrain canvas size to be <= window size, and maintain proportions
 		while(canvasWidth > w || canvasHeight > h) {
@@ -431,8 +445,7 @@
             pad(now.getHours()),
             pad(now.getMinutes()),
             pad(now.getSeconds())
-                ];
-
+        ];
         var timestamp = parts.join('');
 
         return timestamp;
@@ -476,7 +489,6 @@
             var recordProgress = gifLength * 1.0 / gifMaxLength;
             videoProgressBar.value = recordProgress;
             videoProgressSpan.innerHTML = Math.floor(gifLength / 10) / 100 + 's';
-			console.log('recorded amnt', recordProgress, Math.floor(recordProgress*100) + '%');
             
             recordGIFTimeout = setTimeout(addFrameToGIF, gifDelay);
         } else {

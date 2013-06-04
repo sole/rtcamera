@@ -1,72 +1,117 @@
 * {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body, #wrapper {
+    height: 100%;
+    position: relative;
 }
 
 body {
-	overflow: hidden;
-	color: #fff;
-	background: #000;
+    overflow: hidden;
+    color: #fff;
+    background: #000;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
-#wrapper {
-	position: relative;
-}
-	
-	#instructions {
-		z-index: 0;
-	}
+    #wrapper {
+        width: 100%;
+    }
 
-	#controls {
-		z-index: 2;
-		display: block;
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		text-align: center;
-		padding: 0.5rem 0;
-		background: #000;
-		background: rgba(0, 0, 0, 0.3);
-        opacity: 0;
-        transition: opacity 0.5s;
-	}
+        .controls {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
 
-	#wrapper > canvas {
-		position: relative;
-		z-index: 1;
-		display: block;
-		margin: 0 auto;
-	}
+        header, footer {
+            display: block;
+            z-index: 10;
+            position: absolute;
+            left: 0;
+            width: 100%;
+            text-align: center;
+        }
 
-	#savedImages {
-		position: absolute;
-		right: 0;
-		top: 0;
-		width: 128px;
-		height: 100%;
-		overflow-y: scroll;
-	}
+            header {
+                top: 0;
+            }
+                h1 {
+                    text-shadow: 2px 2px 1px #000;
+                    background: rgba(0, 0, 0, 0.3);
+                }
 
-		#savedImages img {
-			width: 100%;
-			height: auto;
-		}
+                #video_controls {
+                    opacity: 0;
+                    display: none;
+                    transition: opacity 0.3s;
+                }
+                    #video_controls progress {
+                        border: 2px solid white;
+                        border-radius: 5px;
+                        background: rgba(0, 0, 0, 0.8);
+                    }
+                        progress::-moz-progress-bar {
+                            background: #666;
+                            border-radius: 5px;
+                        }
 
-.modal {
-	display: block;
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	-webkit-transform: translate(-50%, -50%);
-	transform: translate(-50%, -50%);
-}
+                    #video_controls progress.rendering {
+                    }
+                        progress.rendering::-moz-progress-bar {
+                            background: #800;
+                        }
 
-.error {
-	border: 3px solid red;
-	padding: 2rem;
-    color: #800;
-	font-family: "Courier New", Courier, Monospace, mono;
-	background: #ffefef;
-}
+            footer {
+                bottom: 0;
+            }
+                #mode_toggle {
+                    height: 4rem;
+                    line-height: 4rem;
+                    background: rgba(0, 0, 0, 0.3);
+                    text-shadow: 2px 2px 1px #000;
+                }
+
+        #instructions {
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 1em;
+            padding: 1em;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+
+        #canvasContainer > canvas {
+            display: block;
+            margin: 0 auto;
+            image-rendering: crisp-edges;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -webkit-optimize-contrast;
+            -ms-interpolation-mode: nearest-neighbor;
+        }
+
+        .modal {
+            display: block;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        .error {
+            border: 3px solid red;
+            padding: 2rem;
+            color: #800;
+            font-family: "Courier New", Courier, Monospace, mono;
+            background: #ffefef;
+        }
+
+        .non_selectable {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }

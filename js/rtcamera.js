@@ -317,6 +317,8 @@
         videoProgressSpan = document.getElementById('progress_label');
         btnVideoCancel = document.getElementById('btn_cancel');
         btnVideoDone = document.getElementById('btn_done');
+        modeToggle = document.getElementById('mode_toggle');
+
 
         // Set up listeners
 
@@ -329,27 +331,19 @@
         btnVideoCancel.addEventListener('click', cancelVideoRecording, false);
         btnVideoDone.addEventListener('click', finishVideoRecording, false);
 
+        modeToggle.addEventListener('change', function(ev) {
+            
+            setMode( this.checked ? MODE_STATIC : MODE_VIDEO );
+
+        }, false);
+
+
         // Set up 'gestures' using Hammer touch library (HA HA)
         Hammer(canvas, { hold_timeout: 300 })
             .on('release', onRelease)
             .on('hold', onHold)
             .on('swipeleft', prevEffect)
             .on('swiperight', nextEffect);
-
-        Hammer(document.getElementById('mode_toggle'))
-            .on('swipeleft', function() {
-                setMode(MODE_STATIC);
-            })
-            .on('swiperight', function() {
-                setMode(MODE_VIDEO);
-            })
-            .on('tap', function() {
-                if(mode === MODE_STATIC) {
-                    setMode(MODE_VIDEO);
-                } else {
-                    setMode(MODE_STATIC);
-                }
-            });
 
         //setMode(MODE_STATIC); // TMP
         setMode(MODE_VIDEO);
@@ -477,11 +471,11 @@
 
             hide(videoControls);
             animatedGIF = null;
-            toggle.innerHTML = 'static (swipe right or tap here to change)';
+            toggle.checked = true;
 
         } else {
 
-            toggle.innerHTML = 'video (swipe left or tap here to change)';
+            toggle.checked = false;
 
         }
 

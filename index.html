@@ -3,7 +3,10 @@
     <head>
         <meta charset="utf-8">
         <title>real time camera</title>
+        <link rel="stylesheet" href="css/x-tag-switch.css" type="text/css" />
         <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
     </head>
     <body>
@@ -24,7 +27,8 @@
 
             <p id="instructions" class="modal non_selectable">Swipe left or right to change between effects</p>
             <footer class="controls">
-                <div id="mode_toggle" class="non_selectable"></div>
+                [video icon] <x-switch id="mode_toggle" onText="camera" offText="video" ></x-switch> [camera icon]
+                <!--<div id="mode_toggle" class="non_selectable"></div>-->
             </footer>
         </div>
 
@@ -145,6 +149,9 @@
                 gl_FragColor = vec4(rgb, 1.0);
             }
         </script>
+
+        <script src="js/libs/x-tag-core.js"></script>
+        <script src="js/libs/x-tag-components.js"></script>
 
         <script src="js/libs/glmatrix.min.js"></script>
         <script src="js/libs/raf.js"></script>

@@ -13,7 +13,7 @@
 
     <div id="wrapper">
       <header>
-        <h1>rtcamera</h1>
+        <h1><span>rt</span>camera</h1>
         <div class="controls">
           <div id="video_controls">
             <input type="button" id="btn_cancel" value="cancel" />
@@ -25,11 +25,14 @@
 
       <div id="canvasContainer"></div>
 
-      <p id="instructions" class="modal non_selectable">Swipe left or right to change between effects</p>
+      <div id="instructions" class="modal non_selectable">
+        <p>[icon] Press the screen to take a photo or record video.</p>
+        <p>[icon] Swipe left or right to change between effects.</p>
+      </div>
       <footer class="controls">
-        <input type="image" src="img/icons/ic_action_video.png" alt="video" />
+        <input type="image" id="btnVideo" src="img/icons/ic_action_video.png" alt="video" />
         <x-switch id="mode_toggle" onText="camera" offText="video"></x-switch>
-        <input type="image" src="img/icons/ic_action_photo.png" alt="photo" />
+        <input type="image" id="btnPhoto" src="img/icons/ic_action_photo.png" alt="photo" />
       </footer>
     </div>
 

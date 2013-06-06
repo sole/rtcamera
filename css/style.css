@@ -1,3 +1,13 @@
+@font-face {
+    font-family: 'Roboto Condensed';
+    src: url(fonts/Roboto-Condensed.ttf);
+}
+
+@font-face {
+    font-family: 'Roboto Regular';
+    src: url(fonts/Roboto-Regular.ttf);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -13,7 +23,7 @@ body {
     overflow: hidden;
     color: #fff;
     background: #000;
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: 'Roboto Regular', Helvetica, Arial, sans-serif;
 }
 
     #wrapper {
@@ -39,9 +49,14 @@ body {
                 top: 0;
             }
                 h1 {
-                    text-shadow: 2px 2px 1px #000;
-                    background: rgba(0, 0, 0, 0.3);
+                    background: rgba(0, 0, 0, 0.5);
+                    font-weight: normal;
+                    padding: 0.25rem 0;
+                    font-family: 'Roboto Condensed';
                 }
+                    h1 span {
+                        color: #e58f33;
+                    }
 
                 #video_controls {
                     opacity: 0;
@@ -64,23 +79,21 @@ body {
                             background: #800;
                         }
 
-            footer {
-                bottom: 0;
-            }
-
-                footer input {
-                    vertical-align: middle;
-                }
-
-
         #instructions {
+            color: #ddd;
             z-index: 100;
             background: rgba(0, 0, 0, 0.5);
             border-radius: 1em;
             padding: 1em;
             opacity: 0;
             transition: opacity 1s;
+            font-size: 1.2rem;
+            text-align: center;
         }
+
+            #instructions p + p {
+                margin-top: 3rem;
+            }
 
 
         #canvasContainer > canvas {
@@ -114,6 +127,15 @@ body {
             -moz-user-select: none;
             user-select: none;
         }
+
+        footer {
+                bottom: 0;
+            }
+
+                footer input {
+                    vertical-align: middle;
+                }
+
 
 /* refining the x-switch styles */
 x-switch {

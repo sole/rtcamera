@@ -68,6 +68,10 @@ body {
                 bottom: 0;
             }
 
+                footer input {
+                    vertical-align: middle;
+                }
+
 
         #instructions {
             z-index: 100;

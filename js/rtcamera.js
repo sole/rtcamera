@@ -332,7 +332,8 @@
         btnVideoDone.addEventListener('click', finishVideoRecording, false);
 
         modeToggle.addEventListener('change', function(ev) {
-            
+
+            console.log('change', ev, this.checked);
             setMode( this.checked ? MODE_STATIC : MODE_VIDEO );
 
         }, false);

@@ -113,11 +113,11 @@ body {
                 padding-bottom: 25px
             }
                 #press {
-                    background-image: url(/img/icons/icn-coachmark-press.png);
+                    background-image: url(../img/icons/icn-coachmark-press.png);
                 }
 
                 #arrows {
-                    background-image: url(/img/icons/icn-coachmark-arrows.png);
+                    background-image: url(../img/icons/icn-coachmark-arrows.png);
                 }
 
             #instructions li + li {

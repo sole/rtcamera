@@ -102,6 +102,8 @@ body {
             font-size: 1.2rem;
             list-style-type: none;
             list-style-position: inside;
+            width: 90%;
+            max-width: 500px
         }
 
             #instructions li {
@@ -109,8 +111,8 @@ body {
                 background-position: 0 12px;
                 background-size: 48px 48px;
                 padding-left: 64px;
-                padding-top: 25px;
-                padding-bottom: 25px
+                padding-top: 12px;
+                padding-bottom: 25px;
             }
                 #press {
                     background-image: url(../img/icons/icn-coachmark-press.png);

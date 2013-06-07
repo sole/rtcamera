@@ -82,6 +82,11 @@ body {
                         padding: 0.25rem 0;
                     }
 
+                    #video_controls input {
+                        max-width: 24px;
+                        max-height: 24px;
+                    }
+
                 #video_controls.rendering progress, #video_controls.rendering input {
                     display: none;
                 }
@@ -95,15 +100,28 @@ body {
             opacity: 0;
             transition: opacity 1s;
             font-size: 1.2rem;
-            text-align: center;
+            list-style-type: none;
+            list-style-position: inside;
         }
 
-            #instructions img {
-                vertical-align: middle;
+            #instructions li {
+                background-repeat: no-repeat;
+                background-position: 0 12px;
+                background-size: 48px 48px;
+                padding-left: 64px;
+                padding-top: 25px;
+                padding-bottom: 25px
             }
+                #press {
+                    background-image: url(/img/icons/icn-coachmark-press.png);
+                }
 
-            #instructions p + p {
-                margin-top: 3rem;
+                #arrows {
+                    background-image: url(/img/icons/icn-coachmark-arrows.png);
+                }
+
+            #instructions li + li {
+                margin-top: 2rem;
             }
 
 

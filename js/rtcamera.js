@@ -355,7 +355,7 @@
 
         // Show "swipe left or right to change effect" instructions text
         // TODO: maybe do it only once? on the first run?
-        setTimeout(function() {
+        /*setTimeout(function() {
 
             show(document.getElementById('instructions'));
 
@@ -365,8 +365,9 @@
 
             }, 3000);
 
-        }, TRANSITION_LENGTH);
-        // TMP for testing show(document.getElementById('instructions'));
+        }, TRANSITION_LENGTH);*/
+        // TMP for testing 
+        show(document.getElementById('instructions'));
 
     }
 

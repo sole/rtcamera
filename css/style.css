@@ -98,6 +98,10 @@ body {
             text-align: center;
         }
 
+            #instructions img {
+                vertical-align: middle;
+            }
+
             #instructions p + p {
                 margin-top: 3rem;
             }

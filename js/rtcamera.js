@@ -1,5 +1,7 @@
 (function() {
 
+    'use strict';
+
     window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
 
     navigator.getMedia = ( navigator.getUserMedia ||
@@ -20,6 +22,8 @@
     var videoProgressSpan;
     var btnVideoCancel;
     var btnVideoDone;
+    var modeToggle;
+
     var gl;
     var effects = [];
     var activeEffect = null;
@@ -336,7 +340,7 @@
             console.log('change', ev, this.checked);
             setMode( this.checked ? MODE_STATIC : MODE_VIDEO );
 
-        }, false);
+        }, false); 
 
 
         // Set up 'gestures' using Hammer touch library (HA HA)
@@ -362,6 +366,7 @@
             }, 3000);
 
         }, TRANSITION_LENGTH);
+        // TMP for testing show(document.getElementById('instructions'));
 
     }
 

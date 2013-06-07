@@ -539,6 +539,9 @@
             gifRecordStart = Date.now();
             gifLength = 0;
 
+            videoControls.classList.remove('rendering');
+            videoProgressBar.value = 0;
+
             show(videoControls);
 
             animatedGIF = new Animated_GIF({ workerPath: 'js/libs/Animated_GIF/quantizer.js' });
@@ -583,13 +586,13 @@
 
         clearTimeout(recordGIFTimeout);
 
-        videoProgressSpan.innerHTML = 'hold on...';
-        videoProgressBar.value = 0;
-        videoProgressBar.classList.add('rendering');
+        videoControls.classList.add('rendering');
         rendering = true;
 
         btnVideoCancel.disabled = true;
         btnVideoDone.disabled = true;
+
+        videoProgressSpan.innerHTML = '<img src="/img/icons/spinner.gif" />';
 
         animatedGIF.onRenderProgress(function(progress) {
 
@@ -611,7 +614,6 @@
             a.click();
             document.body.removeChild(a);
 
-            videoProgressBar.classList.remove('rendering');
             videoProgressSpan.innerHTML = '';
             hide(videoControls);
 

@@ -77,11 +77,14 @@ body {
                             background: #e58f33;
                         }
 
-                    #video_controls progress.rendering {
+                    #video_controls span {
+                        display: block;
+                        padding: 0.25rem 0;
                     }
-                        progress.rendering::-moz-progress-bar {
-                            background: #800;
-                        }
+
+                #video_controls.rendering progress, #video_controls.rendering input {
+                    display: none;
+                }
 
         #instructions {
             color: #ddd;

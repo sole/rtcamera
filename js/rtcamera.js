@@ -593,7 +593,7 @@
         btnVideoCancel.disabled = true;
         btnVideoDone.disabled = true;
 
-        videoProgressSpan.innerHTML = '<img src="/img/icons/spinner.gif" />';
+        videoProgressSpan.innerHTML = '<img src="/img/icons/spinner.gif">';
 
         animatedGIF.onRenderProgress(function(progress) {
 

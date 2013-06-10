@@ -4,9 +4,9 @@
   "description": "A fun camera app to apply effects on the fly",
   "launch_path": "/index.html",
   "icons": {
-    "16": "/img/icons/mortar-16.png",
-    "48": "/img/icons/mortar-48.png",
-    "128": "/img/icons/mortar-128.png"
+    "16": "/img/icons/camera-icon-16.png",
+    "48": "/img/icons/camera-icon-48.png",
+    "128": "/img/icons/camera-icon-128.png"
   },
   "developer": {
     "name": "Mozilla",

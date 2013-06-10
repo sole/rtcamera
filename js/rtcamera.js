@@ -1,5 +1,7 @@
 (function() {
 
+    'use strict';
+
     window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
 
     navigator.getMedia = ( navigator.getUserMedia ||
@@ -20,6 +22,8 @@
     var videoProgressSpan;
     var btnVideoCancel;
     var btnVideoDone;
+    var modeToggle;
+
     var gl;
     var effects = [];
     var activeEffect = null;
@@ -317,6 +321,8 @@
         videoProgressSpan = document.getElementById('progress_label');
         btnVideoCancel = document.getElementById('btn_cancel');
         btnVideoDone = document.getElementById('btn_done');
+        modeToggle = document.getElementById('mode_toggle');
+
 
         // Set up listeners
 
@@ -329,27 +335,20 @@
         btnVideoCancel.addEventListener('click', cancelVideoRecording, false);
         btnVideoDone.addEventListener('click', finishVideoRecording, false);
 
+        modeToggle.addEventListener('change', function(ev) {
+
+            console.log('change', ev, this.checked);
+            setMode( this.checked ? MODE_STATIC : MODE_VIDEO );
+
+        }, false); 
+
+
         // Set up 'gestures' using Hammer touch library (HA HA)
         Hammer(canvas, { hold_timeout: 300 })
             .on('release', onRelease)
             .on('hold', onHold)
             .on('swipeleft', prevEffect)
             .on('swiperight', nextEffect);
-
-        Hammer(document.getElementById('mode_toggle'))
-            .on('swipeleft', function() {
-                setMode(MODE_STATIC);
-            })
-            .on('swiperight', function() {
-                setMode(MODE_VIDEO);
-            })
-            .on('tap', function() {
-                if(mode === MODE_STATIC) {
-                    setMode(MODE_VIDEO);
-                } else {
-                    setMode(MODE_STATIC);
-                }
-            });
 
         //setMode(MODE_STATIC); // TMP
         setMode(MODE_VIDEO);
@@ -367,6 +366,8 @@
             }, 3000);
 
         }, TRANSITION_LENGTH);
+        // TMP for testing 
+        //show(document.getElementById('instructions'));
 
     }
 
@@ -477,11 +478,11 @@
 
             hide(videoControls);
             animatedGIF = null;
-            toggle.innerHTML = 'static (swipe right or tap here to change)';
+            toggle.checked = true;
 
         } else {
 
-            toggle.innerHTML = 'video (swipe left or tap here to change)';
+            toggle.checked = false;
 
         }
 
@@ -539,6 +540,9 @@
             gifRecordStart = Date.now();
             gifLength = 0;
 
+            videoControls.classList.remove('rendering');
+            videoProgressBar.value = 0;
+
             show(videoControls);
 
             animatedGIF = new Animated_GIF({ workerPath: 'js/libs/Animated_GIF/quantizer.js' });
@@ -583,13 +587,13 @@
 
         clearTimeout(recordGIFTimeout);
 
-        videoProgressSpan.innerHTML = 'hold on...';
-        videoProgressBar.value = 0;
-        videoProgressBar.classList.add('rendering');
+        videoControls.classList.add('rendering');
         rendering = true;
 
         btnVideoCancel.disabled = true;
         btnVideoDone.disabled = true;
+
+        videoProgressSpan.innerHTML = '<img src="/img/icons/spinner.gif">';
 
         animatedGIF.onRenderProgress(function(progress) {
 
@@ -611,7 +615,6 @@
             a.click();
             document.body.removeChild(a);
 
-            videoProgressBar.classList.remove('rendering');
             videoProgressSpan.innerHTML = '';
             hide(videoControls);
 

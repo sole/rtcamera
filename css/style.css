@@ -1,3 +1,13 @@
+@font-face {
+    font-family: 'Roboto Condensed';
+    src: url(fonts/Roboto-Condensed.ttf);
+}
+
+@font-face {
+    font-family: 'Roboto Regular';
+    src: url(fonts/Roboto-Regular.ttf);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -13,7 +23,7 @@ body {
     overflow: hidden;
     color: #fff;
     background: #000;
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: 'Roboto Regular', Helvetica, Arial, sans-serif;
 }
 
     #wrapper {
@@ -25,6 +35,9 @@ body {
             opacity: 0;
             transition: opacity 0.5s;
         }
+            .controls input {
+                vertical-align: middle;
+            }
 
         header, footer {
             display: block;
@@ -39,49 +52,79 @@ body {
                 top: 0;
             }
                 h1 {
-                    text-shadow: 2px 2px 1px #000;
-                    background: rgba(0, 0, 0, 0.3);
+                    background: rgba(0, 0, 0, 0.5);
+                    font-weight: normal;
+                    padding: 0.25rem 0;
+                    font-family: 'Roboto Condensed';
                 }
+                    h1 span {
+                        color: #e58f33;
+                    }
 
                 #video_controls {
                     opacity: 0;
                     display: none;
                     transition: opacity 0.3s;
+                    background: rgba(0, 0, 0, 0.5);
                 }
                     #video_controls progress {
-                        border: 2px solid white;
-                        border-radius: 5px;
+                        border-width: 0;
                         background: rgba(0, 0, 0, 0.8);
+                        height: 4px;
+                        vertical-align: middle;
                     }
                         progress::-moz-progress-bar {
-                            background: #666;
-                            border-radius: 5px;
+                            background: #e58f33;
                         }
 
-                    #video_controls progress.rendering {
+                    #video_controls span {
+                        display: block;
+                        padding: 0.25rem 0;
                     }
-                        progress.rendering::-moz-progress-bar {
-                            background: #800;
-                        }
 
-            footer {
-                bottom: 0;
-            }
-                #mode_toggle {
-                    height: 4rem;
-                    line-height: 4rem;
-                    background: rgba(0, 0, 0, 0.3);
-                    text-shadow: 2px 2px 1px #000;
+                    #video_controls input {
+                        max-width: 24px;
+                        max-height: 24px;
+                    }
+
+                #video_controls.rendering progress, #video_controls.rendering input {
+                    display: none;
                 }
 
         #instructions {
+            color: #ddd;
             z-index: 100;
             background: rgba(0, 0, 0, 0.5);
             border-radius: 1em;
             padding: 1em;
             opacity: 0;
             transition: opacity 1s;
+            font-size: 1.2rem;
+            list-style-type: none;
+            list-style-position: inside;
+            width: 90%;
+            max-width: 500px
         }
+
+            #instructions li {
+                background-repeat: no-repeat;
+                background-position: 0 12px;
+                background-size: 48px 48px;
+                padding-left: 64px;
+                padding-top: 12px;
+                padding-bottom: 25px;
+            }
+                #press {
+                    background-image: url(../img/icons/icn-coachmark-press.png);
+                }
+
+                #arrows {
+                    background-image: url(../img/icons/icn-coachmark-arrows.png);
+                }
+
+            #instructions li + li {
+                margin-top: 2rem;
+            }
 
 
         #canvasContainer > canvas {
@@ -115,3 +158,34 @@ body {
             -moz-user-select: none;
             user-select: none;
         }
+
+        footer {
+            bottom: 0;
+        }
+
+
+/* refining the x-switch styles */
+x-switch {
+    border-color: #333;
+    border-width: 2px;
+    font-family: 'Roboto Regular', sans-serif;
+    font-size: 1rem;
+    line-height: 1rem;
+    vertical-align: middle;
+    text-shadow: 0 0 2px #000;
+    text-transform: uppercase;
+    color: #999;
+}
+
+x-switch, x-switch[checked], .x-switch-background {
+    background: #000;
+}
+
+.x-switch-text {
+    padding: 0.2rem 0.95rem;
+}
+
+.x-switch-knob {
+    background: #e58f33;
+    box-shadow: 0 0 5px #000;
+}

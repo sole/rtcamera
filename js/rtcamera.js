@@ -456,6 +456,7 @@
             btnVideoDone.disabled = false;
 
             rendering = false;
+            render();
 
             // we're done with this instance
             animatedGIF = null;
@@ -476,7 +477,9 @@
 
     function render() {
 
-        requestAnimationFrame( render );
+        if(!rendering) {
+            requestAnimationFrame( render );
+        }
 
         if( video.readyState === video.HAVE_ENOUGH_DATA ) {
             renderer.updateTexture(video);

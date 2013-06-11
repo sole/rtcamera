@@ -380,7 +380,7 @@
             show(videoControls);
 
             animatedGIF = new Animated_GIF({ workerPath: 'js/libs/Animated_GIF/quantizer.js' });
-            animatedGIF.setSize(videoWidth, videoHeight);
+            animatedGIF.setSize(canvas.width, canvas.height);
             animatedGIF.setDelay(gifDelay);
             animatedGIF.setRepeat(1);
 
@@ -478,7 +478,7 @@
     function render() {
 
         if(!rendering) {
-            requestAnimationFrame( render );
+            requestAnimationFrame(render);
         }
 
         if( video.readyState === video.HAVE_ENOUGH_DATA ) {

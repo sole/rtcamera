@@ -1,18 +1,27 @@
-var Renderer = function(canvas) {
+var Renderer = function(canvas, errorCallback, readyCallback) {
+    'use strict';
+
     var gl;
     var effects = [];
+    var effectDefinitions = {
+        'Dithering': { vertex: 'plane.vs', fragment: 'dithering.fs' },
+        'Posterize': { vertex: 'plane.vs', fragment: 'posterize.fs' }
+    };
     var activeEffect = null;
+    var shadersReady = false;
     var shaderProgram;
     var vertexPositionBuffer;
     var uvBuffer;
     var mvMatrix;
     var pMatrix;
     var texture;
+    var onErrorCallback = errorCallback || function() {};
+    var onReadyCallback = readyCallback || function() {};
 
     gl = initWebGL(canvas);
     initWebGLBuffers();
     initTexture();
-    initEffects(gl);
+    loadEffects();
 
     function initWebGL(canvas) {
 
@@ -69,78 +78,95 @@ var Renderer = function(canvas) {
     function initTexture() {
 
         texture = gl.createTexture();
-        // texture.image = video;
 
     }
 
-    function getShader(glContext, id) {
+    function loadEffects() {
+        // We always need to load some common shader code, so add those to the
+        // list to start with
+        var files = ['common.vs', 'common.fs'];
 
-        var shaderScript = document.getElementById(id);
+        // then collect all file names from the effect definitions
+        for(var k in effectDefinitions) {
+            
+            var def = effectDefinitions[k];
+            files.push(def.vertex);
+            files.push(def.fragment);
 
-        if (!shaderScript) {
-            throw new Error('Shader with id = ' + id + ' could not be found');
         }
 
-        var str = '';
-        var k = shaderScript.firstChild;
-        while (k) {
-            if (k.nodeType === 3) {
-                str += k.textContent;
+        // And load each shader file. When done, we can initialise the effects.
+        loadShaders(files, onErrorCallback, function(shaders) {
+            initialiseEffects(shaders);
+        });
+
+    }
+
+    // We will be loading shader files sequentially
+    function loadShaders(files, errorCallback, doneCallback) {
+        var directory = 'shaders/';
+        var loaded = {};
+        var filesToLoad = files.slice(0);
+
+        loadNextShader();
+        
+        //
+        
+        function loadNextShader() {
+
+            if(filesToLoad.length > 0) {
+                setTimeout(function() {
+                    loadShader(filesToLoad.shift());
+                }, 1);
+            } else {
+                doneCallback(loaded);
             }
-            k = k.nextSibling;
-        }
-
-        var shader;
-
-        if (shaderScript.type === 'x-shader/x-fragment') {
-
-            shader = glContext.createShader(gl.FRAGMENT_SHADER);
-
-        } else if (shaderScript.type === 'x-shader/x-vertex') {
-
-            shader = glContext.createShader(gl.VERTEX_SHADER);
-
-        } else {
-
-            throw new Error('Unrecognised shader type, id = ' + id);
 
         }
 
-        glContext.shaderSource(shader, str);
-        glContext.compileShader(shader);
+        function loadShader(filename) {
+            
+            // Don't load shaders twice
+            if(loaded.hasOwnProperty(filename)) {
+                loadNextShader(filename);
+            } else {
+                var fullpath = directory + filename;
+                var request = new XMLHttpRequest();
 
-        if (!glContext.getShaderParameter(shader, glContext.COMPILE_STATUS)) {
+                request.open('GET', fullpath, true);
+                request.responseType = 'text';
+                request.onload = function() {
+                    if(request.status === 404) {
+                        errorCallback('Shader file not found: ' + filename);
+                    } else {
+                        loaded[filename] = request.response;
+                        loadNextShader();
+                    }
+                };
 
-            throw new Error('Shader <strong>' + id + '</strong> could not be compiled\n' + glContext.getShaderInfoLog(shader));
-
+                request.send();
+            }
         }
-
-        return shader;
 
     }
 
-    function initEffects(gl) {
+    function initialiseEffects(shadersData) {
+        
+        var vertexCommonShader = shadersData['common.vs'];
+        var fragmentCommonShader = shadersData['common.fs'];
 
-        var effectDefs = {
-            'dithering': { vertex: 'vs', fragment: 'fs' },
-            'posterize': { vertex: 'vs', fragment: 'fs_bw' }
-        };
+        for(var k in effectDefinitions) {
 
-        var vertexCommonScript = document.getElementById('vs_common').textContent;
-        var fragmentCommonScript = document.getElementById('fs_common').textContent;
+            var def = effectDefinitions[k];
+            var vertexShader = shadersData[def.vertex];
+            var fragmentShader = shadersData[def.fragment];
 
-        for(var k in effectDefs) {
-
-            var def = effectDefs[k];
-            var vertexScript = document.getElementById( def.vertex ).textContent;
-            var fragmentScript = document.getElementById( def.fragment ).textContent;
-
-            vertexScript = vertexCommonScript + vertexScript;
-            fragmentScript = fragmentCommonScript + fragmentScript;
+            vertexShader = vertexCommonShader + vertexShader;
+            fragmentShader = fragmentCommonShader + fragmentShader;
 
             var effect = new ImageEffect({
-                vertexShader: vertexScript,
-                fragmentShader: fragmentScript,
+                vertexShader: vertexShader,
+                fragmentShader: fragmentShader,
                 attributes: {
                     uv: {},
                     position: {}
@@ -158,10 +184,22 @@ var Renderer = function(canvas) {
         }
 
         activeEffect = effects[0];
+        setTimeout(onEffectsInitialised, 1);
 
     }
 
+    function onEffectsInitialised() {
+
+        shadersReady = true;
+        onReadyCallback();
+
+    }
+    
     function render() {
+
+        if(!shadersReady) {
+            return;
+        }
 
         gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
         gl.clearColor(1.0, 0.0, 0.0, 1.0);
@@ -195,8 +233,10 @@ var Renderer = function(canvas) {
     }
 
     this.setSize = function(w, h) {
+
         gl.viewportWidth = w;
         gl.viewportHeight = h;
+
     };
 
     this.prevEffect = function() {
@@ -217,7 +257,7 @@ var Renderer = function(canvas) {
 
     };
 
-    this.updateTexture = function(/*texture,*/ video) {
+    this.updateTexture = function(video) {
 
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
@@ -230,8 +270,5 @@ var Renderer = function(canvas) {
 
         render();
     };
-
-
-
 
 };

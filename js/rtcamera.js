@@ -136,14 +136,16 @@
 
         try {
 
-            renderer = new Renderer(canvas);
+            renderer = new Renderer(canvas, reportError, function() {
+          
+                // Display the UI after a while-as WebGL takes a bit to set up,
+                // and it's weird to see interface elements over a black screen...
+                setTimeout(initUI, 200);
 
-            // Display the UI after a while-as WebGL takes a bit to set up,
-            // and it's weird to see interface elements over a black screen...
-            setTimeout(initUI, 300);
+                render();
 
-            render();
-
+            });
+            
         } catch(e) {
 
             reportError(e.message);

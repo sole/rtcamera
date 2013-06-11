@@ -157,6 +157,9 @@ body {
             -webkit-user-select: none;
             -moz-user-select: none;
             user-select: none;
+            -webkit-pointer-events: none;
+            -moz-pointer-events: none;
+            pointer-events: none;
         }
 
         footer {

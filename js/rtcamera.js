@@ -382,7 +382,7 @@
             animatedGIF = new Animated_GIF({ workerPath: 'js/libs/Animated_GIF/quantizer.js' });
             animatedGIF.setSize(canvas.width, canvas.height);
             animatedGIF.setDelay(gifDelay);
-            animatedGIF.setRepeat(1);
+            animatedGIF.setRepeat(0);
 
         }
 

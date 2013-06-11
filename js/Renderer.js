@@ -280,7 +280,7 @@ var Renderer = function(canvas, errorCallback, readyCallback) {
      * - activate a texture unit or "slot" (texture0),
      * - enable the particular texture we want to use, with bindTexture,
      * - then enable the effect, which involves telling WebGL to use the shaders
-     * associated to the effect
+     *   associated to the effect
      * - tell WebGL to use the matrices we calculated before
      * - tell WebGL to draw a series of triangles, by reading its positions from the
      *   vertexPositionBuffer we initialised early on.

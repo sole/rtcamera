@@ -17,6 +17,9 @@
     var videoHeight;
     var webcamStream = null;
     var canvas;
+    var shiftBox;
+    var btnMenu;
+    var aside;
     var videoControls;
     var videoProgressBar;
     var videoProgressSpan;
@@ -88,6 +91,7 @@
         reportError('Native device media streaming (getUserMedia) not supported in this browser.');
 
     }
+    //});
 
     function reportError(message) {
 
@@ -165,6 +169,10 @@
         btnVideoCancel = document.getElementById('btn_cancel');
         btnVideoDone = document.getElementById('btn_done');
         modeToggle = document.getElementById('mode_toggle');
+        btnMenu = document.getElementById('menu');
+        shiftBox = document.querySelector('x-shiftbox');
+        //shiftBox = document.querySelector('.x-shiftbox');
+        aside = document.querySelector('aside');
 
 
         // Set up listeners
@@ -195,6 +203,23 @@
 
         //setMode(MODE_STATIC); // TMP
         setMode(MODE_VIDEO);
+
+        // Set up the app menu
+        //shiftBox.shift = 'right';
+        
+        btnMenu.addEventListener('click', function() {
+            console.log('click');
+            if(shiftBox.hasAttribute('open')) {
+                shiftBox.removeAttribute('open');
+            } else {
+                //shiftBox.setAttribute('open', true);
+                shiftBox.setAttribute('open');
+            }
+        }, false);
+
+        aside.addEventListener('click', function() {
+            shiftBox.removeAttribute('open');
+        }, false);
 
         // Show "swipe left or right to change effect" instructions text
         // TODO: maybe do it only once? on the first run?

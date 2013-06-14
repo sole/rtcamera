@@ -171,7 +171,6 @@
         modeToggle = document.getElementById('mode_toggle');
         btnMenu = document.getElementById('menu');
         shiftBox = document.querySelector('x-shiftbox');
-        //shiftBox = document.querySelector('.x-shiftbox');
         aside = document.querySelector('aside');
 
 
@@ -201,8 +200,8 @@
             .on('swipeleft', prevEffect)
             .on('swiperight', nextEffect);
 
-        //setMode(MODE_STATIC); // TMP
-        setMode(MODE_VIDEO);
+        setMode(MODE_STATIC); // TMP
+        //setMode(MODE_VIDEO);
 
         // Set up the app menu
         //shiftBox.shift = 'right';
@@ -381,12 +380,48 @@
 
     }
 
+
+    // data == base64 dataURL (needs to be "blobified" for downloading later on)
+    function saveLocalPicture(data, callback) {
+        console.log('save picture', data.length);
+        var img = document.createElement('img');
+        var s = img.style;
+        img.src = data;
+        s.border = '1px solid red';
+        s.position = 'absolute';
+        s.top = '0px';
+        s.left = '0px';
+        s.zIndex = '10';
+
+        var picture = new Picture();
+        picture.imageData = data;
+
+        picture.save(function() {
+
+            document.body.appendChild(img);
+
+            asyncStorage.length(function(value) {
+                console.log('asyncstorage length?', value);
+            });
+
+        });
+        
+    }
+
     function takePicture() {
 
-        canvas.toBlob(function(blob) {
+        // FIXME FAILS in Chrome ?? does it fail in Firefox too? (!?!)
+
+        /* TMP canvas.toBlob(function(blob) {
 
             saveAs(blob, getTimestamp() + '.png');
 
+        });*/
+
+        var bitmapData = canvas.toDataURL();
+
+        saveLocalPicture(bitmapData, function(error) {
+            console.log('local pic saved', error);
         });
 
     }

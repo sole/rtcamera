@@ -1,7 +1,36 @@
 // This class will be used to store and retrieve taken pictures and some
 // associated metadata, using IndexedDB
-var Picture = function() {
-    var self = this;
+var Picture = (function() {
+
+    var PICTURES_INDEX_KEY = 'pictures_index';
+    var PICTURE_PREFIX = 'picture_';
+
+    function loadPicturesIndex(callback) {
+        var index;
+
+        asyncStorage.getItem(PICTURES_INDEX_KEY, function(dbIndex) {
+            console.log('this is what the pic ind is', dbIndex);
+            if(!dbIndex) {
+                dbIndex = [];
+            }
+
+            callback(dbIndex);
+        });
+    }
+
+    function savePicturesIndex(updatedIndex) {
+        asyncStorage.setItem(PICTURES_INDEX_KEY, updatedIndex);
+    }
+
+    function addToIndex(pictureId) {
+        loadPicturesIndex(function(index) {
+            // No duplicates! (for when updating)
+            if(index.indexOf(pictureId) === -1) {
+                index.push(pictureId);
+                savePicturesIndex(index);
+            }
+        });
+    }
 
     function pad(v) {
 
@@ -34,53 +63,50 @@ var Picture = function() {
 
     }
 
-    var PICTURES_INDEX_KEY = 'pictures_index';
+    function guessIsImageAnimated(data) {
+        var animated = null;
 
-    function loadPicturesIndex(callback) {
-        var index;
-        
-        asyncStorage.getItem(PICTURES_INDEX_KEY, function(dbIndex) {
-            console.log('this is what the pic ind is', dbIndex);
-            if(!dbIndex) {
-                dbIndex = [];
-            }
-
-            callback(dbIndex);
-        });
-    }
-
-    function savePicturesIndex(updatedIndex) {
-        asyncStorage.setItem(PICTURES_INDEX_KEY, updatedIndex);
-    }
-
-    function addToIndex(pictureId) {
-        loadPicturesIndex(function(index) {
-            // No duplicates! (for when updating)
-            if(index.indexOf(pictureId) === -1) {
-                index.push(pictureId);
-                savePicturesIndex(index);
-            }
-        });
-    }
-
-    this.id = null;
-    this.imageData = null;
-
-    this.save = function(callback) {
-        
-        if(self.id === null) {
-            self.id = getTimestamp();
+        if(data) {
+            animated = data.indexOf('image/gif') !== -1;
         }
 
-        console.log('Saving object with id', this.id);
+        return animated;
+    }
 
-        // Saving stuff
-        asyncStorage.setItem(self.id, {
-            imageData: this.imageData
-        }, function() {
-            addToIndex(self.id);
-            callback();
-        });
+
+    var Pic = function() {
+        
+        var self = this;
+
+        this.id = null;
+        this.imageData = null;
+        this.imageIsAnimated = null;
+
+        this.save = function(callback) {
+            
+            if(self.id === null) {
+                self.id = getTimestamp();
+            }
+
+            if(self.imageIsAnimated === null) {
+                self.imageIsAnimated = guessIsImageAnimated(this.imageData);
+            }
+
+            // Saving stuff
+            asyncStorage.setItem(PICTURE_PREFIX + self.id, {
+                imageData: this.imageData,
+                imageIsAnimated: this.imageIsAnimated
+            }, function() {
+                addToIndex(self.id);
+                callback();
+            });
+        };
+
     };
 
-};
+    Pic.getAll = function() {
+        console.log('get all');
+    };
+
+    return Pic;
+})();

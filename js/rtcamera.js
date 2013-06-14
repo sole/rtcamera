@@ -387,11 +387,13 @@
         var img = document.createElement('img');
         var s = img.style;
         img.src = data;
-        s.border = '1px solid red';
+        s.border = '1px solid yellow';
         s.position = 'absolute';
         s.top = '0px';
         s.left = '0px';
         s.zIndex = '10';
+        s.width = '100px';
+        s.height = 'auto';
 
         var picture = new Picture();
         picture.imageData = data;

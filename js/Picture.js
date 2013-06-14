@@ -118,7 +118,7 @@ var Picture = (function() {
                 pictures.push(picture);
 
                 if(nextPosition >= list.length) {
-                    callback(list);
+                    callback(pictures);
                 } else {
                     loadPicture(nextPosition);
                 }

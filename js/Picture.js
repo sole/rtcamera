@@ -63,7 +63,7 @@ var Picture = (function() {
     }
 
     function guessIsImageAnimated(data) {
-        var animated = null;
+        var animated = false;
 
         if(data) {
             animated = data.indexOf('image/gif') !== -1;

@@ -204,14 +204,11 @@
         //setMode(MODE_VIDEO);
 
         // Set up the app menu
-        //shiftBox.shift = 'right';
-        
         btnMenu.addEventListener('click', function() {
             console.log('click');
             if(shiftBox.hasAttribute('open')) {
                 shiftBox.removeAttribute('open');
             } else {
-                //shiftBox.setAttribute('open', true);
                 shiftBox.setAttribute('open');
             }
         }, false);
@@ -229,6 +226,7 @@
             setTimeout(function() {
 
                 hide(instructions);
+                show(btnMenu);
 
             }, 3000);
 

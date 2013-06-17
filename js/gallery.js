@@ -23,7 +23,6 @@
     });
 
     function showDetails(pictureId) {
-        console.log('show details', pictureId);
 
         galleryDetails.innerHTML = 'Loading...';
 
@@ -39,10 +38,10 @@
             
             actions.forEach(function(action) {
                 var input = document.createElement('input');
-                input.value = 'Download...';
+                input.value = action.text;
                 input.type = 'button';
                 input.addEventListener('click', function(ev) {
-                    action.action(picture);
+                    action.action(pictureId, picture);
                 }, false);
                 actionsDiv.appendChild(input);
             });
@@ -54,9 +53,16 @@
 
     }
 
-    function downloadPicture(picture) {
-        console.log('download...', picture);
+    function downloadPicture(pictureId, picture) {
         
+        var a = document.createElement('a');
+        a.setAttribute('href', picture.imageData);
+        a.setAttribute('download', pictureId + picture.getExtension());
+        
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
 
     }
 

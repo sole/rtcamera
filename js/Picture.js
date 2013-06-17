@@ -101,6 +101,14 @@ var Picture = (function() {
             });
         };
 
+        this.getExtension = function() {
+            if(self.imageIsAnimated) {
+                return '.gif';
+            } else {
+                return '.png';
+            }
+        };
+
     };
 
     Pic.getAll = function(callback/* numItemsPerPage, page */) {

@@ -381,26 +381,16 @@
     }
 
 
-    // data == base64 dataURL (needs to be "blobified" for downloading later on)
-    function saveLocalPicture(data, callback) {
-        console.log('save picture', data.length);
-        var img = document.createElement('img');
-        var s = img.style;
-        img.src = data;
-        s.border = '1px solid yellow';
-        s.position = 'absolute';
-        s.top = '0px';
-        s.left = '0px';
-        s.zIndex = '10';
-        s.width = '100px';
-        s.height = 'auto';
-
+    // data == base64 dataURL 
+    function saveLocalPicture(data, isAnimated) {
+        
         var picture = new Picture();
         picture.imageData = data;
+        picture.imageIsAnimated = isAnimated;
 
         picture.save(function() {
 
-            document.body.appendChild(img);
+            // TODO: flash and translate to the right
 
             asyncStorage.length(function(value) {
                 console.log('asyncstorage length?', value);
@@ -410,24 +400,16 @@
         
     }
 
+    // Save static image
     function takePicture() {
-
-        // FIXME FAILS in Chrome ?? does it fail in Firefox too? (!?!)
-
-        /* TMP canvas.toBlob(function(blob) {
-
-            saveAs(blob, getTimestamp() + '.png');
-
-        });*/
 
         var bitmapData = canvas.toDataURL();
 
-        saveLocalPicture(bitmapData, function(error) {
-            console.log('local pic saved', error);
-        });
+        saveLocalPicture(bitmapData, false);
 
     }
 
+    // Starts capturing video
     function startVideoRecording() {
 
         // We might already have a half-way recorded video
@@ -499,17 +481,7 @@
         });
 
         animatedGIF.getBase64GIF(function(gifData) {
-
-            var a = document.createElement('a');
-            a.setAttribute('href', gifData);
-            a.setAttribute('download', getTimestamp() + '.gif');
-
-            // Apparently the download won't start unless the anchor element
-            // is in the DOM tree
-            a.style.display = 'none';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            saveLocalPicture(gifData, true);
 
             videoProgressSpan.innerHTML = '';
             hide(videoControls);

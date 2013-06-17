@@ -3,8 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>real time camera</title>
-    <link rel="stylesheet" href="css/x-tag-switch.css" type="text/css">
-    <link rel="stylesheet" href="css/shiftbox.css" type="text/css">
+    <link rel="stylesheet" href="css/x-tags/modal.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
   </head>
@@ -26,10 +25,14 @@
         Loading...
       </div>
     </div>
-    <div id="galleryDetails" class="modal"></div>
+    <!--<div id="galleryDetails" class="modal"></div>-->
+    <x-modal id="galleryDetails" overlay esc-hide hidden></x-modal>
 
     <script src="js/libs/asyncStorage.js"></script>
     <script src="js/libs/IndexedDBShim.js"></script>
+
+    <script src="js/libs/x-tags/core.js"></script>
+    <script src="js/libs/x-tags/modal.js"></script>
 
     <script src="js/Picture.js"></script>
 

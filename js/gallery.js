@@ -66,12 +66,15 @@
             galleryDetails.innerHTML = '';
             galleryDetails.appendChild(img);
             galleryDetails.appendChild(actionsDiv);
+
+            galleryDetails.removeAttribute('hidden');
         });
 
     }
 
     function closeDetails() {
         galleryDetails.innerHTML = '';
+        galleryDetails.setAttribute('hidden');
     }
 
     function downloadPicture(pictureId, picture) {

@@ -36,7 +36,6 @@ x-shiftbox {
     }
 
     x-shiftbox[open] > section {
-        xmargin-left: -100px;
         -webkit-transform: translate(20%, 0);
         -moz-transform: translate(20%, 0);
         -ms-transform: translate(20%, 0);
@@ -64,11 +63,12 @@ x-shiftbox {
 
             header {
                 top: 0;
-                margin: 0.2rem 0;
+                padding: 0.2rem 0;
             }
                 h1 {
                     background: rgba(0, 0, 0, 0.5);
                     font-weight: normal;
+                    font-size: 2rem;
                     padding: 0.25rem 0;
                     font-family: 'Roboto Condensed';
                 }
@@ -91,9 +91,14 @@ x-shiftbox {
                     background: #666;
                     opacity: 0;
                     display: none;
+                    text-decoration: none;
                 }
                     #menuButton:hover {
                         background: #777;
+                    }
+
+                    #menuButton:visited {
+                        color: #fff;
                     }
 
                 #video_controls {
@@ -178,11 +183,23 @@ x-shiftbox {
             #galleryContainer img {
                 max-width: 10rem;
                 height: auto;
+                margin: 0.2rem;
             }
 
         #galleryDetails {
-            border: 1px solid red;
+            z-index: 100;
         }
+            #actions {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                text-align: center;
+                width: 100%;
+                padding: 0.5rem 0;
+            }
+                #actions input {
+                    margin: 0 0.4rem;
+                }
 
         .modal {
             display: block;
@@ -212,17 +229,16 @@ x-shiftbox {
 
         footer {
             bottom: 0;
+            position: absolute;
         }
 
     aside {
-        /*border: 1px solid green;*/
         width: 100%;
         height: 100%;
         display: block;
         position: absolute;
         top: 0;
         left: 0;
-        /*padding: 1rem;*/
     }
         aside ul {
             padding: 0;

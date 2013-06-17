@@ -1,12 +1,18 @@
 (function() {
     
+    var backButton = document.getElementById('menuButton');
     var galleryContainer = document.getElementById('galleryContainer');
     var galleryDetails = document.getElementById('galleryDetails');
+
+    backButton.style.opacity = '1';
+    backButton.style.display = 'block';
 
     galleryContainer.addEventListener('click', function(ev) {
         var target = ev.target;
         if(target && target.nodeName === 'IMG') {
             showDetails(target.dataset['id']);
+        } else {
+            closeDetails();
         }
     }, false);
 
@@ -45,6 +51,7 @@
             ];
 
             var actionsDiv = document.createElement('div');
+            actionsDiv.id = 'actions';
             
             actions.forEach(function(action) {
                 var input = document.createElement('input');

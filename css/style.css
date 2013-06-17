@@ -35,7 +35,7 @@ x-shiftbox {
         background: black;
     }
 
-    x-shiftbox[shift="right"][open] > section {
+    x-shiftbox[open] > section {
         xmargin-left: -100px;
         -webkit-transform: translate(20%, 0);
         -moz-transform: translate(20%, 0);
@@ -63,12 +63,12 @@ x-shiftbox {
             position: absolute;
             left: 0;
             width: 100%;
-            xtext-align: center;
+            text-align: center;
         }
 
             header {
                 top: 0;
-                text-align: left;
+                margin: 0.2rem 0;
             }
                 h1 {
                     background: rgba(0, 0, 0, 0.5);
@@ -78,6 +78,23 @@ x-shiftbox {
                 }
                     h1 span {
                         color: #e58f33;
+                    }
+
+                #menu {
+                    font-family: sans-serif;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    line-height: 1;
+                    margin: 0.2rem 0.4rem;
+                    padding: 0.2rem;
+                    border: 1px solid #999;
+                    border-radius: 3px;
+                    cursor: pointer;
+                    background: #666;
+                }
+                    #menu:hover {
+                        background: #777;
                     }
 
                 #video_controls {
@@ -159,6 +176,10 @@ x-shiftbox {
             height: 100%;
             overflow-y: scroll;
         }
+            #galleryContainer img {
+                max-width: 10rem;
+                height: auto;
+            }
 
         #galleryDetails {
             border: 1px solid red;
@@ -192,7 +213,6 @@ x-shiftbox {
 
         footer {
             bottom: 0;
-            text-align: center;
         }
 
     aside {

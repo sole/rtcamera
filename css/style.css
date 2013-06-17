@@ -180,6 +180,7 @@ x-shiftbox {
         #galleryContainer {
             height: 100%;
             overflow-y: scroll;
+            padding: 0 2rem;
         }
             #galleryContainer.empty {
                 font-size: 2rem;
@@ -292,3 +293,16 @@ x-switch, x-switch[checked], .x-switch-background {
     background: #e58f33;
     box-shadow: 0 0 5px #000;
 }
+
+/* refining styles for smaller/mobile screens */
+@media (max-width: 600px) {
+    
+    aside li {
+        font-size: 1.5rem;
+    }
+    
+    x-shiftbox[open] > section {
+        margin-left: 200px;
+    }
+}
+

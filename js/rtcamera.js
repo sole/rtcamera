@@ -17,6 +17,7 @@
     var videoHeight;
     var webcamStream = null;
     var canvas;
+    var flasher;
     var shiftBox;
     var btnMenu;
     var aside;
@@ -168,6 +169,7 @@
         videoProgressSpan = document.getElementById('progress_label');
         btnVideoCancel = document.getElementById('btn_cancel');
         btnVideoDone = document.getElementById('btn_done');
+        flasher = document.getElementById('flasher');
         modeToggle = document.getElementById('mode_toggle');
         btnMenu = document.getElementById('menuButton');
         shiftBox = document.querySelector('x-shiftbox');
@@ -181,6 +183,11 @@
 
         // Adding the canvas once it's been resized first
         document.getElementById('canvasContainer').appendChild(canvas);
+
+        flasher.addEventListener('animationend', function() {
+            flasher.classList.remove('on_animation');
+        }, false);
+
 
         btnVideoCancel.addEventListener('click', cancelVideoRecording, false);
         btnVideoDone.addEventListener('click', finishVideoRecording, false);
@@ -394,11 +401,13 @@
 
         picture.save(function() {
 
-            // TODO: flash and translate to the right
+            // TODO: translate to the right
 
             asyncStorage.length(function(value) {
                 console.log('asyncstorage length?', value);
             });
+            
+            flasher.classList.add('on_animation');
 
         });
         

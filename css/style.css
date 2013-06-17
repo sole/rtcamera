@@ -177,6 +177,34 @@ x-shiftbox {
             -ms-interpolation-mode: nearest-neighbor;
         }
 
+        #flasher {
+            background: rgba(255, 255, 255, 0.5);
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
+            .on_animation {
+                animation-duration: 0.4s;
+                animation-name: flash_it;
+            }
+
+            @keyframes flash_it {
+                from {
+                    opacity: 0;
+                }
+
+                75% {
+                    opacity: 1;
+                }
+
+                to {
+                    opacity: 0;
+                }
+            }
+
         #galleryContainer {
             height: 100%;
             overflow-y: scroll;

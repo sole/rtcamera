@@ -17,8 +17,8 @@ var Picture = (function() {
         });
     }
 
-    function savePicturesList(updatedList) {
-        asyncStorage.setItem(PICTURES_LIST_KEY, updatedList);
+    function savePicturesList(updatedList, callback) {
+        asyncStorage.setItem(PICTURES_LIST_KEY, updatedList, callback);
     }
 
     function addToPicturesList(pictureId) {
@@ -28,6 +28,18 @@ var Picture = (function() {
                 list.push(pictureId);
                 savePicturesList(list);
             }
+        });
+    }
+
+    function removeFromPicturesList(pictureId, callback) {
+        getPicturesList(function(list) {
+
+            var pos = list.indexOf(pictureId);
+            if(pos !== -1) {
+                list.splice(pos, 1);
+                savePicturesList(list, callback);
+            }
+
         });
     }
 
@@ -144,6 +156,12 @@ var Picture = (function() {
     Pic.getById = function(id, callback) {
 
         asyncStorage.getItem(id, function(value) {
+            
+            if(value === null) {
+                callback(false);
+                return;
+            }
+
             var picture = new Pic();
             picture.id = id;
             picture.imageData = value.imageData || null;
@@ -153,5 +171,33 @@ var Picture = (function() {
         });
     };
 
+    Pic.deleteById = function(id, callback) {
+        asyncStorage.removeItem(id, function() {
+            removeFromPicturesList(id, callback);
+        });
+    };
+
+    Pic.fixList = function(callback) {
+        getPicturesList(function(list) {
+            var outputList = [];
+            var invalidList = [];
+
+            list.forEach(function(index) {
+                Pic.getById(index, function(picture) {
+                    if(picture) {
+                        outputList.push(index);
+                    } else {
+                        invalidList.push(index);
+                    }
+
+                    if(outputList.length + invalidList.length === list.length) {
+                        savePicturesList(outputList, callback);
+                    }
+                });
+            });
+        });
+    };
+
     return Pic;
+
 })();

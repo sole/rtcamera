@@ -155,6 +155,15 @@ x-shiftbox {
             -ms-interpolation-mode: nearest-neighbor;
         }
 
+        #galleryContainer {
+            height: 100%;
+            overflow-y: scroll;
+        }
+
+        #galleryDetails {
+            border: 1px solid red;
+        }
+
         .modal {
             display: block;
             position: fixed;

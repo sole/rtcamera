@@ -169,7 +169,7 @@
         btnVideoCancel = document.getElementById('btn_cancel');
         btnVideoDone = document.getElementById('btn_done');
         modeToggle = document.getElementById('mode_toggle');
-        btnMenu = document.getElementById('menu');
+        btnMenu = document.getElementById('menuButton');
         shiftBox = document.querySelector('x-shiftbox');
         aside = document.querySelector('aside');
 
@@ -213,8 +213,14 @@
             }
         }, false);
 
-        aside.addEventListener('click', function() {
-            shiftBox.removeAttribute('open');
+        aside.addEventListener('click', function(ev) {
+            var target = ev.target;
+            if(target && target.nodeName === 'LI') {
+                var a = target.querySelector('a');
+                a.click();
+            } else {
+                shiftBox.removeAttribute('open');
+            }
         }, false);
 
         // Show "swipe left or right to change effect" instructions text

@@ -76,7 +76,7 @@ x-shiftbox {
                         color: #e58f33;
                     }
 
-                #menu {
+                #menuButton {
                     font-size: 2rem;
                     font-family: sans-serif;
                     position: absolute;
@@ -92,7 +92,7 @@ x-shiftbox {
                     opacity: 0;
                     display: none;
                 }
-                    #menu:hover {
+                    #menuButton:hover {
                         background: #777;
                     }
 
@@ -215,16 +215,36 @@ x-shiftbox {
         }
 
     aside {
-        border: 1px solid green;
+        /*border: 1px solid green;*/
         width: 100%;
         height: 100%;
         display: block;
         position: absolute;
         top: 0;
         left: 0;
-        padding: 1rem;
+        /*padding: 1rem;*/
     }
+        aside ul {
+            padding: 0;
+            margin: 0;
+        }
 
+        aside li {
+            padding: 0.4rem 0.6rem;
+            border-bottom: 1px solid #666;
+            cursor: pointer;
+        }
+
+        aside li:hover {
+            background: #e58f33;
+        }
+
+
+        aside a {
+            color: #fff;
+            text-decoration: none;
+        }
+            
 
 /* refining the x-switch styles */
 x-switch {

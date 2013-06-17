@@ -6,9 +6,9 @@ var Picture = (function() {
     var PICTURE_PREFIX = 'picture_';
 
     function getPicturesList(callback) {
-        var list;
 
         asyncStorage.getItem(PICTURES_LIST_KEY, function(list) {
+            
             if(!list) {
                 list = [];
             }
@@ -124,13 +124,17 @@ var Picture = (function() {
     };
 
     Pic.getAll = function(callback/* numItemsPerPage, page */) {
-
+        
         getPicturesList(function(list) {
  
             var pictures = [];
             var position = 0; // (page - 1) * numItemsPerPage
             
-            loadPicture(position);
+            if(list.length > 0) {
+                loadPicture(position);
+            } else {
+                callback(pictures);
+            }
 
             function onPictureLoaded(picture, loadedPosition) {
                 var nextPosition = loadedPosition + 1;
@@ -182,19 +186,27 @@ var Picture = (function() {
             var outputList = [];
             var invalidList = [];
 
-            list.forEach(function(index) {
-                Pic.getById(index, function(picture) {
-                    if(picture) {
-                        outputList.push(index);
-                    } else {
-                        invalidList.push(index);
-                    }
+            if(list.length === 0) {
 
-                    if(outputList.length + invalidList.length === list.length) {
-                        savePicturesList(outputList, callback);
-                    }
+                callback();
+
+            } else {
+
+                list.forEach(function(index) {
+                    Pic.getById(index, function(picture) {
+                        if(picture) {
+                            outputList.push(index);
+                        } else {
+                            invalidList.push(index);
+                        }
+
+                        if(outputList.length + invalidList.length === list.length) {
+                            savePicturesList(outputList, callback);
+                        }
+                    });
                 });
-            });
+
+            }
         });
     };
 

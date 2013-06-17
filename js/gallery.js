@@ -21,17 +21,28 @@
     // ~~~
     
     function updateGallery() {
-
+        
         Picture.getAll(function(pictures) {
-
+            
             galleryContainer.innerHTML = '';
 
-            pictures.forEach(function(pic) {
-                var img = document.createElement('img');
-                img.src = pic.imageData;
-                img.dataset['id'] = pic.id;
-                galleryContainer.appendChild(img);
-            });
+            if(pictures.length) {
+
+                galleryContainer.classList.remove('empty');
+
+                pictures.forEach(function(pic) {
+                    var img = document.createElement('img');
+                    img.src = pic.imageData;
+                    img.dataset['id'] = pic.id;
+                    galleryContainer.appendChild(img);
+                });
+
+            } else {
+
+                galleryContainer.classList.add('empty');
+                galleryContainer.innerHTML = '<div class="modal">Boo, no pictures (yet!)</div>';
+
+            }
         });
 
     }

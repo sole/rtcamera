@@ -77,6 +77,7 @@ x-shiftbox {
                     }
 
                 #menuButton {
+                    color: #fff;
                     font-size: 2rem;
                     font-family: sans-serif;
                     position: absolute;
@@ -180,6 +181,10 @@ x-shiftbox {
             height: 100%;
             overflow-y: scroll;
         }
+            #galleryContainer.empty {
+                font-size: 2rem;
+            }
+
             #galleryContainer img {
                 max-width: 10rem;
                 height: auto;

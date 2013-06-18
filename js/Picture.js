@@ -92,6 +92,7 @@ var Picture = (function() {
         this.id = null;
         this.imageData = null;
         this.imageIsAnimated = null;
+        this.imgurURL = null;
 
         this.save = function(callback) {
             
@@ -106,7 +107,8 @@ var Picture = (function() {
             // Saving stuff
             asyncStorage.setItem(self.id, {
                 imageData: this.imageData,
-                imageIsAnimated: this.imageIsAnimated
+                imageIsAnimated: this.imageIsAnimated,
+                imgurURL: this.imgurURL
             }, function() {
                 addToPicturesList(self.id);
                 callback();
@@ -170,6 +172,7 @@ var Picture = (function() {
             picture.id = id;
             picture.imageData = value.imageData || null;
             picture.imageIsAnimated = value.imageIsAnimated || null;
+            picture.imgurURL = value.imgurURL || null;
 
             callback(picture);
         });

@@ -366,5 +366,9 @@ x-switch, x-switch[checked], .x-switch-background {
     x-shiftbox[open] > section {
         margin-left: 200px;
     }
+
+    #galleryContainer img {
+        max-width: 40vw;
+    }
 }
 

@@ -1,5 +1,7 @@
 (function() {
-    
+
+    var IMGUR_KEY = '49c42af902d1fd4';
+
     var backButton = document.getElementById('menuButton');
     var galleryContainer = document.getElementById('galleryContainer');
     var galleryDetails = document.getElementById('galleryDetails');
@@ -66,6 +68,7 @@
                 });
 
             var actions = [
+                { text: 'Share with imgur', action: uploadPicture },
                 { text: 'Download', action: downloadPicture },
                 { text: 'Delete', action: deletePicture }
 
@@ -84,9 +87,17 @@
                 actionsDiv.appendChild(input);
             });
 
+            var urlDiv = document.createElement('div');
+            console.log(picture);
+            if(picture.imgurURL) {
+                var imgur = picture.imgurURL;
+                urlDiv.innerHTML = 'Share: <input type="text" value="' + imgur + '"> <a href="' + imgur + '" target="_blank">(open)</a>';
+            }
+
             galleryDetails.innerHTML = '';
             galleryDetails.appendChild(img);
             galleryDetails.appendChild(actionsDiv);
+            actionsDiv.appendChild(urlDiv);
 
             galleryDetails.removeAttribute('hidden');
         });
@@ -151,6 +162,46 @@
             closeDetails();
             Picture.deleteById(pictureId, updateGallery);
         }
+
+    }
+
+    function uploadPicture(pictureId, picture) {
+        
+        var image = picture.imageData.replace(/^data:image\/(png|gif);base64,/, "");
+
+        var fd = new FormData();
+        fd.append("image", image);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://api.imgur.com/3/upload.json');
+        xhr.setRequestHeader('Authorization', 'Client-ID ' + IMGUR_KEY);
+        xhr.onload = function() {
+            console.log(xhr.responseText);
+            try {
+                var response = JSON.parse(xhr.responseText);
+                if(response.success) {
+                    var url = response.data.link;
+
+                    console.log(response);
+                    console.log(url);
+
+                    picture.imgurURL = url;
+
+                    picture.save(function() {
+                        console.log('pic saved!');
+                    });
+                } else {
+                    console.log('error uploading :-/');
+                    console.log(response);
+                }
+                
+            } catch(err) {
+                console.error(err);
+            }
+        };
+
+        // TODO error handling
+        xhr.send(fd);
 
     }
 

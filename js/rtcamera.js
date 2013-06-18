@@ -17,6 +17,8 @@
     var videoHeight;
     var webcamStream = null;
     var canvas;
+    var ghostCanvas;
+    var ghostBitmap;
     var flasher;
     var shiftBox;
     var btnMenu;
@@ -170,6 +172,7 @@
         btnVideoCancel = document.getElementById('btn_cancel');
         btnVideoDone = document.getElementById('btn_done');
         flasher = document.getElementById('flasher');
+        ghostCanvas = document.createElement('canvas');
         modeToggle = document.getElementById('mode_toggle');
         btnMenu = document.getElementById('menuButton');
         shiftBox = document.querySelector('x-shiftbox');
@@ -186,6 +189,15 @@
 
         flasher.addEventListener('animationend', function() {
             flasher.classList.remove('on_animation');
+            animateGhostPicture(ghostBitmap);
+        }, false);
+
+        var ghostCanvasContainer = document.getElementById('ghostCanvasContainer');
+        ghostCanvasContainer.appendChild(ghostCanvas);
+        ghostCanvasContainer.addEventListener('transitionend', function() {
+            console.log('fin');
+            ghostCanvas.getContext('2d').clearRect(0, 0, ghostCanvas.width, ghostCanvas.height);
+            ghostCanvasContainer.classList.remove('faded_out');
         }, false);
 
 
@@ -413,14 +425,32 @@
         
     }
 
+    
     // Save static image
     function takePicture() {
 
         var bitmapData = canvas.toDataURL();
 
+        ghostBitmap = document.createElement('img');
+        ghostBitmap.src = bitmapData;
+
         saveLocalPicture(bitmapData, false);
 
     }
+
+    function animateGhostPicture(img) {
+        ghostCanvas.width = canvas.width;
+        ghostCanvas.height = canvas.height;
+        ghostCanvas.classList.add('modal');
+
+        var ctx = ghostCanvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+
+        setTimeout(function() {
+            ghostCanvasContainer.classList.add('faded_out');
+        }, 10);
+    }
+
 
     // Starts capturing video
     function startVideoRecording() {

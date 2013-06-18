@@ -181,6 +181,10 @@ var Picture = (function() {
         });
     };
 
+    Pic.getList = function(callback) {
+        getPicturesList(callback);
+    };
+
     Pic.fixList = function(callback) {
         getPicturesList(function(list) {
             var outputList = [];

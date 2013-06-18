@@ -55,6 +55,16 @@
             var img = document.createElement('img');
             img.src = picture.imageData;
 
+            Hammer(img)
+                .on('swiperight', function(ev) {
+                    ev.gesture.preventDefault();
+                    showPrevPicture(pictureId);
+                })
+                .on('swipeleft', function(ev) {
+                    ev.gesture.preventDefault();
+                    showNextPicture(pictureId);
+                });
+
             var actions = [
                 { text: 'Download', action: downloadPicture },
                 { text: 'Delete', action: deletePicture }
@@ -86,6 +96,38 @@
     function closeDetails() {
         galleryDetails.innerHTML = '';
         galleryDetails.setAttribute('hidden');
+    }
+
+    function showPrevPicture(currentId) {
+
+        Picture.getList(function(picturesList) {
+
+            var currentPosition = picturesList.indexOf(currentId);
+
+            if(currentPosition === 0) {
+                return;
+            } else {
+                showDetails(picturesList[currentPosition - 1]);
+            }
+
+        });
+
+    }
+
+    function showNextPicture(currentId) {
+
+        Picture.getList(function(picturesList) {
+
+            var currentPosition = picturesList.indexOf(currentId);
+
+            if(currentPosition === picturesList.length - 1) {
+                return;
+            } else {
+                showDetails(picturesList[currentPosition + 1]);
+            }
+
+        });
+
     }
 
     function downloadPicture(pictureId, picture) {

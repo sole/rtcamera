@@ -17,11 +17,14 @@ var Picture = (function() {
         });
     }
 
+
     function savePicturesList(updatedList, callback) {
         asyncStorage.setItem(PICTURES_LIST_KEY, updatedList, callback);
     }
 
+
     function addToPicturesList(pictureId) {
+        
         getPicturesList(function(list) {
             // No duplicates! (for when updating pictures)
             if(list.indexOf(pictureId) === -1) {
@@ -29,9 +32,12 @@ var Picture = (function() {
                 savePicturesList(list);
             }
         });
+
     }
 
+
     function removeFromPicturesList(pictureId, callback) {
+
         getPicturesList(function(list) {
 
             var pos = list.indexOf(pictureId);
@@ -42,6 +48,7 @@ var Picture = (function() {
 
         });
     }
+
 
     function pad(v) {
 
@@ -55,6 +62,7 @@ var Picture = (function() {
 
         return s;
     }
+
 
     function getTimestamp() {
 
@@ -74,7 +82,9 @@ var Picture = (function() {
 
     }
 
+
     function guessIsImageAnimated(data) {
+    
         var animated = false;
 
         if(data) {
@@ -82,6 +92,7 @@ var Picture = (function() {
         }
 
         return animated;
+
     }
 
 
@@ -125,6 +136,7 @@ var Picture = (function() {
 
     };
 
+
     Pic.getAll = function(callback/* numItemsPerPage, page */) {
         
         getPicturesList(function(list) {
@@ -159,6 +171,7 @@ var Picture = (function() {
         
     };
 
+
     Pic.getById = function(id, callback) {
 
         asyncStorage.getItem(id, function(value) {
@@ -178,17 +191,25 @@ var Picture = (function() {
         });
     };
 
+
     Pic.deleteById = function(id, callback) {
+
         asyncStorage.removeItem(id, function() {
             removeFromPicturesList(id, callback);
         });
+
     };
+
 
     Pic.getList = function(callback) {
+
         getPicturesList(callback);
+
     };
 
+
     Pic.fixList = function(callback) {
+
         getPicturesList(function(list) {
             var outputList = [];
             var invalidList = [];
@@ -215,7 +236,9 @@ var Picture = (function() {
 
             }
         });
+
     };
+
 
     return Pic;
 

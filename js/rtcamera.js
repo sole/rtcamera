@@ -373,39 +373,7 @@
 
     }
 
-
-    function pad(v) {
-
-        var s = String(v);
-
-        if(s.length < 2) {
-
-            s = '0' + s;
-
-        }
-
-        return s;
-    }
-
-    function getTimestamp() {
-
-        var now = new Date();
-        var parts = [
-            now.getFullYear(),
-            pad(now.getMonth() + 1), // months are 0 based!
-            pad(now.getDate()),
-            '_',
-            pad(now.getHours()),
-            pad(now.getMinutes()),
-            pad(now.getSeconds())
-        ];
-        var timestamp = parts.join('');
-
-        return timestamp;
-
-    }
-
-
+  
     // data == base64 dataURL 
     function saveLocalPicture(data, isAnimated) {
         
@@ -433,6 +401,7 @@
         saveLocalPicture(bitmapData, false);
 
     }
+
 
     // Makes a copy of img onto the ghost canvas, and sets it to fade out
     // and translate to the right, using a CSS transition
@@ -477,11 +446,13 @@
 
     }
 
+
     function pauseVideoRecording() {
 
         clearTimeout(recordGIFTimeout);
 
     }
+
 
     function addFrameToGIF() {
 
@@ -503,6 +474,7 @@
         }
 
     }
+
 
     function finishVideoRecording() {
 
@@ -542,6 +514,7 @@
 
     }
 
+
     function cancelVideoRecording() {
 
         clearTimeout(recordGIFTimeout);
@@ -551,6 +524,7 @@
         animatedGIF = null;
 
     }
+
 
     function render() {
 

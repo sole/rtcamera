@@ -187,15 +187,17 @@
         // Adding the canvas once it's been resized first
         document.getElementById('canvasContainer').appendChild(canvas);
 
-        flasher.addEventListener('animationend', function() {
+        function onFlasherAnimationEnd() {
             flasher.classList.remove('on_animation');
             animateGhostPicture(ghostBitmap);
-        }, false);
+        }
+
+        flasher.addEventListener('animationend', onFlasherAnimationEnd, false);
+        flasher.addEventListener('webkitAnimationEnd', onFlasherAnimationEnd, false);
 
         var ghostCanvasContainer = document.getElementById('ghostCanvasContainer');
         ghostCanvasContainer.appendChild(ghostCanvas);
         ghostCanvasContainer.addEventListener('transitionend', function() {
-            console.log('fin');
             ghostCanvas.getContext('2d').clearRect(0, 0, ghostCanvas.width, ghostCanvas.height);
             ghostCanvasContainer.classList.remove('faded_out');
         }, false);
@@ -413,12 +415,6 @@
 
         picture.save(function() {
 
-            // TODO: translate to the right
-
-            asyncStorage.length(function(value) {
-                console.log('asyncstorage length?', value);
-            });
-            
             flasher.classList.add('on_animation');
 
         });
@@ -438,7 +434,10 @@
 
     }
 
+    // Makes a copy of img onto the ghost canvas, and sets it to fade out
+    // and translate to the right, using a CSS transition
     function animateGhostPicture(img) {
+        
         ghostCanvas.width = canvas.width;
         ghostCanvas.height = canvas.height;
         ghostCanvas.classList.add('modal');
@@ -449,6 +448,7 @@
         setTimeout(function() {
             ghostCanvasContainer.classList.add('faded_out');
         }, 10);
+
     }
 
 

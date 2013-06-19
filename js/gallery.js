@@ -141,7 +141,8 @@
 
         if(picture.imgurURL) {
             var imgur = picture.imgurURL;
-            urlDiv.innerHTML = 'Share: <input type="text" value="' + imgur + '"> <a href="' + imgur + '" target="_blank">(open)</a>';
+            urlDiv.innerHTML = 'Share: <input type="text" value="' + imgur + '"> ';
+            urlDiv.innerHTML+= '<a href="' + imgur + '" target="_blank">(open)</a>';
         }
 
         galleryDetails.innerHTML = '';
@@ -172,9 +173,7 @@
     function showPrevPicture(currentId) {
 
         var picture = getPictureById(currentId);
-        if(picture.previousPicture === null) {
-            return;
-        } else {
+        if(picture.previousPicture) {
             showDetails(picture.previousPicture.id);
         }
 
@@ -184,9 +183,7 @@
     function showNextPicture(currentId) {
 
         var picture = getPictureById(currentId);
-        if(picture.nextPicture === null) {
-            return;
-        } else {
+        if(picture.nextPicture) {
             showDetails(picture.nextPicture.id);
         }
 

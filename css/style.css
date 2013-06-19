@@ -39,7 +39,6 @@ x-shiftbox {
         -webkit-transform: translate(20%, 0);
         -moz-transform: translate(20%, 0);
         -ms-transform: translate(20%, 0);
-        -o-transform: translate(20%, 0);
         transform: translate(20%,0);
     }
 
@@ -227,7 +226,6 @@ x-shiftbox {
                     opacity: 0;
                 }
             }
-
 
         #ghostCanvasContainer {
             -webkit-transition: 1s ease-out;

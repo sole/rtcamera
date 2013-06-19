@@ -61,7 +61,6 @@
     }
 
     function getPictureById(pictureId) {
-        console.log('get pic by id', pictureId);
         return galleryPictures[pictureId];
     }
 
@@ -86,10 +85,9 @@
 
 
         var actions = [
-        { text: 'Share with imgur', action: uploadPicture },
-        { text: 'Download', action: downloadPicture },
-        { text: 'Delete', action: deletePicture }
-
+            { text: 'Share with imgur', action: uploadPicture },
+            { text: 'Download', action: downloadPicture },
+            { text: 'Delete', action: deletePicture }
         ];
 
         var actionsDiv = document.createElement('div');
@@ -194,37 +192,49 @@
         var fd = new FormData();
         fd.append("image", image);
 
+        var div = document.createElement('div');
+        div.innerHTML = 'Uploading...';
+        div.classList.add('modal');
+        galleryDetails.appendChild(div);
+
+
         var xhr = new XMLHttpRequest();
+        
         xhr.open('POST', 'https://api.imgur.com/3/upload.json');
         xhr.setRequestHeader('Authorization', 'Client-ID ' + IMGUR_KEY);
+
         xhr.onload = function() {
-            console.log(xhr.responseText);
+
+            galleryDetails.removeChild(div);
+            
             try {
                 var response = JSON.parse(xhr.responseText);
                 if(response.success) {
                     var url = response.data.link;
 
-                    console.log(response);
-                    console.log(url);
-
                     picture.imgurURL = url;
 
                     picture.save(function() {
-                        console.log('pic saved!');
+                        new Toast('Posted to imgur').show();
+                        showDetails(pictureId);
                     });
                 } else {
-                    console.log('error uploading :-/');
-                    console.log(response);
+                    uploadPictureError();
                 }
                 
             } catch(err) {
-                console.error(err);
+                uploadPictureError();
             }
         };
 
-        // TODO error handling
+        xhr.onerror = uploadPictureError;
+
         xhr.send(fd);
 
+    }
+
+    function uploadPictureError() {
+        new Toast('Error posting picture :-/').show();
     }
 
 })();

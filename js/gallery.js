@@ -78,10 +78,10 @@
                 ev.gesture.preventDefault();
                 showPrevPicture(pictureId);
             })
-        .on('swipeleft', function(ev) {
-            ev.gesture.preventDefault();
-            showNextPicture(pictureId);
-        });
+            .on('swipeleft', function(ev) {
+                ev.gesture.preventDefault();
+                showNextPicture(pictureId);
+            });
 
 
         var actions = [
@@ -194,6 +194,7 @@
 
         var div = document.createElement('div');
         div.innerHTML = 'Uploading...';
+        div.id = 'galleryUploading';
         div.classList.add('modal');
         galleryDetails.appendChild(div);
 

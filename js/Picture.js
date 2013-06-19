@@ -117,13 +117,13 @@ var Picture = (function() {
 
         this.save = function(callback) {
             
-            if(self.id === null) {
+            if(!self.id) {
 
                 self.id = PICTURE_PREFIX + getTimestamp();
 
             }
 
-            if(self.imageIsAnimated === null) {
+            if(!self.imageIsAnimated) {
 
                 self.imageIsAnimated = guessIsImageAnimated(this.imageData);
 

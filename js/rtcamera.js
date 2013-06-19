@@ -25,6 +25,7 @@
     var aside;
     var videoControls;
     var videoProgressBar;
+    var videoProgressDiv;
     var videoProgressSpan;
     var btnVideoCancel;
     var btnVideoDone;
@@ -168,7 +169,8 @@
 
         videoControls = document.getElementById('video_controls');
         videoProgressBar = document.querySelector('progress');
-        videoProgressSpan = document.getElementById('progress_label');
+        videoProgressDiv = document.getElementById('progress_label');
+        videoProgressSpan = videoProgressDiv.querySelector('span');
         btnVideoCancel = document.getElementById('btn_cancel');
         btnVideoDone = document.getElementById('btn_done');
         flasher = document.getElementById('flasher');
@@ -208,7 +210,6 @@
 
         modeToggle.addEventListener('change', function(ev) {
 
-            console.log('change', ev, this.checked);
             setMode( this.checked ? MODE_STATIC : MODE_VIDEO );
 
         }, false); 
@@ -485,8 +486,6 @@
 
         btnVideoCancel.disabled = true;
         btnVideoDone.disabled = true;
-
-        videoProgressSpan.innerHTML = '<img src="/img/icons/spinner.gif">';
 
         animatedGIF.onRenderProgress(function(progress) {
 

@@ -118,10 +118,17 @@ x-shiftbox {
                             background: #e58f33;
                         }
 
-                    #video_controls span {
-                        display: block;
+                    #progress_label span {
                         padding: 0.25rem 0;
+                        transition: all 0.5s;
                     }
+
+                        .rendering #progress_label span {
+                            background-image: url(spinner.gif);
+                            background-repeat: no-repeat;
+                            background-position: 8px 50%;
+                            padding-left: 32px;
+                        }
 
                     #video_controls input {
                         max-width: 24px;

@@ -17,8 +17,15 @@
     var videoHeight;
     var webcamStream = null;
     var canvas;
+    var ghostCanvas;
+    var ghostBitmap;
+    var flasher;
+    var shiftBox;
+    var btnMenu;
+    var aside;
     var videoControls;
     var videoProgressBar;
+    var videoProgressDiv;
     var videoProgressSpan;
     var btnVideoCancel;
     var btnVideoDone;
@@ -161,10 +168,16 @@
 
         videoControls = document.getElementById('video_controls');
         videoProgressBar = document.querySelector('progress');
-        videoProgressSpan = document.getElementById('progress_label');
+        videoProgressDiv = document.getElementById('progress_label');
+        videoProgressSpan = videoProgressDiv.querySelector('span');
         btnVideoCancel = document.getElementById('btn_cancel');
         btnVideoDone = document.getElementById('btn_done');
+        flasher = document.getElementById('flasher');
+        ghostCanvas = document.createElement('canvas');
         modeToggle = document.getElementById('mode_toggle');
+        btnMenu = document.getElementById('menuButton');
+        shiftBox = document.querySelector('x-shiftbox');
+        aside = document.querySelector('aside');
 
 
         // Set up listeners
@@ -175,12 +188,27 @@
         // Adding the canvas once it's been resized first
         document.getElementById('canvasContainer').appendChild(canvas);
 
+        function onFlasherAnimationEnd() {
+            flasher.classList.remove('on_animation');
+            animateGhostPicture(ghostBitmap);
+        }
+
+        flasher.addEventListener('animationend', onFlasherAnimationEnd, false);
+        flasher.addEventListener('webkitAnimationEnd', onFlasherAnimationEnd, false);
+
+        var ghostCanvasContainer = document.getElementById('ghostCanvasContainer');
+        ghostCanvasContainer.appendChild(ghostCanvas);
+        ghostCanvasContainer.addEventListener('transitionend', function() {
+            ghostCanvas.getContext('2d').clearRect(0, 0, ghostCanvas.width, ghostCanvas.height);
+            ghostCanvasContainer.classList.remove('faded_out');
+        }, false);
+
+
         btnVideoCancel.addEventListener('click', cancelVideoRecording, false);
         btnVideoDone.addEventListener('click', finishVideoRecording, false);
 
         modeToggle.addEventListener('change', function(ev) {
 
-            console.log('change', ev, this.checked);
             setMode( this.checked ? MODE_STATIC : MODE_VIDEO );
 
         }, false); 
@@ -193,8 +221,27 @@
             .on('swipeleft', prevEffect)
             .on('swiperight', nextEffect);
 
-        //setMode(MODE_STATIC); // TMP
-        setMode(MODE_VIDEO);
+        setMode(MODE_STATIC);
+
+        // Set up the app menu
+        btnMenu.addEventListener('click', function() {
+            console.log('click');
+            if(shiftBox.hasAttribute('open')) {
+                shiftBox.removeAttribute('open');
+            } else {
+                shiftBox.setAttribute('open');
+            }
+        }, false);
+
+        aside.addEventListener('click', function(ev) {
+            var target = ev.target;
+            if(target && target.nodeName === 'LI') {
+                var a = target.querySelector('a');
+                a.click();
+            } else {
+                shiftBox.removeAttribute('open');
+            }
+        }, false);
 
         // Show "swipe left or right to change effect" instructions text
         // TODO: maybe do it only once? on the first run?
@@ -205,6 +252,7 @@
             setTimeout(function() {
 
                 hide(instructions);
+                show(btnMenu);
 
             }, 3000);
 
@@ -324,48 +372,55 @@
 
     }
 
+  
+    // data == base64 dataURL 
+    function saveLocalPicture(data, isAnimated) {
+        
+        var picture = new Picture();
+        picture.imageData = data;
+        picture.imageIsAnimated = isAnimated;
 
-    function pad(v) {
+        picture.save(function() {
 
-        var s = String(v);
-
-        if(s.length < 2) {
-
-            s = '0' + s;
-
-        }
-
-        return s;
-    }
-
-    function getTimestamp() {
-
-        var now = new Date();
-        var parts = [
-            now.getFullYear(),
-            pad(now.getMonth() + 1), // months are 0 based!
-            pad(now.getDate()),
-            '_',
-            pad(now.getHours()),
-            pad(now.getMinutes()),
-            pad(now.getSeconds())
-        ];
-        var timestamp = parts.join('');
-
-        return timestamp;
-
-    }
-
-    function takePicture() {
-
-        canvas.toBlob(function(blob) {
-
-            saveAs(blob, getTimestamp() + '.png');
+            flasher.classList.add('on_animation');
 
         });
+        
+    }
+
+    
+    // Save static image
+    function takePicture() {
+
+        var bitmapData = canvas.toDataURL();
+
+        ghostBitmap = document.createElement('img');
+        ghostBitmap.src = bitmapData;
+
+        saveLocalPicture(bitmapData, false);
 
     }
 
+
+    // Makes a copy of img onto the ghost canvas, and sets it to fade out
+    // and translate to the right, using a CSS transition
+    function animateGhostPicture(img) {
+        
+        ghostCanvas.width = canvas.width;
+        ghostCanvas.height = canvas.height;
+        ghostCanvas.classList.add('modal');
+
+        var ctx = ghostCanvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+
+        setTimeout(function() {
+            ghostCanvasContainer.classList.add('faded_out');
+        }, 10);
+
+    }
+
+
+    // Starts capturing video
     function startVideoRecording() {
 
         // We might already have a half-way recorded video
@@ -390,11 +445,13 @@
 
     }
 
+
     function pauseVideoRecording() {
 
         clearTimeout(recordGIFTimeout);
 
     }
+
 
     function addFrameToGIF() {
 
@@ -417,6 +474,7 @@
 
     }
 
+
     function finishVideoRecording() {
 
         clearTimeout(recordGIFTimeout);
@@ -427,8 +485,6 @@
         btnVideoCancel.disabled = true;
         btnVideoDone.disabled = true;
 
-        videoProgressSpan.innerHTML = '<img src="/img/icons/spinner.gif">';
-
         animatedGIF.onRenderProgress(function(progress) {
 
             videoProgressSpan.innerHTML = 'rendering ' + Math.floor(progress * 100) + '%';
@@ -437,17 +493,7 @@
         });
 
         animatedGIF.getBase64GIF(function(gifData) {
-
-            var a = document.createElement('a');
-            a.setAttribute('href', gifData);
-            a.setAttribute('download', getTimestamp() + '.gif');
-
-            // Apparently the download won't start unless the anchor element
-            // is in the DOM tree
-            a.style.display = 'none';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            saveLocalPicture(gifData, true);
 
             videoProgressSpan.innerHTML = '';
             hide(videoControls);
@@ -465,6 +511,7 @@
 
     }
 
+
     function cancelVideoRecording() {
 
         clearTimeout(recordGIFTimeout);
@@ -474,6 +521,7 @@
         animatedGIF = null;
 
     }
+
 
     function render() {
 

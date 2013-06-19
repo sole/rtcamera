@@ -8,6 +8,10 @@ x-switch {
 	cursor: pointer;
 }
 
+x-switch[disabled] {
+    opacity: 0.5;
+}
+
 x-switch input[type="checkbox"] {
 	position: absolute;
 	border: none;

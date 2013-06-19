@@ -60,6 +60,15 @@
           this.firstElementChild.checked = state;
         }
       },
+      disabled: {
+        attribute: { boolean: true },
+        get: function(){
+          return this.firstElementChild.disabled;
+        },
+        set: function(state){
+          this.firstElementChild.disabled = state;
+        }
+      },
       formName: {
         attribute: { name: 'formname' },
         get: function(){

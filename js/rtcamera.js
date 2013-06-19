@@ -504,6 +504,9 @@
 
         btnVideoCancel.disabled = true;
         btnVideoDone.disabled = true;
+        modeToggle.disabled = true;
+        btnVideo.disabled = true;
+        btnStatic.disabled = true;
 
         animatedGIF.onRenderProgress(function(progress) {
 
@@ -520,6 +523,9 @@
 
             btnVideoCancel.disabled = false;
             btnVideoDone.disabled = false;
+            modeToggle.disabled = false;
+            btnVideo.disabled = false;
+            btnStatic.disabled = false;
 
             rendering = false;
             render();

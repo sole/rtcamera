@@ -10,7 +10,9 @@ var Picture = (function() {
         asyncStorage.getItem(PICTURES_LIST_KEY, function(list) {
             
             if(!list) {
+
                 list = [];
+
             }
 
             callback(list);
@@ -26,10 +28,13 @@ var Picture = (function() {
     function addToPicturesList(pictureId) {
         
         getPicturesList(function(list) {
+
             // No duplicates! (for when updating pictures)
             if(list.indexOf(pictureId) === -1) {
+
                 list.push(pictureId);
                 savePicturesList(list);
+
             }
         });
 
@@ -41,9 +46,12 @@ var Picture = (function() {
         getPicturesList(function(list) {
 
             var pos = list.indexOf(pictureId);
+
             if(pos !== -1) {
+
                 list.splice(pos, 1);
                 savePicturesList(list, callback);
+
             }
 
         });
@@ -88,7 +96,9 @@ var Picture = (function() {
         var animated = false;
 
         if(data) {
+
             animated = data.indexOf('image/gif') !== -1;
+
         }
 
         return animated;
@@ -107,31 +117,45 @@ var Picture = (function() {
 
         this.save = function(callback) {
             
-            if(self.id === null) {
+            if(!self.id) {
+
                 self.id = PICTURE_PREFIX + getTimestamp();
+
             }
 
-            if(self.imageIsAnimated === null) {
+            if(!self.imageIsAnimated) {
+
                 self.imageIsAnimated = guessIsImageAnimated(this.imageData);
+
             }
 
             // Saving stuff
             asyncStorage.setItem(self.id, {
+
                 imageData: this.imageData,
                 imageIsAnimated: this.imageIsAnimated,
                 imgurURL: this.imgurURL
+
             }, function() {
+
                 addToPicturesList(self.id);
                 callback();
+
             });
         };
 
         this.getExtension = function() {
+
             if(self.imageIsAnimated) {
+
                 return '.gif';
+
             } else {
+
                 return '.png';
+
             }
+
         };
 
     };
@@ -145,27 +169,41 @@ var Picture = (function() {
             var position = 0; // (page - 1) * numItemsPerPage
             
             if(list.length > 0) {
+
                 loadPicture(position);
+
             } else {
+
                 callback(pictures);
+
             }
 
             function onPictureLoaded(picture, loadedPosition) {
+
                 var nextPosition = loadedPosition + 1;
                 
                 pictures.push(picture);
 
                 if(nextPosition >= list.length) {
+
                     callback(pictures);
+
                 } else {
+
                     loadPicture(nextPosition);
+
                 }
+
             }
 
             function loadPicture(position, callback) {
+
                 Pic.getById(list[position], function(picture) {
+
                     onPictureLoaded(picture, position);
+
                 });
+
             }
         });
         
@@ -177,8 +215,10 @@ var Picture = (function() {
         asyncStorage.getItem(id, function(value) {
             
             if(value === null) {
+
                 callback(false);
                 return;
+
             }
 
             var picture = new Pic();
@@ -195,7 +235,9 @@ var Picture = (function() {
     Pic.deleteById = function(id, callback) {
 
         asyncStorage.removeItem(id, function() {
+
             removeFromPicturesList(id, callback);
+
         });
 
     };
@@ -211,6 +253,7 @@ var Picture = (function() {
     Pic.fixList = function(callback) {
 
         getPicturesList(function(list) {
+
             var outputList = [];
             var invalidList = [];
 
@@ -221,20 +264,31 @@ var Picture = (function() {
             } else {
 
                 list.forEach(function(index) {
+
                     Pic.getById(index, function(picture) {
+
                         if(picture) {
+
                             outputList.push(index);
+
                         } else {
+
                             invalidList.push(index);
+
                         }
 
                         if(outputList.length + invalidList.length === list.length) {
+
                             savePicturesList(outputList, callback);
+
                         }
+
                     });
+
                 });
 
             }
+
         });
 
     };

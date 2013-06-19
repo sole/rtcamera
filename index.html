@@ -3,40 +3,57 @@
   <head>
     <meta charset="utf-8">
     <title>real time camera</title>
-    <link rel="stylesheet" href="css/x-tag-switch.css" type="text/css">
+    <link rel="stylesheet" href="css/x-tags/switch.css" type="text/css">
+    <link rel="stylesheet" href="css/x-tags/shiftbox.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
   </head>
   <body>
 
-    <div id="wrapper">
-      <header>
-        <h1><span>rt</span>camera</h1>
-        <div class="controls">
-          <div id="video_controls">
-            <input type="image" id="btn_cancel" src="img/icons/ic_action_cancel.png" value="cancel">
-            <progress max="1" value="0"></progress>
-            <input type="image" id="btn_done" src="img/icons/ic_action_done.png" value="done">
-            <span id="progress_label"></span>
+    <x-shiftbox>
+
+      <section id="wrapper">
+        <header>
+          <h1>
+            <a id="menuButton">&#9776;</a>
+            <span>rt</span>camera
+          </h1>
+          <div class="controls">
+            <div id="video_controls">
+              <input type="image" id="btn_cancel" src="img/icons/ic_action_cancel.png" value="cancel">
+              <progress max="1" value="0"></progress>
+              <input type="image" id="btn_done" src="img/icons/ic_action_done.png" value="done">
+              <div id="progress_label"><span></span></div>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <div id="canvasContainer"></div>
+        <div id="canvasContainer"></div>
+        <div id="ghostCanvasContainer" class="non_selectable"></div>
+        <div id="flasher" class="non_selectable"></div>
 
-      <ul id="instructions" class="modal non_selectable">
-        <li id="press">Press the screen to take a photo or record video.</li>
-        <li id="arrows">Swipe left or right to change between effects.</li>
-      </ul>
-      <footer class="controls">
-        <input type="image" id="btnVideo" src="img/icons/ic_action_video.png" alt="video">
-        <x-switch id="mode_toggle" onText="camera" offText="video"></x-switch>
-        <input type="image" id="btnPhoto" src="img/icons/ic_action_photo.png" alt="photo">
-      </footer>
-    </div>
+        <ul id="instructions" class="modal non_selectable">
+          <li id="press">Press the screen to take a photo or record video.</li>
+          <li id="arrows">Swipe left or right to change between effects.</li>
+        </ul>
+        <footer class="controls">
+          <input type="image" id="btnVideo" src="img/icons/ic_action_video.png" alt="video">
+          <x-switch id="mode_toggle" onText="camera" offText="video"></x-switch>
+          <input type="image" id="btnPhoto" src="img/icons/ic_action_photo.png" alt="photo">
+        </footer>
+      </section>
+  
+      <aside>
+        <ul>
+          <li><a href="gallery.html">Gallery</a></li>
+        </ul>
+      </aside>
 
-    <script src="js/libs/x-tag-core.js"></script>
-    <script src="js/libs/x-tag-switch.js"></script>
+    </x-shiftbox>
+
+    <script src="js/libs/x-tags/core.js"></script>
+    <script src="js/libs/x-tags/shiftbox.js"></script>
+    <script src="js/libs/x-tags/switch.js"></script>
 
     <script src="js/libs/glmatrix.min.js"></script>
     <script src="js/libs/raf.js"></script>
@@ -48,6 +65,10 @@
 
     <script src="js/libs/Hammer.js"></script>
     
+    <script src="js/libs/asyncStorage.js"></script>
+    <script src="js/libs/IndexedDBShim.js"></script>
+    
+    <script src="js/Picture.js"></script>
     <script src="js/ImageEffect.js"></script>
     <script src="js/Renderer.js"></script>
     <script src="js/rtcamera.js"></script>

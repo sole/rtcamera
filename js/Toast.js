@@ -1,3 +1,7 @@
+/**
+ * This class is used to display short-lived messages on the screen,
+ * Android-toasts style
+ */
 var Toast = function(text) {
 
     var div;

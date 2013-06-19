@@ -221,8 +221,7 @@
             .on('swipeleft', prevEffect)
             .on('swiperight', nextEffect);
 
-        setMode(MODE_STATIC); // TMP
-        //setMode(MODE_VIDEO);
+        setMode(MODE_STATIC);
 
         // Set up the app menu
         btnMenu.addEventListener('click', function() {

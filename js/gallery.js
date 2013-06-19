@@ -1,3 +1,6 @@
+/**
+ * Displays the gallery and picture details page
+ */
 (function() {
 
     var IMGUR_KEY = '49c42af902d1fd4';
@@ -10,19 +13,39 @@
     backButton.style.opacity = '1';
     backButton.style.display = 'block';
 
+    // We'll be using 'event delegation' to avoid having to update listeners
+    // if pictures are deleted
     galleryContainer.addEventListener('click', function(ev) {
+
         var target = ev.target;
         if(target && target.nodeName === 'IMG') {
+
             showDetails(target.dataset['id']);
+
         } else {
+
             closeDetails();
+
         }
+
     }, false);
 
+    // Ensure the database & index are in good shape, then show the gallery
     Picture.fixList(updateGallery);
+
 
     // ~~~
     
+
+    /**
+     * This function grabs all the pictures in the database, iterates through
+     * the array to build an "index" using the galleryPictures object, and also
+     * sets the nextPicture and previousPicture properties of each picture to the
+     * appropriate values, so that it's faster to navigate later on, without having
+     * to run additionaly queries (as we already have all the required data).
+     *
+     * It also renders the gallery itself, which is basically a bunch of IMG elements.
+     */
     function updateGallery() {
         
         Picture.getAll(function(pictures) {
@@ -60,10 +83,21 @@
 
     }
 
+
+    /**
+     * Returns a picture from the galleryPictures hash. updateGallery must be called at
+     * least once before calling this one for the galleryPictures object to be filled in
+     */
     function getPictureById(pictureId) {
         return galleryPictures[pictureId];
     }
 
+
+    /**
+     * Display the selected picture and allow to perform actions over it too
+     * If the picture has already been shared to imgur, it will show the url of the
+     * picture in imgur
+     */
     function showDetails(pictureId) {
 
         showLoadingDetails();
@@ -185,6 +219,10 @@
     }
 
 
+    /**
+     * Upload picture to imgur image sharing service, which allows for cross domain
+     * requests and hence is very JS friendly!
+     */
     function uploadPicture(pictureId, picture) {
         
         var image = picture.imageData.replace(/^data:image\/(png|gif);base64,/, "");

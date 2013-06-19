@@ -95,7 +95,6 @@
         reportError('Native device media streaming (getUserMedia) not supported in this browser.');
 
     }
-    //});
 
     function reportError(message) {
 

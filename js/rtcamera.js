@@ -30,6 +30,8 @@
     var btnVideoCancel;
     var btnVideoDone;
     var modeToggle;
+    var btnVideo;
+    var btnStatic;
     var renderer;
     var animatedGIF = null;
     var gifDelay = 100;
@@ -175,6 +177,8 @@
         flasher = document.getElementById('flasher');
         ghostCanvas = document.createElement('canvas');
         modeToggle = document.getElementById('mode_toggle');
+        btnVideo = document.getElementById('btnVideo');
+        btnStatic = document.getElementById('btnStatic');
         btnMenu = document.getElementById('menuButton');
         shiftBox = document.querySelector('x-shiftbox');
         aside = document.querySelector('aside');
@@ -212,6 +216,21 @@
             setMode( this.checked ? MODE_STATIC : MODE_VIDEO );
 
         }, false); 
+
+        btnVideo.addEventListener('click', function() {
+
+            modeToggle.checked = false;
+            setMode(MODE_VIDEO);
+
+        }, false);
+
+        btnStatic.addEventListener('click', function() {
+
+            modeToggle.checked = true;
+            setMode(MODE_STATIC);
+
+        }, false);
+
 
 
         // Set up 'gestures' using Hammer touch library (HA HA)

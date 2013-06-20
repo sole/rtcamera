@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="css/x-tags/shiftbox.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <link rel="icon" sizes="144x144" href="img/icons/camera-icon-144.png" type="image/png">
+    <link rel="icon" sizes="114x114" href="img/icons/camera-icon-114.png" type="image/png">
+    <link rel="icon" sizes="72x72" href="img/icons/camera-icon-72.png" type="image/png">
+    <link rel="icon" href="img/icons/camera-icon-16.png" type="image/png">
+    <link rel="shortcut icon" href="favicon.ico" />
+
   </head>
   <body>
 
@@ -37,9 +44,9 @@
           <li id="arrows">Swipe left or right to change between effects.</li>
         </ul>
         <footer class="controls">
+          <input type="image" id="btnStatic" src="img/icons/ic_action_photo.png" alt="photo">
+          <x-switch id="mode_toggle" onText="" offText=""></x-switch>
           <input type="image" id="btnVideo" src="img/icons/ic_action_video.png" alt="video">
-          <x-switch id="mode_toggle" onText="camera" offText="video"></x-switch>
-          <input type="image" id="btnPhoto" src="img/icons/ic_action_photo.png" alt="photo">
         </footer>
       </section>
   

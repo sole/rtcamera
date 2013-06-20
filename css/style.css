@@ -357,6 +357,8 @@ x-switch {
     text-shadow: 0 0 2px #000;
     text-transform: uppercase;
     color: #999;
+    width: 90px;
+    height: 26px;
 }
 
 x-switch, x-switch[checked], .x-switch-background {
@@ -369,7 +371,7 @@ x-switch, x-switch[checked], .x-switch-background {
 
 .x-switch-knob {
     background: #e58f33;
-    box-shadow: 0 0 5px #000;
+    width: 40px;
 }
 
 /* refining styles for smaller/mobile screens */

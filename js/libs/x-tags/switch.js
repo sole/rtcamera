@@ -17,7 +17,8 @@
     return {
       attribute: { name: state + 'text' },
       get: function(){
-        return this.getAttribute(state + 'text') || state;
+        var attrValue = this.getAttribute(state + 'text');
+        return attrValue !== undefined ? attrValue : state;
       },
       set: function(text){
         xtag.query(this, '[' + state + 'text]').forEach(function(el){
@@ -58,6 +59,15 @@
         },
         set: function(state){
           this.firstElementChild.checked = state;
+        }
+      },
+      disabled: {
+        attribute: { boolean: true },
+        get: function(){
+          return this.firstElementChild.disabled;
+        },
+        set: function(state){
+          this.firstElementChild.disabled = state;
         }
       },
       formName: {

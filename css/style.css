@@ -300,6 +300,7 @@ x-shiftbox {
             color: #800;
             font-family: "Courier New", Courier, Monospace, mono;
             background: #ffefef;
+            z-index: 10;
         }
 
         .non_selectable {

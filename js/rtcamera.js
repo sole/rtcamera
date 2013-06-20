@@ -213,24 +213,25 @@
 
         modeToggle.addEventListener('change', function(ev) {
 
-            setMode( this.checked ? MODE_STATIC : MODE_VIDEO );
+            setMode( this.checked ? MODE_VIDEO : MODE_STATIC );
 
         }, false); 
 
         btnVideo.addEventListener('click', function() {
 
-            modeToggle.checked = false;
+            modeToggle.checked = true;
             setMode(MODE_VIDEO);
 
         }, false);
 
         btnStatic.addEventListener('click', function() {
 
-            modeToggle.checked = true;
+            modeToggle.checked = false;
             setMode(MODE_STATIC);
 
         }, false);
 
+        setMode(MODE_STATIC);
 
 
         // Set up 'gestures' using Hammer touch library (HA HA)
@@ -239,9 +240,7 @@
             .on('hold', onHold)
             .on('swipeleft', prevEffect)
             .on('swiperight', nextEffect);
-
-        setMode(MODE_STATIC);
-
+        
         // Set up the app menu
         btnMenu.addEventListener('click', function() {
             console.log('click');
@@ -379,11 +378,11 @@
 
             hide(videoControls);
             animatedGIF = null;
-            toggle.checked = true;
+            toggle.checked = false;
 
         } else {
 
-            toggle.checked = false;
+            toggle.checked = true;
 
         }
 

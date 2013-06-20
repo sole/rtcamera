@@ -30,6 +30,8 @@
     var btnVideoCancel;
     var btnVideoDone;
     var modeToggle;
+    var btnVideo;
+    var btnStatic;
     var renderer;
     var animatedGIF = null;
     var gifDelay = 100;
@@ -175,6 +177,8 @@
         flasher = document.getElementById('flasher');
         ghostCanvas = document.createElement('canvas');
         modeToggle = document.getElementById('mode_toggle');
+        btnVideo = document.getElementById('btnVideo');
+        btnStatic = document.getElementById('btnStatic');
         btnMenu = document.getElementById('menuButton');
         shiftBox = document.querySelector('x-shiftbox');
         aside = document.querySelector('aside');
@@ -209,9 +213,25 @@
 
         modeToggle.addEventListener('change', function(ev) {
 
-            setMode( this.checked ? MODE_STATIC : MODE_VIDEO );
+            setMode( this.checked ? MODE_VIDEO : MODE_STATIC );
 
         }, false); 
+
+        btnVideo.addEventListener('click', function() {
+
+            modeToggle.checked = true;
+            setMode(MODE_VIDEO);
+
+        }, false);
+
+        btnStatic.addEventListener('click', function() {
+
+            modeToggle.checked = false;
+            setMode(MODE_STATIC);
+
+        }, false);
+
+        setMode(MODE_STATIC);
 
 
         // Set up 'gestures' using Hammer touch library (HA HA)
@@ -220,9 +240,7 @@
             .on('hold', onHold)
             .on('swipeleft', prevEffect)
             .on('swiperight', nextEffect);
-
-        setMode(MODE_STATIC);
-
+        
         // Set up the app menu
         btnMenu.addEventListener('click', function() {
             console.log('click');
@@ -360,11 +378,11 @@
 
             hide(videoControls);
             animatedGIF = null;
-            toggle.checked = true;
+            toggle.checked = false;
 
         } else {
 
-            toggle.checked = false;
+            toggle.checked = true;
 
         }
 
@@ -484,6 +502,9 @@
 
         btnVideoCancel.disabled = true;
         btnVideoDone.disabled = true;
+        modeToggle.disabled = true;
+        btnVideo.disabled = true;
+        btnStatic.disabled = true;
 
         animatedGIF.onRenderProgress(function(progress) {
 
@@ -500,6 +521,9 @@
 
             btnVideoCancel.disabled = false;
             btnVideoDone.disabled = false;
+            modeToggle.disabled = false;
+            btnVideo.disabled = false;
+            btnStatic.disabled = false;
 
             rendering = false;
             render();

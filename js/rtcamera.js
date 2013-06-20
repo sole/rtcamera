@@ -45,15 +45,31 @@
     var mode;
     var TRANSITION_LENGTH = 500;
     var attempts = 0;
+    var noGUMSupportTimeout;
+    var liveStreamPossible = false;
+    var liveStreaming = false;
+    var outputImageNeedsUpdating = false;
+    var inputElement;
+
+
+    // Some browsers do not even answer to our query for getUserMedia support,
+    // so we'll set up this timeout and if nothing happens in a second, we'll
+    // conclude that there's no getUserMedia support.
+    noGUMSupportTimeout = setTimeout(onNoGUMSupport, 1000);
 
     if (navigator.getMedia) {
 
+        clearTimeout(noGUMSupportTimeout);
+        
         video = document.createElement('video');
         video.autoplay = true;
 
         video.addEventListener('loadeddata', function readyListener(event) {
 
             findVideoSize();
+
+            liveStreaming = true;
+            inputElement = video;
 
             function findVideoSize() {
 
@@ -83,18 +99,28 @@
                 video.src = window.URL.createObjectURL(stream);
             }
 
+            liveStreamPossible = true;
             webcamStream = stream;
             video.play();
 
         }, function (error) {
 
-            reportError(error);
+            // TODO remove? reportError(error);
+            onNoGUMSupport();
 
         });
 
     } else {
 
+        clearTimeout(noGUMSupportTimeout);
+        onNoGUMSupport();
+
+    }
+
+    function onNoGUMSupport() {
+        
         reportError('Native device media streaming (getUserMedia) not supported in this browser.');
+        // TODO: show 'degraded mode' infoscreen, on OK = open file picker
 
     }
 
@@ -549,12 +575,35 @@
 
     function render() {
 
-        if(!rendering) {
+        /*if(!rendering) {
             requestAnimationFrame(render);
         }
 
         if( video.readyState === video.HAVE_ENOUGH_DATA ) {
             renderer.updateTexture(video);
+        }*/
+
+        if(liveStreaming) {
+
+            if(!rendering) {
+
+                requestAnimationFrame(render);
+
+            }
+
+            if(video.readyState === video.HAVE_ENOUGH_DATA) {
+
+                outputImageNeedsUpdating = true;
+
+            }
+        }
+
+        if(outputImageNeedsUpdating) {
+
+            renderer.updateTexture(inputElement);
+
+            outputImageNeedsUpdating = false;
+
         }
 
     }

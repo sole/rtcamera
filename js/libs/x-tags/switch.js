@@ -17,7 +17,8 @@
     return {
       attribute: { name: state + 'text' },
       get: function(){
-        return this.getAttribute(state + 'text') || state;
+        var attrValue = this.getAttribute(state + 'text');
+        return attrValue !== undefined ? attrValue : state;
       },
       set: function(text){
         xtag.query(this, '[' + state + 'text]').forEach(function(el){

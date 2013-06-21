@@ -20,6 +20,7 @@
     var ghostCanvas;
     var ghostBitmap;
     var flasher;
+    var filePicker;
     var shiftBox;
     var btnMenu;
     var aside;
@@ -119,8 +120,10 @@
 
     function onNoGUMSupport() {
         
-        reportError('Native device media streaming (getUserMedia) not supported in this browser.');
+        // reportError('Native device media streaming (getUserMedia) not supported in this browser.');
         // TODO: show 'degraded mode' infoscreen, on OK = open file picker
+        window.alert('You are in sad mode now');
+        openFilePicker();
 
     }
 
@@ -201,6 +204,7 @@
         btnVideoCancel = document.getElementById('btn_cancel');
         btnVideoDone = document.getElementById('btn_done');
         flasher = document.getElementById('flasher');
+        filePicker = document.getElementById('filePicker');
         ghostCanvas = document.createElement('canvas');
         modeToggle = document.getElementById('mode_toggle');
         btnVideo = document.getElementById('btnVideo');
@@ -225,6 +229,9 @@
 
         flasher.addEventListener('animationend', onFlasherAnimationEnd, false);
         flasher.addEventListener('webkitAnimationEnd', onFlasherAnimationEnd, false);
+
+        var filePickerInput = filePicker.querySelector('input');
+        filePickerInput.addEventListener('change', onFilePicked, false);
 
         var ghostCanvasContainer = document.getElementById('ghostCanvasContainer');
         ghostCanvasContainer.appendChild(ghostCanvas);
@@ -361,14 +368,55 @@
 
     }
 
+
+    function openFilePicker() {
+
+        // ??? show(filePicker);
+    }
+
+    function onFilePicked(ev) {
+
+        liveStreaming = false;
+        // TODO stop stream, refactor webcamStream.stop call
+
+        var files = this.files;
+
+        if(files.length > 0 && files[0].type.indexOf('image/') === 0) {
+            
+            // get data from picked file
+            // put that into an element
+            var file = files[0];
+            var img = document.createElement('img');
+            
+
+            document.body.appendChild(img);
+            img.style.position = 'absolute';
+            img.style.left = '0px';
+            img.style.top = '0px';
+            img.style.zIndex = '100';
+            img.src = window.URL.createObjectURL(file);
+            img.onload = function() {
+                window.URL.revokeObjectURL(this.src);
+                inputElement = img;
+                outputImageNeedsUpdating = true;
+                render();
+            };
+
+        }
+
+    }
+
+
     function prevEffect() {
 
+        outputImageNeedsUpdating = true;
         renderer.prevEffect();
 
     }
 
     function nextEffect() {
 
+        outputImageNeedsUpdating = true;
         renderer.nextEffect();
 
     }

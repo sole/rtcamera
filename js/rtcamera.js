@@ -41,19 +41,9 @@
     var inputElement;
     var animationFrameId = null;
 
-    gumHelper.startVideoStreaming(function(error) {
+    init();
 
-        reportError(error);
-
-    }, function(stream, videoElement, width, height) {
-
-        video = videoElement;
-        cameraStream = stream;
-        liveStreaming = true;
-        inputElement = video;
-        init(width, height);
-
-    });
+    // ---
 
     function reportError(message) {
 
@@ -81,26 +71,40 @@
 
     }
 
-    function init(width, height) {
 
-        videoWidth = width;
-        videoHeight = height;
+    function init() {
 
-        canvas = document.createElement('canvas');
-        canvas.classList.add('modal');
+        initUI();
 
         try {
-
+        
             renderer = new Renderer(canvas, reportError, function() {
-          
-                // Display the UI after a while-as WebGL takes a bit to set up,
-                // and it's weird to see interface elements over a black screen...
-                setTimeout(initUI, 200);
 
-                render();
+                setMode(MODE_STATIC);
+
+                gumHelper.startVideoStreaming(function(error) {
+
+                    // No getUserMedia support, so using "basic" experience
+
+                    disableLiveStreamingOptions();
+                    showUI();
+                    showNoLiveStreamInfoScreen();
+
+                }, function(stream, videoElement, width, height) {
+
+                    // getUserMedia, yay!
+
+                    video = videoElement;
+                    liveStreamPossible = true;
+                    liveStreaming = true;
+                    changeInputTo(videoElement, width, height);
+                    render();
+                    showUI();
+
+                });
 
             });
-            
+
         } catch(e) {
 
             reportError(e.message);
@@ -109,10 +113,8 @@
 
     }
 
-    function initUI() {
 
-        var controls = Array.prototype.slice.call(document.querySelectorAll('.controls'));
-        controls.forEach(show);
+    function initUI() {
 
         videoControls = document.getElementById('video_controls');
         videoProgressBar = document.querySelector('progress');
@@ -131,12 +133,10 @@
         aside = document.querySelector('aside');
 
 
-        // Set up listeners
-
         window.addEventListener('resize', onResize, false);
-        onResize();
 
-        // Adding the canvas once it's been resized first
+        canvas = document.createElement('canvas');
+        canvas.classList.add('modal');
         document.getElementById('canvasContainer').appendChild(canvas);
 
         function onFlasherAnimationEnd() {
@@ -181,8 +181,6 @@
 
         }, false);
 
-        setMode(MODE_STATIC);
-
 
         // Set up 'gestures' using Hammer touch library (HA HA)
         Hammer(canvas, { hold_timeout: 300 })
@@ -211,28 +209,52 @@
             }
         }, false);
 
-        // Show "swipe left or right to change effect" instructions text
-        // TODO: maybe do it only once? on the first run?
+    }
+
+
+    function showNoLiveStreamInfoScreen() {
+    }
+
+
+    function disableLiveStreamingOptions() {
+    }
+
+
+    function showUI() {
+
+        var controls = Array.prototype.slice.call(document.querySelectorAll('.controls'));
+        var instructions = document.getElementById('instructions');
+
+        controls.forEach(show);
+        show(instructions);
+
         setTimeout(function() {
 
-            show(document.getElementById('instructions'));
+            show(btnMenu);
+            hide(instructions);
 
-            setTimeout(function() {
-
-                hide(instructions);
-                show(btnMenu);
-
-            }, 3000);
-
-        }, TRANSITION_LENGTH);
+        }, 3000);
 
     }
+
+
+    function changeInputTo(newInputElement, width, height) {
+
+        inputElement = newInputElement;
+
+        videoWidth = width;
+        videoHeight = height;
+
+        onResize();
+
+    }
+
 
     function onResize() {
 
         var w = window.innerWidth;
         var h = window.innerHeight;
-        var canvasWidth = videoWidth;
+        var canvasWidth = videoWidth; // TODO videoWidth -> inputWidth, etc
         var canvasHeight = videoHeight;
 
         // constrain canvas size to be <= window size, and maintain proportions
@@ -243,10 +265,12 @@
 
         }
 
-        canvas.width = canvasWidth;
-        canvas.height = canvasHeight;
 
-        renderer.setSize(canvasWidth, canvasHeight);
+        if(renderer) {
+
+            renderer.setSize(canvasWidth, canvasHeight);
+
+        }
 
         // And then reescale it up with CSS style
         var scaleX = w / canvasWidth;
@@ -255,8 +279,15 @@
 
         scaleToFit |= 0;
 
-        canvas.style.width = (canvasWidth * scaleToFit) + 'px';
-        canvas.style.height = (canvasHeight * scaleToFit) + 'px';
+        if(canvas) {
+
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+
+            canvas.style.width = (canvasWidth * scaleToFit) + 'px';
+            canvas.style.height = (canvasHeight * scaleToFit) + 'px';
+
+        }
 
     }
 

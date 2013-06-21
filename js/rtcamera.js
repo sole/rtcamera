@@ -2,16 +2,6 @@
 
     'use strict';
 
-    window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
-
-    navigator.getMedia = ( navigator.getUserMedia ||
-        navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia ||
-        navigator.msGetUserMedia
-    );
-
-    // ---
-
     var video = null;
     var videoWidth;
     var videoHeight;
@@ -45,48 +35,25 @@
     var MODE_VIDEO = 'video';
     var mode;
     var TRANSITION_LENGTH = 500;
-    var noGUMSupportTimeout;
     var liveStreamPossible = false;
     var liveStreaming = false;
     var outputImageNeedsUpdating = false;
     var inputElement;
     var animationFrameId = null;
 
+    gumHelper.startVideoStreaming(function(error) {
 
-    // Some browsers do not even answer to our query for getUserMedia support,
-    // so we'll set up this timeout and if nothing happens in a second, we'll
-    // conclude that there's no getUserMedia support.
-    noGUMSupportTimeout = setTimeout(onNoGUMSupport, 1000);
+        reportError(error);
 
-    if (navigator.getMedia) {
+    }, function(stream, videoElement, width, height) {
 
-        clearTimeout(noGUMSupportTimeout);
+        video = videoElement;
+        cameraStream = stream;
+        liveStreaming = true;
+        inputElement = video;
+        init(width, height);
 
-        startVideoStreaming(reportError, function(stream, videoElement, width, height) {
-
-            video = videoElement;
-            cameraStream = stream;
-            liveStreaming = true;
-            inputElement = video;
-            init(width, height);
-            
-        });
-        
-    } else {
-
-        clearTimeout(noGUMSupportTimeout);
-        onNoGUMSupport();
-
-    }
-
-    function onNoGUMSupport() {
-        
-        // reportError('Native device media streaming (getUserMedia) not supported in this browser.');
-        // TODO: show 'degraded mode' infoscreen, on OK = open file picker
-        window.alert('You are in sad mode now');
-        openFilePicker();
-
-    }
+    });
 
     function reportError(message) {
 
@@ -110,19 +77,7 @@
         
         document.body.appendChild(error);
 
-        /*if(webcamStream !== null) {
-
-            webcamStream.stop();
-
-        }
-
-        if(video !== null) {
-
-            video.pause();
-            video.src = null;
-
-        }*/
-        stopVideoStreaming();
+        gumHelper.stopVideoStreaming();
 
     }
 
@@ -327,90 +282,6 @@
             element.style.opacity = 1;
 
         }, 1);
-
-    }
-
-
-    /**
-     * Requests permission for using the user's camera,
-     * starts reading video from the selected camera, and calls
-     * `okCallback` when the video dimensions are known (with a fallback
-     * for when the dimensions are not reported on time),
-     * or calls `errorCallback` if something goes wrong
-     */
-    function startVideoStreaming(errorCallback, okCallback) {
-
-        var videoElement;
-        var cameraStream;
-        var attempts = 0;
-        var readyListener = function(event) {
-
-            findVideoSize();
-
-        };
-        var findVideoSize = function() {
-
-            if(videoElement.videoWidth > 0 && videoElement.videoHeight > 0) {
-
-                videoElement.removeEventListener('loadeddata', readyListener);
-                onDimensionsReady(videoElement.videoWidth, videoElement.videoHeight);
-
-            } else {
-
-                if(attempts < 10) {
-
-                    attempts++;
-                    setTimeout(findVideoSize, 200);
-
-                } else {
-
-                    onDimensionsReady(640, 480);
-
-                }
-
-            }
-
-        };
-        var onDimensionsReady = function(width, height) {
-            okCallback(cameraStream, videoElement, width, height);
-        };
-        
-        videoElement = document.createElement('video');
-        videoElement.autoplay = true;
-
-        videoElement.addEventListener('loadeddata', readyListener);
-
-        navigator.getMedia({ video: true }, function (stream) {
-
-            if(videoElement.mozSrcObject !== undefined) {
-                videoElement.mozSrcObject = stream;
-            } else {
-                videoElement.src = window.URL.createObjectURL(stream);
-            }
-
-            cameraStream = stream;
-            videoElement.play();
-
-        }, errorCallback);
-
-    }
-
-    
-    function stopVideoStreaming() {
-        
-        if(cameraStream !== null) {
-
-            cameraStream.stop();
-
-        }
-
-        if(video !== null) {
-
-            video.pause();
-            // TODO free src url object
-            video.src = null;
-
-        }
 
     }
 

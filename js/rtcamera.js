@@ -201,7 +201,6 @@
         
         // Set up the app menu
         btnMenu.addEventListener('click', function() {
-            console.log('click');
             if(shiftBox.hasAttribute('open')) {
                 shiftBox.removeAttribute('open');
             } else {
@@ -329,14 +328,14 @@
 
     function openFilePicker() {
 
-        show(filePicker);
+        filePicker.removeAttribute('hidden');
 
     }
 
 
     function onFilePicked(ev) {
 
-        hide(filePicker);
+        filePicker.setAttribute('hidden');
 
         gumHelper.stopVideoStreaming();
 
@@ -351,8 +350,10 @@
 
             img.src = window.URL.createObjectURL(file);
             img.onload = function() {
-                window.URL.revokeObjectURL(this.src);
-                inputElement = img;
+                window.URL.revokeObjectURL(this.src); // TODO maybe too early?
+
+                changeInputTo(img, img.width, img.height);
+
                 outputImageNeedsUpdating = true;
                 render();
             };

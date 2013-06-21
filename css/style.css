@@ -228,8 +228,10 @@ x-shiftbox {
             }
 
         #filePicker {
-            opacity: 0;
-            display: none;
+            background: #fff;
+            color: #000;
+            padding: 1rem;
+            border-radius: 0.5rem;
         }
 
         #ghostCanvasContainer {

@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>real time camera</title>
+    <link rel="stylesheet" href="css/x-tags/modal.css" type="text/css">
     <link rel="stylesheet" href="css/x-tags/switch.css" type="text/css">
     <link rel="stylesheet" href="css/x-tags/shiftbox.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
@@ -39,10 +40,11 @@
         <div id="ghostCanvasContainer" class="non_selectable"></div>
         <div id="flasher" class="non_selectable"></div>
 
-        <div id="filePicker" class="modal">
+        <x-modal id="filePicker" overlay esc-hide hidden>
           Select an image
           <input type="file" />
-        </div>
+        </x-modal>
+
 
         <ul id="instructions" class="modal non_selectable">
           <li id="press">Press the screen to take a photo or record video.</li>
@@ -65,6 +67,7 @@
     </x-shiftbox>
 
     <script src="js/libs/x-tags/core.js"></script>
+    <script src="js/libs/x-tags/modal.js"></script>
     <script src="js/libs/x-tags/shiftbox.js"></script>
     <script src="js/libs/x-tags/switch.js"></script>
 

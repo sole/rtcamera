@@ -15,7 +15,7 @@
     var video = null;
     var videoWidth;
     var videoHeight;
-    var webcamStream = null;
+    var cameraStream = null;
     var canvas;
     var ghostCanvas;
     var ghostBitmap;
@@ -45,7 +45,6 @@
     var MODE_VIDEO = 'video';
     var mode;
     var TRANSITION_LENGTH = 500;
-    var attempts = 0;
     var noGUMSupportTimeout;
     var liveStreamPossible = false;
     var liveStreaming = false;
@@ -62,56 +61,17 @@
     if (navigator.getMedia) {
 
         clearTimeout(noGUMSupportTimeout);
-        
-        video = document.createElement('video');
-        video.autoplay = true;
 
-        video.addEventListener('loadeddata', function readyListener(event) {
+        startVideoStreaming(reportError, function(stream, videoElement, width, height) {
 
-            findVideoSize();
-
+            video = videoElement;
+            cameraStream = stream;
             liveStreaming = true;
             inputElement = video;
-
-            function findVideoSize() {
-
-                if(video.videoWidth > 0 && video.videoHeight > 0) {
-
-                    video.removeEventListener('loadeddata', readyListener);
-                    init(video.videoWidth, video.videoHeight);
-
-                } else {
-
-                    if(attempts < 10) {
-                        attempts++;
-                        setTimeout(findVideoSize, 200);
-                    } else {
-                        init(640, 480);
-                    }
-
-                }
-            }
+            init(width, height);
+            
         });
-
-        navigator.getMedia({ video: true }, function (stream) {
-
-            if(video.mozSrcObject !== undefined) {
-                video.mozSrcObject = stream;
-            } else {
-                video.src = window.URL.createObjectURL(stream);
-            }
-
-            liveStreamPossible = true;
-            webcamStream = stream;
-            video.play();
-
-        }, function (error) {
-
-            // TODO remove? reportError(error);
-            onNoGUMSupport();
-
-        });
-
+        
     } else {
 
         clearTimeout(noGUMSupportTimeout);
@@ -150,7 +110,7 @@
         
         document.body.appendChild(error);
 
-        if(webcamStream !== null) {
+        /*if(webcamStream !== null) {
 
             webcamStream.stop();
 
@@ -161,7 +121,8 @@
             video.pause();
             video.src = null;
 
-        }
+        }*/
+        stopVideoStreaming();
 
     }
 
@@ -370,10 +331,95 @@
     }
 
 
+    /**
+     * Requests permission for using the user's camera,
+     * starts reading video from the selected camera, and calls
+     * `okCallback` when the video dimensions are known (with a fallback
+     * for when the dimensions are not reported on time),
+     * or calls `errorCallback` if something goes wrong
+     */
+    function startVideoStreaming(errorCallback, okCallback) {
+
+        var videoElement;
+        var cameraStream;
+        var attempts = 0;
+        var readyListener = function(event) {
+
+            findVideoSize();
+
+        };
+        var findVideoSize = function() {
+
+            if(videoElement.videoWidth > 0 && videoElement.videoHeight > 0) {
+
+                videoElement.removeEventListener('loadeddata', readyListener);
+                onDimensionsReady(videoElement.videoWidth, videoElement.videoHeight);
+
+            } else {
+
+                if(attempts < 10) {
+
+                    attempts++;
+                    setTimeout(findVideoSize, 200);
+
+                } else {
+
+                    onDimensionsReady(640, 480);
+
+                }
+
+            }
+
+        };
+        var onDimensionsReady = function(width, height) {
+            okCallback(cameraStream, videoElement, width, height);
+        };
+        
+        videoElement = document.createElement('video');
+        videoElement.autoplay = true;
+
+        videoElement.addEventListener('loadeddata', readyListener);
+
+        navigator.getMedia({ video: true }, function (stream) {
+
+            if(videoElement.mozSrcObject !== undefined) {
+                videoElement.mozSrcObject = stream;
+            } else {
+                videoElement.src = window.URL.createObjectURL(stream);
+            }
+
+            cameraStream = stream;
+            videoElement.play();
+
+        }, errorCallback);
+
+    }
+
+    
+    function stopVideoStreaming() {
+        
+        if(cameraStream !== null) {
+
+            cameraStream.stop();
+
+        }
+
+        if(video !== null) {
+
+            video.pause();
+            // TODO free src url object
+            video.src = null;
+
+        }
+
+    }
+
+
     function openFilePicker() {
 
         // ??? show(filePicker);
     }
+
 
     function onFilePicked(ev) {
 

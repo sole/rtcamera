@@ -51,6 +51,7 @@
     var liveStreaming = false;
     var outputImageNeedsUpdating = false;
     var inputElement;
+    var animationFrameId = null;
 
 
     // Some browsers do not even answer to our query for getUserMedia support,
@@ -411,6 +412,7 @@
 
         outputImageNeedsUpdating = true;
         renderer.prevEffect();
+        requestAnimation();
 
     }
 
@@ -418,6 +420,7 @@
 
         outputImageNeedsUpdating = true;
         renderer.nextEffect();
+        requestAnimation();
 
     }
 
@@ -621,21 +624,21 @@
     }
 
 
+    function requestAnimation() {
+
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = requestAnimationFrame(render);
+
+    }
+
+
     function render() {
-
-        /*if(!rendering) {
-            requestAnimationFrame(render);
-        }
-
-        if( video.readyState === video.HAVE_ENOUGH_DATA ) {
-            renderer.updateTexture(video);
-        }*/
 
         if(liveStreaming) {
 
             if(!rendering) {
 
-                requestAnimationFrame(render);
+                requestAnimation();
 
             }
 

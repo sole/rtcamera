@@ -3,8 +3,8 @@
     'use strict';
 
     var video = null;
-    var videoWidth;
-    var videoHeight;
+    var inputWidth;
+    var inputHeight;
     var cameraStream = null;
     var canvas;
     var ghostCanvas;
@@ -251,8 +251,8 @@
 
         inputElement = newInputElement;
 
-        videoWidth = width;
-        videoHeight = height;
+        inputWidth = width;
+        inputHeight = height;
 
         onResize();
 
@@ -263,8 +263,8 @@
 
         var w = window.innerWidth;
         var h = window.innerHeight;
-        var canvasWidth = videoWidth; // TODO videoWidth -> inputWidth, etc
-        var canvasHeight = videoHeight;
+        var canvasWidth = inputWidth;
+        var canvasHeight = inputHeight;
 
         // constrain canvas size to be <= window size, and maintain proportions
         while(canvasWidth > w || canvasHeight > h) {

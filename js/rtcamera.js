@@ -139,16 +139,26 @@
         canvas.classList.add('modal');
         document.getElementById('canvasContainer').appendChild(canvas);
 
+
         function onFlasherAnimationEnd() {
+
             flasher.classList.remove('on_animation');
             animateGhostPicture(ghostBitmap);
+
         }
 
         flasher.addEventListener('animationend', onFlasherAnimationEnd, false);
         flasher.addEventListener('webkitAnimationEnd', onFlasherAnimationEnd, false);
 
+
+        var filePickerMenuOption = document.getElementById('pickImageOption');
+        filePickerMenuOption.addEventListener('click', function() {
+            openFilePicker();
+        }, false);
+
         var filePickerInput = filePicker.querySelector('input');
         filePickerInput.addEventListener('change', onFilePicked, false);
+
 
         var ghostCanvasContainer = document.getElementById('ghostCanvasContainer');
         ghostCanvasContainer.appendChild(ghostCanvas);
@@ -319,14 +329,16 @@
 
     function openFilePicker() {
 
-        // ??? show(filePicker);
+        show(filePicker);
+
     }
 
 
     function onFilePicked(ev) {
 
-        liveStreaming = false;
-        // TODO stop stream, refactor webcamStream.stop call
+        hide(filePicker);
+
+        gumHelper.stopVideoStreaming();
 
         var files = this.files;
 
@@ -336,13 +348,7 @@
             // put that into an element
             var file = files[0];
             var img = document.createElement('img');
-            
 
-            document.body.appendChild(img);
-            img.style.position = 'absolute';
-            img.style.left = '0px';
-            img.style.top = '0px';
-            img.style.zIndex = '100';
             img.src = window.URL.createObjectURL(file);
             img.onload = function() {
                 window.URL.revokeObjectURL(this.src);

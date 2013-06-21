@@ -227,6 +227,11 @@ x-shiftbox {
                 }
             }
 
+        #filePicker {
+            opacity: 0;
+            display: none;
+        }
+
         #ghostCanvasContainer {
             -webkit-transition: 1s ease-out;
             transition: 1s ease-out;

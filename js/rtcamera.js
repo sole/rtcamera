@@ -222,27 +222,42 @@
 
 
     function showNoLiveStreamInfoScreen() {
+        window.alert('could not access your camera so showing limited functionality only');
+        
     }
 
 
     function disableLiveStreamingOptions() {
+        hide(document.querySelector('footer'));
     }
 
 
     function showUI() {
 
+        // TODO it should show only the UI corresponding to the detected functionality
+
         var controls = Array.prototype.slice.call(document.querySelectorAll('.controls'));
         var instructions = document.getElementById('instructions');
 
         controls.forEach(show);
-        show(instructions);
 
-        setTimeout(function() {
+        if(liveStreamPossible) {
+
+            show(instructions);
+
+            setTimeout(function() {
+
+                show(btnMenu);
+                hide(instructions);
+
+            }, 3000);
+
+        } else {
 
             show(btnMenu);
-            hide(instructions);
+            openFilePicker();
 
-        }, 3000);
+        }
 
     }
 
@@ -300,6 +315,7 @@
 
     }
 
+
     function hide(element, transitionLength) {
 
         transitionLength = transitionLength || TRANSITION_LENGTH;
@@ -312,6 +328,7 @@
         }, transitionLength);
 
     }
+
 
     function show(element) {
 
@@ -341,6 +358,10 @@
 
         var files = this.files;
 
+        alert('picked!');
+        console.log('file picked');
+        console.log(files[0]);
+
         if(files.length > 0 && files[0].type.indexOf('image/') === 0) {
             
             // get data from picked file
@@ -350,7 +371,7 @@
 
             img.src = window.URL.createObjectURL(file);
             img.onload = function() {
-                window.URL.revokeObjectURL(this.src); // TODO maybe too early?
+                //window.URL.revokeObjectURL(this.src); // TODO maybe too early?
 
                 changeInputTo(img, img.width, img.height);
 

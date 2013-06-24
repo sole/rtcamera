@@ -32,7 +32,7 @@ x-shiftbox {
 }
 
     #wrapper {
-        background: black;
+        background: #000;
     }
 
     x-shiftbox[open] > section {

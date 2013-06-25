@@ -57,7 +57,6 @@ x-switch > div > .x-switch-knob:last-child .x-switch-text:last-child:before {
 }
 
 .x-switch-knob {
-	display: table;
 	width: 20px;
 	height: 100%;
 	background: black;

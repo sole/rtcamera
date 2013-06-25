@@ -18,9 +18,8 @@
       attribute: { name: state + 'text' },
       get: function(){
         var attrValue = this.getAttribute(state + 'text');
-        return attrValue !== undefined ? attrValue : state;
+        return attrValue !== null ? attrValue : state;
       },
-
       set: function(text){
         xtag.query(this, '[' + state + 'text]').forEach(function(el){
           el.setAttribute(state + 'text', text);
@@ -82,4 +81,3 @@
   });
 
 })();
-

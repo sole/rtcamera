@@ -10,7 +10,7 @@ You need a browser with support for WebRTC and WebGL, and a connected camera for
 
 If you're running Firefox (either Desktop and Mobile) you might need to explicitly enable WebRTC. Go to about:config and set ```media.peerconnection.enabled``` to ```true```, and possibly use a Nightly build, that you can get from the [Nightly builds](http://nightly.mozilla.org/) website. **NOTE:** This is a temporary requirement, as WebRTC should get *out of beta* soon in Firefox, and you won't need to do that to run this app.
 
-Chrome should work out of the box.
+Chrome should work out of the box on desktop, but WebRTC is not supported on mobile yet.
 
 ## How to run it
 

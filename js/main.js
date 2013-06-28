@@ -3,13 +3,22 @@
     require(
         ['app'],
         function(App) {
+            
+            var app = new App(reportError, function() {
+                
+                // TODO url parse and switch to according 'page'
+                app.gotoCamera();
 
-            var app = new App();
-            //app.initUI();
+            });
 
-            // TODO url parse and switch to according 'page'
-            //app.gotoGallery();
-            app.gotoCamera();
+
+            // ~~~
+
+            function reportError(e) {
+                console.log('aaah the drama!', e);
+            }
+
         }
+
     );
 //});

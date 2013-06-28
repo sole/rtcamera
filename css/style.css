@@ -77,4 +77,15 @@ h1 span {
     text-align: center;
 }
 
+.canvasContainer {
+    background: #f0f;
+}
 
+.canvasContainer canvas {
+    display: block;
+    margin: 0 auto;
+    image-rendering: crisp-edges;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    -ms-interpolation-mode: nearest-neighbor;
+}

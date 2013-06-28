@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/x-tags/deck.css">
     <link rel="stylesheet" href="css/x-tags/appbar.css">
     <link rel="stylesheet" href="css/x-tags/switch.css">
+    <link rel="stylesheet" href="css/x-tags/modal.css">
     <link rel="stylesheet" href="css/style.css">
 
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
@@ -48,6 +49,8 @@
               <input type="image" id="btn_done" src="img/icons/ic_action_done.png" value="done">
               <div id="progress_label"><span></span></div>
             </div>
+
+            <div class="canvasContainer"></div>
             
             <ul id="instructions" class="modal non_selectable">
               <li id="press">Press the screen to take a photo or record video.</li>
@@ -59,7 +62,13 @@
             </footer>
           </x-card>
           <x-card id="pickFile">
-            ... pickFile ...
+            <div class="canvasContainer"></div>
+            <x-modal id="filePicker" overlay esc-hide hidden>
+              Select an image
+              <input type="file" />
+              <button>Cancel</button>
+            </x-modal>
+
           </x-card>
         </x-deck>
       </section>
@@ -70,6 +79,7 @@
     <script src="js/libs/x-tags/deck.js"></script>
     <script src="js/libs/x-tags/appbar.js"></script>
     <script src="js/libs/x-tags/switch.js"></script>
+    <script src="js/libs/x-tags/modal.js"></script>
     <script src="js/libs/require.js" data-main="js/main.js"></script>
   </body>
 </html>

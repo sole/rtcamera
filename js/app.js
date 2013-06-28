@@ -1,14 +1,25 @@
 // do the require.js dance
-define(['libs/Hammer', 'Renderer'], function(Hammer, Renderer) {
+define(['hammer', 'Renderer', 'gumHelper'], function(Hammer, Renderer, gumHelper) {
     
     'use strict';
 
     var App = function(errorCallback, readyCallback) {
 
-        this.activePage = null; // XXX
+        this.activePage = null;
 
         this.initUI();
-        this.initMedia(errorCallback, readyCallback);
+
+        var that = this;
+
+        this.initRenderer(errorCallback, function() {
+
+            var canvas = that.renderer.domElement;
+            Hammer(canvas)
+                .on('swipeleft', that.renderer.previousEffect)
+                .on('swiperight', that.renderer.nextEffect);
+            readyCallback();
+
+        });
 
     };
 
@@ -17,13 +28,10 @@ define(['libs/Hammer', 'Renderer'], function(Hammer, Renderer) {
      */
     App.prototype.initUI = function() {
 
-        var self = this;
+        var that = this;
 
         this.deck = document.querySelector('x-deck');
-        /*Hammer(this.deck)
-            .on('swipeleft', self.previousEffect.bind(self))
-            .on('swiperight', self.nextEffect.bind(self));*/
-
+        
         var pages = {};
         ['gallery', 'detail', 'camera', 'pickFile'].forEach(function(id) {
             var page = document.getElementById(id);
@@ -31,21 +39,29 @@ define(['libs/Hammer', 'Renderer'], function(Hammer, Renderer) {
         });
         this.pages = pages;
 
+
         var btnGallery = document.getElementById('btnGallery');
-        btnGallery.addEventListener('click', self.gotoGallery.bind(self));
+        btnGallery.addEventListener('click', that.gotoGallery.bind(that));
         this.btnGallery = btnGallery;
 
-        var btnCamera = document.getElementById('btnCamera');
-        btnCamera.addEventListener('click', self.gotoCamera.bind(self), false);
 
-        document.getElementById('btnPicker').addEventListener('click', self.gotoStatic.bind(self), false);
+        var btnCamera = document.getElementById('btnCamera');
+        btnCamera.addEventListener('click', that.gotoCamera.bind(that), false);
+
+        // Hide the camera button is there's likely no support for WebRTC
+        if(!navigator.getMedia) {
+            btnCamera.style.display = 'none';
+        }
+
+
+        document.getElementById('btnPicker').addEventListener('click', that.gotoStatic.bind(that), false);
 
     };
 
     /**
-     * Initialise WebGL and WebRTC related stuff
+     * Initialise Renderer
      */
-    App.prototype.initMedia = function(errorCallback, readyCallback) {
+    App.prototype.initRenderer = function(errorCallback, readyCallback) {
         this.renderer = new Renderer(errorCallback, readyCallback);
     };
 
@@ -56,6 +72,8 @@ define(['libs/Hammer', 'Renderer'], function(Hammer, Renderer) {
         } else {
             this.btnGallery.classList.add('hidden');
         }
+
+        this.activePage = id;
 
         this.pages[id].show();
     };
@@ -69,11 +87,22 @@ define(['libs/Hammer', 'Renderer'], function(Hammer, Renderer) {
     };
 
     App.prototype.gotoCamera = function() {
+        this.attachRendererCanvasToPage('camera');
         this.showPage('camera');
     };
 
     App.prototype.gotoStatic = function() {
+        this.attachRendererCanvasToPage('pickFile');
         this.showPage('pickFile');
+    };
+
+    App.prototype.attachRendererCanvasToPage = function(pageId) {
+        var canvas = this.renderer.domElement;
+        if(canvas.parentNode) {
+            canvas.parentNode.removeChild(canvas);
+        }
+        this.pages[pageId].querySelector('.canvasContainer').appendChild(canvas);
+        // TODO clear canvas
     };
 
     // TODO maybe this.renderer.isPaused()

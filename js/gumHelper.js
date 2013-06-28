@@ -1,4 +1,5 @@
-var gumHelper = (function() {
+define([], function() {
+    
     'use strict';
 
     // A couple of shims for having a common interface
@@ -153,4 +154,5 @@ var gumHelper = (function() {
         startVideoStreaming: startVideoStreaming,
         stopVideoStreaming: stopVideoStreaming
     };
-})();
+
+});

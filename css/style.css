@@ -34,6 +34,29 @@ x-appbar {
     background: rgba(0, 0, 0, 0.3);
 }
 
+#btnGallery {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 1;
+}
+
+#btnGallery.hidden {
+    opacity: 0;
+}
+
+h1 {
+    font-weight: normal;
+    font-size: 2rem;
+    padding: 0.25rem 0;
+    font-family: 'Roboto Condensed';
+    text-align: center;
+}
+
+h1 span {
+    color: #e58f33;
+}
+
 #app x-deck {
     width: 100%;
     height: 100%;
@@ -43,17 +66,15 @@ x-appbar {
     overflow: auto;
 }
 
-#btnGallery {
-    opacity: 1;
-}
-
-#btnGallery.hidden {
-    opacity: 0;
-}
-
-#gallery footer {
+#gallery footer, #camera footer {
     position: absolute;
     bottom: 0;
     text-align: center;
     width: 100%;
 }
+
+#camera {
+    text-align: center;
+}
+
+

@@ -8,7 +8,8 @@
             //app.initUI();
 
             // TODO url parse and switch to according 'page'
-            app.gotoGallery();
+            //app.gotoGallery();
+            app.gotoCamera();
         }
     );
 //});

@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/x-tags/view.css">
     <link rel="stylesheet" href="css/x-tags/deck.css">
     <link rel="stylesheet" href="css/x-tags/appbar.css">
+    <link rel="stylesheet" href="css/x-tags/switch.css">
     <link rel="stylesheet" href="css/style.css">
 
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
@@ -23,13 +24,15 @@
       <x-appbar>
         <header>
           <button id="btnGallery">Gallery</button>
-          rtcamera
+          <h1><span>rt</span>camera</h1>
         </header>
       </x-appbar>
       <section>
         <x-deck>
           <x-card id="gallery">
-            ... gallery ...
+            <div>
+              <p>No pictures yet!</p>
+            </div>
             <footer>
               <button id="btnCamera">Camera</button>
               <button id="btnPicker">Pick file</button>
@@ -39,7 +42,21 @@
             ... detail ...
           </x-card>
           <x-card id="camera">
-            ... camera ...
+            <div id="video_controls">
+              <input type="image" id="btn_cancel" src="img/icons/ic_action_cancel.png" value="cancel">
+              <progress max="1" value="0"></progress>
+              <input type="image" id="btn_done" src="img/icons/ic_action_done.png" value="done">
+              <div id="progress_label"><span></span></div>
+            </div>
+            
+            <ul id="instructions" class="modal non_selectable">
+              <li id="press">Press the screen to take a photo or record video.</li>
+              <li id="arrows">Swipe left or right to change between effects.</li>
+            </ul>
+
+            <footer>
+              <x-switch id="mode_toggle" onText="VIDEO" offText="CAMERA"></x-switch>
+            </footer>
           </x-card>
           <x-card id="pickFile">
             ... pickFile ...
@@ -52,6 +69,7 @@
     <script src="js/libs/x-tags/view.js"></script>
     <script src="js/libs/x-tags/deck.js"></script>
     <script src="js/libs/x-tags/appbar.js"></script>
+    <script src="js/libs/x-tags/switch.js"></script>
     <script src="js/libs/require.js" data-main="js/main.js"></script>
   </body>
 </html>

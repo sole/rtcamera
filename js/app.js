@@ -29,7 +29,6 @@ App.prototype.initUI = function() {
 
     document.getElementById('btnPicker').addEventListener('click', self.gotoStatic.bind(self), false);
 
-
 };
 
 App.prototype.showPage = function(id) {

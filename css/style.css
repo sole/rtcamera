@@ -14,7 +14,7 @@
     box-sizing: border-box;
 }
 
-html, body, #wrapper {
+html, body {
     height: 100%;
     position: relative;
 }
@@ -26,375 +26,34 @@ body {
     font-family: 'Roboto Regular', Helvetica, Arial, sans-serif;
 }
 
-x-shiftbox {
-    background: rgba(255, 255, 255, 0.3);
+#app {
+    border: 0 none;
+}
+
+x-appbar {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+#app x-deck {
+    width: 100%;
     height: 100%;
 }
 
-    #wrapper {
-        background: #000;
-    }
-
-    x-shiftbox[open] > section {
-        -webkit-transform: translate(20%, 0);
-        -moz-transform: translate(20%, 0);
-        -ms-transform: translate(20%, 0);
-        transform: translate(20%,0);
-    }
-
-        .controls {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s;
-        }
-            .controls input {
-                vertical-align: middle;
-            }
-
-        header, footer {
-            display: block;
-            z-index: 10;
-            position: absolute;
-            left: 0;
-            width: 100%;
-            text-align: center;
-        }
-
-            header {
-                top: 0;
-                padding: 0.2rem 0;
-            }
-                h1 {
-                    background: rgba(0, 0, 0, 0.5);
-                    font-weight: normal;
-                    font-size: 2rem;
-                    padding: 0.25rem 0;
-                    font-family: 'Roboto Condensed';
-                }
-                    h1 span {
-                        color: #e58f33;
-                    }
-
-                #menuButton {
-                    color: #fff;
-                    font-size: 2rem;
-                    font-family: sans-serif;
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                    line-height: 1;
-                    margin: 0.2rem 0.4rem;
-                    padding: 0.2rem;
-                    border: 1px solid #999;
-                    border-radius: 3px;
-                    cursor: pointer;
-                    background: #666;
-                    opacity: 0;
-                    display: none;
-                    text-decoration: none;
-                }
-                    #menuButton:hover {
-                        background: #777;
-                    }
-
-                    #menuButton:visited {
-                        color: #fff;
-                    }
-
-                #video_controls {
-                    opacity: 0;
-                    display: none;
-                    transition: opacity 0.3s;
-                    background: rgba(0, 0, 0, 0.5);
-                }
-                    #video_controls progress {
-                        border-width: 0;
-                        background: rgba(0, 0, 0, 0.8);
-                        height: 4px;
-                        vertical-align: middle;
-                    }
-                        progress::-moz-progress-bar {
-                            background: #e58f33;
-                        }
-
-                    #progress_label span {
-                        padding: 0.25rem 0;
-                        transition: all 0.5s;
-                    }
-
-                        .rendering #progress_label span {
-                            background-image: url(spinner.gif);
-                            background-repeat: no-repeat;
-                            background-position: 8px 50%;
-                            padding-left: 32px;
-                        }
-
-                    #video_controls input {
-                        max-width: 24px;
-                        max-height: 24px;
-                    }
-
-                #video_controls.rendering progress, #video_controls.rendering input {
-                    display: none;
-                }
-
-        #instructions {
-            color: #ddd;
-            z-index: 100;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 1em;
-            padding: 1em;
-            opacity: 0;
-            transition: opacity 1s;
-            font-size: 1.2rem;
-            list-style-type: none;
-            list-style-position: inside;
-            width: 90%;
-            max-width: 500px
-        }
-
-            #instructions li {
-                background-repeat: no-repeat;
-                background-position: 0 12px;
-                background-size: 48px 48px;
-                padding-left: 64px;
-                padding-top: 12px;
-                padding-bottom: 25px;
-            }
-                #press {
-                    background-image: url(../img/icons/icn-coachmark-press.png);
-                }
-
-                #arrows {
-                    background-image: url(../img/icons/icn-coachmark-arrows.png);
-                }
-
-            #instructions li + li {
-                margin-top: 2rem;
-            }
-
-
-        #canvasContainer > canvas {
-            display: block;
-            margin: 0 auto;
-            image-rendering: crisp-edges;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: -webkit-optimize-contrast;
-            -ms-interpolation-mode: nearest-neighbor;
-        }
-
-        #flasher {
-            background: rgba(255, 255, 255, 0.5);
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            opacity: 0;
-        }
-            .on_animation {
-                -webkit-animation-duration: 0.4s;
-                -webkit-animation-name: flash_it;
-                animation-duration: 0.4s;
-                animation-name: flash_it;
-            }
-
-            @keyframes flash_it {
-                from {
-                    opacity: 0;
-                }
-
-                75% {
-                    opacity: 1;
-                }
-
-                to {
-                    opacity: 0;
-                }
-            }
-
-            @-webkit-keyframes flash_it {
-                from {
-                    opacity: 0;
-                }
-
-                75% {
-                    opacity: 1;
-                }
-
-                to {
-                    opacity: 0;
-                }
-            }
-
-        #filePicker {
-            background: #fff;
-            color: #000;
-            padding: 1rem;
-            border-radius: 0.5rem;
-        }
-
-        #ghostCanvasContainer {
-            -webkit-transition: 1s ease-out;
-            transition: 1s ease-out;
-            width: 100%;
-            height: 100%;
-            position: relative;
-            opacity: 1;
-            -webkit-transform: translate(0, 0);
-            transform: translate(0, 0);
-        }
-
-        #ghostCanvasContainer.faded_out {
-            -webkit-transform: translate(100%, 0);
-            transform: translate(100%, 0);
-            opacity: 0;
-        }
-
-        #galleryContainer {
-            height: 100%;
-            overflow-y: scroll;
-            padding: 0 2rem;
-        }
-            #galleryContainer.empty {
-                font-size: 2rem;
-            }
-
-            #galleryContainer img {
-                max-width: 10rem;
-                height: auto;
-                margin: 0.2rem;
-            }
-
-        #galleryDetails {
-            z-index: 100;
-        }
-            #actions {
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                text-align: center;
-                width: 100%;
-                padding: 0.5rem 0;
-            }
-                #actions input {
-                    margin: 0 0.4rem;
-                }
-
-        #galleryUploading {
-            background: rgba(0, 0, 0, 0.3);
-            background-image: url(spinner.gif);
-            background-repeat: no-repeat;
-            background-position: 8px 50%;
-            padding: 8px;
-            padding-left: 32px;
-            border: 1px solid white;
-            border-radius: 3px;
-        }
-
-        .modal {
-            display: block;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            -webkit-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
-        }
-
-        .error {
-            border: 3px solid red;
-            padding: 2rem;
-            color: #800;
-            font-family: "Courier New", Courier, Monospace, mono;
-            background: #ffefef;
-            z-index: 10;
-        }
-
-        .non_selectable {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;
-            -webkit-pointer-events: none;
-            -moz-pointer-events: none;
-            pointer-events: none;
-        }
-
-        footer {
-            bottom: 0;
-            position: absolute;
-        }
-
-    aside {
-        width: 100%;
-        height: 100%;
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-    }
-        aside ul {
-            padding: 0;
-            margin: 0;
-        }
-
-        aside li {
-            padding: 0.4rem 0.6rem;
-            border-bottom: 1px solid #666;
-            cursor: pointer;
-        }
-
-        aside li:hover {
-            background: #e58f33;
-        }
-
-
-        aside a {
-            color: #fff;
-            text-decoration: none;
-        }
-            
-
-/* refining the x-switch styles */
-x-switch {
-    border-color: #333;
-    border-width: 2px;
-    font-family: 'Roboto Regular', sans-serif;
-    font-size: 1rem;
-    line-height: 1rem;
-    vertical-align: middle;
-    text-shadow: 0 0 2px #000;
-    text-transform: uppercase;
-    color: #999;
-    width: 90px;
-    height: 26px;
+#app x-card {
+    overflow: auto;
 }
 
-x-switch, x-switch[checked], .x-switch-background {
-    background: #000;
+#btnGallery {
+    opacity: 1;
 }
 
-.x-switch-text {
-    padding: 0.2rem 0.95rem;
+#btnGallery.hidden {
+    opacity: 0;
 }
 
-.x-switch-knob {
-    background: #e58f33;
-    width: 40px;
+#gallery footer {
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    width: 100%;
 }
-
-/* refining styles for smaller/mobile screens */
-@media (max-width: 600px) {
-    
-    aside li {
-        font-size: 1.5rem;
-    }
-    
-    x-shiftbox[open] > section {
-        margin-left: 200px;
-    }
-
-    #galleryContainer img {
-        max-width: 40vw;
-    }
-}
-

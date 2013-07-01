@@ -5,123 +5,203 @@ define(['hammer', 'Renderer', 'gumHelper'], function(Hammer, Renderer, gumHelper
 
     var App = function(errorCallback, readyCallback) {
 
-        this.activePage = null;
-
-        this.initUI();
-
         var that = this;
+        var pages = {};
+        var activePage = null;
+        var btnGallery;
+        var btnCamera;
+        var renderer;
+        var animationFrameId = null;
+        var inputElement = null;
+        var inputWidth = 320;
+        var inputHeight = 240;
+        var liveStreaming = false;
+        var rendering = false;
+        var outputImageNeedsUpdating = false;
+        var video = null;
 
-        this.initRenderer(errorCallback, function() {
+        initUI();
 
-            var canvas = that.renderer.domElement;
+        renderer = new Renderer(errorCallback, function() {
+
+            var canvas = renderer.domElement;
             Hammer(canvas)
-                .on('swipeleft', that.renderer.previousEffect)
-                .on('swiperight', that.renderer.nextEffect);
+                .on('swipeleft', renderer.previousEffect)
+                .on('swiperight', renderer.nextEffect);
             readyCallback();
 
         });
 
-    };
 
-    /**
-     * Find UI elements and attach events to them
-     */
-    App.prototype.initUI = function() {
+        /**
+         * Find UI elements and attach events to them
+         */
+        function initUI() {
 
-        var that = this;
+            pages = {};
+            ['gallery', 'detail', 'camera', 'pickFile'].forEach(function(id) {
+                var page = document.getElementById(id);
+                pages[id] = page;
+            });
 
-        this.deck = document.querySelector('x-deck');
-        
-        var pages = {};
-        ['gallery', 'detail', 'camera', 'pickFile'].forEach(function(id) {
-            var page = document.getElementById(id);
-            pages[id] = page;
-        });
-        this.pages = pages;
+            btnGallery = document.getElementById('btnGallery');
+            btnGallery.addEventListener('click', that.gotoGallery, false);
+
+            btnCamera = document.getElementById('btnCamera');
+            btnCamera.addEventListener('click', that.gotoCamera, false);
+
+            // Hide the camera button is there's likely no support for WebRTC
+            if(!navigator.getMedia) {
+                hideCameraButton();
+            }
 
 
-        var btnGallery = document.getElementById('btnGallery');
-        btnGallery.addEventListener('click', that.gotoGallery.bind(that));
-        this.btnGallery = btnGallery;
+            document.getElementById('btnPicker').addEventListener('click', that.gotoStatic, false);
+
+        }
+
+        function onResize() {
+            // TODO
+        }
 
 
-        var btnCamera = document.getElementById('btnCamera');
-        btnCamera.addEventListener('click', that.gotoCamera.bind(that), false);
+        function showPage(id) {
 
-        // Hide the camera button is there's likely no support for WebRTC
-        if(!navigator.getMedia) {
+            if(id !== 'gallery') {
+                btnGallery.classList.remove('hidden');
+            } else {
+                btnGallery.classList.add('hidden');
+            }
+
+            if(id !== 'camera') {
+                disableCamera();
+            }
+
+            activePage = id;
+
+            pages[id].show();
+
+        }
+
+
+        function hideCameraButton() {
             btnCamera.style.display = 'none';
         }
 
 
-        document.getElementById('btnPicker').addEventListener('click', that.gotoStatic.bind(that), false);
+        function enableCamera(errorCallback, okCallback) {
 
-    };
+            gumHelper.startVideoStreaming(function() {
+                // Error!
+                hideCameraButton();
+                // TODO: show error, and on OK => gotoGallery
 
-    /**
-     * Initialise Renderer
-     */
-    App.prototype.initRenderer = function(errorCallback, readyCallback) {
-        this.renderer = new Renderer(errorCallback, readyCallback);
-    };
+            }, function(stream, videoElement, width, height) {
+                video = videoElement;
+                liveStreaming = true;
+                changeInputTo(videoElement, width, height);
+                render();
+            });
 
-    App.prototype.showPage = function(id) {
-
-        if(id !== 'gallery') {
-            this.btnGallery.classList.remove('hidden');
-        } else {
-            this.btnGallery.classList.add('hidden');
         }
 
-        this.activePage = id;
 
-        this.pages[id].show();
-    };
-
-    App.prototype.gotoGallery = function() {
-        this.showPage('gallery');
-    };
-
-    App.prototype.gotoDetail = function() {
-        this.showPage('detail');
-    };
-
-    App.prototype.gotoCamera = function() {
-        this.attachRendererCanvasToPage('camera');
-        this.showPage('camera');
-    };
-
-    App.prototype.gotoStatic = function() {
-        this.attachRendererCanvasToPage('pickFile');
-        this.showPage('pickFile');
-    };
-
-    App.prototype.attachRendererCanvasToPage = function(pageId) {
-        var canvas = this.renderer.domElement;
-        if(canvas.parentNode) {
-            canvas.parentNode.removeChild(canvas);
+        function disableCamera() {
+            gumHelper.stopVideoStreaming();
         }
-        this.pages[pageId].querySelector('.canvasContainer').appendChild(canvas);
-        // TODO clear canvas
-    };
 
-    // TODO maybe this.renderer.isPaused()
-    App.prototype.isUsingTheRenderer = function() {
-        return this.activePage === 'camera' || this.activePage === 'pickFile';
-    };
 
-    App.prototype.previousEffect = function() {
-        if(this.isUsingTheRenderer()) {
-            this.renderer.previousEffect();
+        function changeInputTo(element, width, height) {
+            inputElement = element;
+
+            inputWidth = width;
+            inputHeight = height;
+
+            onResize();
         }
-    };
 
-    App.prototype.nextEffect = function() {
-        if(this.isUsingTheRenderer()) {
-            this.renderer.nextEffect();
+
+        function attachRendererCanvasToPage(pageId) {
+            // TODO canvas behind pages?
+            var container = pages[pageId].querySelector('.canvasContainer');
+            var canvas = renderer.domElement;
+            
+            container.appendChild(canvas);
         }
-    };
 
+
+        // TODO maybe this.renderer.isPaused()
+        function usingTheRenderer() {
+            return activePage === 'camera' || activePage === 'pickFile';
+        }
+
+
+        function previousEffect() {
+            if(usingTheRenderer()) {
+                renderer.previousEffect();
+            }
+        }
+
+
+        function nextEffect() {
+            if(usingTheRenderer()) {
+                renderer.nextEffect();
+            }
+        }
+
+
+        function requestAnimation() {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = requestAnimationFrame(render);
+        }
+
+
+        function render() {
+            requestAnimation();
+
+            if(liveStreaming) {
+                if(!rendering) {
+                    requestAnimation();
+                }
+
+                if(video.readyState === video.HAVE_ENOUGH_DATA) {
+                    outputImageNeedsUpdating = true;
+                }
+            }
+
+            if(outputImageNeedsUpdating) {
+                renderer.updateTexture(inputElement);
+                outputImageNeedsUpdating = false;
+            }
+        }
+
+
+        // 'Public' methods
+
+        this.gotoGallery = function() {
+            showPage('gallery');
+        };
+
+
+        this.gotoDetail = function() {
+            showPage('detail');
+        };
+
+
+        this.gotoCamera = function() {
+            attachRendererCanvasToPage('camera');
+            enableCamera();
+            showPage('camera');
+        };
+
+
+        this.gotoStatic = function() {
+            attachRendererCanvasToPage('pickFile');
+            showPage('pickFile');
+        };
+
+
+    };
 
     return App;
 });

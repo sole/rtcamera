@@ -25,9 +25,9 @@ define(['hammer', 'Renderer', 'gumHelper'], function(Hammer, Renderer, gumHelper
         renderer = new Renderer(errorCallback, function() {
 
             var canvas = renderer.domElement;
-            Hammer(canvas)
-                .on('swipeleft', renderer.previousEffect)
-                .on('swiperight', renderer.nextEffect);
+            Hammer(document)
+                .on('swipeleft', previousEffect)
+                .on('swiperight', nextEffect);
             readyCallback();
 
         });
@@ -45,10 +45,10 @@ define(['hammer', 'Renderer', 'gumHelper'], function(Hammer, Renderer, gumHelper
             });
 
             btnGallery = document.getElementById('btnGallery');
-            btnGallery.addEventListener('click', that.gotoGallery, false);
+            btnGallery.addEventListener('click', gotoGallery, false);
 
             btnCamera = document.getElementById('btnCamera');
-            btnCamera.addEventListener('click', that.gotoCamera, false);
+            btnCamera.addEventListener('click', gotoCamera, false);
 
             // Hide the camera button is there's likely no support for WebRTC
             if(!navigator.getMedia) {
@@ -56,7 +56,7 @@ define(['hammer', 'Renderer', 'gumHelper'], function(Hammer, Renderer, gumHelper
             }
 
 
-            document.getElementById('btnPicker').addEventListener('click', that.gotoStatic, false);
+            document.getElementById('btnPicker').addEventListener('click', gotoStatic, false);
 
         }
 
@@ -67,18 +67,9 @@ define(['hammer', 'Renderer', 'gumHelper'], function(Hammer, Renderer, gumHelper
             var canvasWidth = inputWidth;
             var canvasHeight = inputHeight;
 
-            /*// constrain canvas size to be <= window size, and maintain proportions
-            while(canvasWidth > w || canvasHeight > h) {
-
-                canvasWidth /= 2;
-                canvasHeight /= 2;
-
-            }*/
             var scaleX = w / canvasWidth;
             var scaleY = h / canvasHeight;
             var scaleToFit = Math.min(scaleX, scaleY);
-
-            console.log(scaleToFit, scaleToFit | 0);
 
             canvasWidth = (canvasWidth * scaleToFit) | 0 ;
             canvasHeight = (canvasHeight * scaleToFit) | 0;
@@ -86,27 +77,6 @@ define(['hammer', 'Renderer', 'gumHelper'], function(Hammer, Renderer, gumHelper
             if(renderer) {
                 renderer.setSize(canvasWidth, canvasHeight);
             }
-
-            // make canvas dimensions fit the screen
-            // set renderer size to new canvas dimensions
-            // when recording video -> resize down if larger than x,y
-
-            // And then reescale it up with CSS style
-            /*var scaleX = w / canvasWidth;
-            var scaleY = h / canvasHeight;
-            var scaleToFit = Math.min(scaleX, scaleY);
-
-            scaleToFit |= 0;
-
-            if(canvas) {
-
-                canvas.width = canvasWidth;
-                canvas.height = canvasHeight;
-
-                canvas.style.width = (canvasWidth * scaleToFit) + 'px';
-                canvas.style.height = (canvasHeight * scaleToFit) + 'px';
-
-            }*/
 
         }
 
@@ -117,10 +87,6 @@ define(['hammer', 'Renderer', 'gumHelper'], function(Hammer, Renderer, gumHelper
                 btnGallery.classList.remove('hidden');
             } else {
                 btnGallery.classList.add('hidden');
-            }
-
-            if(id !== 'camera') {
-                disableCamera();
             }
 
             activePage = id;
@@ -167,9 +133,15 @@ define(['hammer', 'Renderer', 'gumHelper'], function(Hammer, Renderer, gumHelper
         }
 
 
-        function attachRendererCanvasToPage(pageId) {
-            // TODO canvas behind pages?
-            var container = pages[pageId].querySelector('.canvasContainer');
+        function detachRendererCanvas() {
+            var canvas = renderer.domElement;
+            if(canvas.parentNode) {
+                canvas.parentNode.removeChild(canvas);
+            }
+        }
+
+        function attachRendererCanvas() {
+            var container = document.getElementById('canvasContainer');
             var canvas = renderer.domElement;
             
             container.appendChild(canvas);
@@ -222,30 +194,42 @@ define(['hammer', 'Renderer', 'gumHelper'], function(Hammer, Renderer, gumHelper
         }
 
 
+        function gotoGallery() {
+            detachRendererCanvas();
+            disableCamera();
+            showPage('gallery');
+        }
+
+
+        function gotoDetail() {
+            detachRendererCanvas();
+            showPage('detail');
+        }
+
+
+        function gotoCamera() {
+            enableCamera();
+            attachRendererCanvas();
+            showPage('camera');
+        }
+
+
+        function gotoStatic() {
+            // To delete the last image from the renderer, we set an empty
+            // canvas as input element.
+            var emptyCanvas = document.createElement('canvas');
+            changeInputTo(emptyCanvas, inputWidth, inputHeight);
+
+            attachRendererCanvas();
+            showPage('pickFile');
+        }
+
         // 'Public' methods
 
-        this.gotoGallery = function() {
-            showPage('gallery');
-        };
-
-
-        this.gotoDetail = function() {
-            showPage('detail');
-        };
-
-
-        this.gotoCamera = function() {
-            attachRendererCanvasToPage('camera');
-            enableCamera();
-            showPage('camera');
-        };
-
-
-        this.gotoStatic = function() {
-            attachRendererCanvasToPage('pickFile');
-            showPage('pickFile');
-        };
-
+        this.gotoGallery = gotoGallery;
+        this.gotoDetail = gotoDetail;
+        this.gotoCamera = gotoCamera;
+        this.gotoStatic = gotoStatic;
 
     };
 

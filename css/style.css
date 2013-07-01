@@ -30,6 +30,28 @@ body {
     border: 0 none;
 }
 
+x-appbar, #app > section {
+    z-index: 10;
+}
+
+#canvasContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+#canvasContainer canvas {
+    display: block;
+    margin: 0 auto;
+    image-rendering: crisp-edges;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    -ms-interpolation-mode: nearest-neighbor;
+}
+
 x-appbar {
     background: rgba(0, 0, 0, 0.3);
 }
@@ -135,21 +157,3 @@ progress::-moz-progress-bar {
     z-index: 100;
 }
 
-.canvasContainer {
-    background: #303;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-}
-
-.canvasContainer canvas {
-    display: block;
-    margin: 0 auto;
-    image-rendering: crisp-edges;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: -webkit-optimize-contrast;
-    -ms-interpolation-mode: nearest-neighbor;
-}

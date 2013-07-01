@@ -301,7 +301,7 @@ define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
             }
 
             gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
-            gl.clearColor(1.0, 0.0, 0.0, 1.0);
+            gl.clearColor(0.0, 0.0, 0.0, 1.0);
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
             glMatrix.mat4.ortho(pMatrix, -1, 1, -1, 1, 0.1, 1000);
@@ -341,7 +341,7 @@ define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
 
         };
 
-        this.prevEffect = function() {
+        this.previousEffect = function() {
 
             var index = effects.indexOf(activeEffect);
             var newIndex = --index < 0 ? effects.length - 1 : index;

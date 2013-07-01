@@ -22,12 +22,16 @@
   </head>
   <body>
     <x-view id="app">
+
+      <div id="canvasContainer"></div>
+
       <x-appbar>
         <header>
           <button id="btnGallery">Gallery</button>
           <h1><span>rt</span>camera</h1>
         </header>
       </x-appbar>
+
       <section>
         <x-deck>
           <x-card id="gallery">
@@ -52,7 +56,7 @@
               </div>
             </header>
 
-            <div class="canvasContainer"></div>
+            <!--<div class="canvasContainer"></div>-->
             
             <ul id="instructions" class="modal non_selectable">
               <li id="press">Press the screen to take a photo or record video.</li>
@@ -64,7 +68,7 @@
             </footer>
           </x-card>
           <x-card id="pickFile">
-            <div class="canvasContainer"></div>
+          <!--<div class="canvasContainer"></div>-->
             <x-modal id="filePicker" overlay esc-hide hidden>
               Select an image
               <input type="file" />

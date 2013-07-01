@@ -1,5 +1,5 @@
 // do the require.js dance
-define(['hammer', 'Renderer', 'gumHelper'], function(Hammer, Renderer, gumHelper) {
+define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer, gumHelper, Picture) {
     
     'use strict';
 
@@ -10,6 +10,11 @@ define(['hammer', 'Renderer', 'gumHelper'], function(Hammer, Renderer, gumHelper
         var activePage = null;
         var btnGallery;
         var btnCamera;
+        var switchVideo;
+        var flasher;
+        var ghostBitmap;
+        var ghostCanvas;
+
         var renderer;
         var animationFrameId = null;
         var inputElement = null;
@@ -24,8 +29,9 @@ define(['hammer', 'Renderer', 'gumHelper'], function(Hammer, Renderer, gumHelper
 
         renderer = new Renderer(errorCallback, function() {
 
-            var canvas = renderer.domElement;
             Hammer(document)
+                .on('hold', onHold)
+                .on('release', onRelease)
                 .on('swipeleft', previousEffect)
                 .on('swiperight', nextEffect);
             readyCallback();
@@ -44,6 +50,40 @@ define(['hammer', 'Renderer', 'gumHelper'], function(Hammer, Renderer, gumHelper
                 pages[id] = page;
             });
 
+            
+            flasher = document.getElementById('flasher');
+            
+            function onFlasherAnimationEnd() {
+
+                flasher.classList.remove('on_animation');
+                //animateGhostPicture(ghostBitmap);
+                
+                var canvas = renderer.domElement;
+                ghostCanvas.width = canvas.width;
+                ghostCanvas.height = canvas.height;
+
+                var ctx = ghostCanvas.getContext('2d');
+                ctx.drawImage(ghostBitmap, 0, 0);
+
+                setTimeout(function() {
+                    ghostCanvasContainer.classList.add('faded_out');
+                }, 10);
+
+            }
+
+            flasher.addEventListener('animationend', onFlasherAnimationEnd, false);
+            flasher.addEventListener('webkitAnimationEnd', onFlasherAnimationEnd, false);
+
+            ghostCanvas = document.createElement('canvas');
+            
+            var ghostCanvasContainer = document.getElementById('ghostCanvasContainer');
+            ghostCanvasContainer.appendChild(ghostCanvas);
+            ghostCanvasContainer.addEventListener('transitionend', function() {
+                //ghostCanvas.getContext('2d').clearRect(0, 0, ghostCanvas.width, ghostCanvas.height);
+                //ghostCanvasContainer.classList.remove('faded_out');
+            }, false);
+
+
             btnGallery = document.getElementById('btnGallery');
             btnGallery.addEventListener('click', gotoGallery, false);
 
@@ -55,6 +95,7 @@ define(['hammer', 'Renderer', 'gumHelper'], function(Hammer, Renderer, gumHelper
                 hideCameraButton();
             }
 
+            switchVideo = document.getElementById('switchVideo');
 
             document.getElementById('btnPicker').addEventListener('click', gotoStatic, false);
 
@@ -79,6 +120,33 @@ define(['hammer', 'Renderer', 'gumHelper'], function(Hammer, Renderer, gumHelper
             }
 
         }
+
+
+        function onHold(ev) {
+            
+            if(rendering) {
+                return;
+            }
+
+            console.log('hold');
+
+            if(switchVideo.checked) {
+                startVideoRecording();
+            } else {
+                takePicture();
+            }
+
+        }
+
+
+        function onRelease(ev) {
+            console.log('release', ev);
+            
+            if(switchVideo.checked) {
+                pauseVideoRecording();
+            }
+        }
+
 
 
         function showPage(id) {
@@ -166,6 +234,43 @@ define(['hammer', 'Renderer', 'gumHelper'], function(Hammer, Renderer, gumHelper
                 renderer.nextEffect();
             }
         }
+
+        // Save static image
+        function takePicture() {
+
+            var bitmapData = renderer.domElement.toDataURL();
+
+            saveLocalPicture(bitmapData, false);
+
+        }
+
+        function startVideoRecording() {
+            console.log('start recording TODO');
+        }
+
+        function pauseVideoRecording() {
+            console.log('pause TODO');
+        }
+
+        
+        // data == base64 dataURL 
+        function saveLocalPicture(data, isAnimated) {
+            
+            var picture = new Picture();
+            picture.imageData = data;
+            picture.imageIsAnimated = isAnimated;
+
+            picture.save(function() {
+
+                ghostBitmap = document.createElement('img');
+                ghostBitmap.src = data;
+
+                flasher.classList.add('on_animation');
+
+            });
+            
+        }
+
 
 
         function requestAnimation() {

@@ -24,6 +24,8 @@
     <x-view id="app">
 
       <div id="canvasContainer"></div>
+      <div id="ghostCanvasContainer" class="non_selectable"></div>
+      <div id="flasher" class="non_selectable"></div>
 
       <x-appbar>
         <header>
@@ -55,8 +57,6 @@
                 <div id="progress_label"><span></span></div>
               </div>
             </header>
-
-            <!--<div class="canvasContainer"></div>-->
             
             <ul id="instructions" class="modal non_selectable">
               <li id="press">Press the screen to take a photo or record video.</li>
@@ -64,17 +64,15 @@
             </ul>
 
             <footer>
-              <x-switch id="mode_toggle" onText="VIDEO" offText="CAMERA"></x-switch>
+              <x-switch id="switchVideo" onText="VIDEO" offText="CAMERA"></x-switch>
             </footer>
           </x-card>
           <x-card id="pickFile">
-          <!--<div class="canvasContainer"></div>-->
             <x-modal id="filePicker" overlay esc-hide hidden>
               Select an image
               <input type="file" />
               <button>Cancel</button>
             </x-modal>
-
           </x-card>
         </x-deck>
       </section>
@@ -87,5 +85,6 @@
     <script src="js/libs/x-tags/switch.js"></script>
     <script src="js/libs/x-tags/modal.js"></script>
     <script src="js/libs/require.js" data-main="js/main.js"></script>
+  
   </body>
 </html>

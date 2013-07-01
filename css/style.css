@@ -34,7 +34,7 @@ x-appbar, #app > section {
     z-index: 10;
 }
 
-#canvasContainer {
+#ghostCanvasContainer, #canvasContainer {
     position: absolute;
     top: 0;
     left: 0;
@@ -50,6 +50,71 @@ x-appbar, #app > section {
     image-rendering: -moz-crisp-edges;
     image-rendering: -webkit-optimize-contrast;
     -ms-interpolation-mode: nearest-neighbor;
+}
+
+#ghostCanvasContainer {
+    -webkit-transition: 0.8s ease-out;
+    transition: 0.8s ease-out;
+    opacity: 1;
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0);
+}
+    #ghostCanvasContainer canvas {
+        display: block;
+        margin: 0 auto;
+    }
+
+#ghostCanvasContainer.faded_out {
+    /* Why 2rem? For making it look as if we're moving the image into the Gallery button */
+    -webkit-transform: translate(calc(-50% + 2rem), calc(-50% + 1rem)) scale3d(0.01, 0.01, 1) rotateZ(300deg);
+    transform: translate(calc(-50% + 2rem), calc(-50% + 1rem)) scale3d(0.01, 0.01, 1) rotateZ(300deg);
+    opacity: 0;
+}
+
+
+#flasher {
+    background: rgba(255, 255, 255, 0.5);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+}
+
+.on_animation {
+    -webkit-animation-duration: 0.4s;
+    -webkit-animation-name: flash_it;
+    animation-duration: 0.4s;
+    animation-name: flash_it;
+}
+
+@keyframes flash_it {
+    from {
+        opacity: 0;
+    }
+
+    75% {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@-webkit-keyframes flash_it {
+    from {
+        opacity: 0;
+    }
+
+    75% {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
 }
 
 x-appbar {
@@ -93,6 +158,7 @@ h1 span {
 #app x-card {
     overflow: auto;
 }
+
 
 #gallery footer, #camera footer {
     position: absolute;
@@ -157,3 +223,25 @@ progress::-moz-progress-bar {
     z-index: 100;
 }
 
+/* Since the canvas where the processed images are shown is behind everything else,
+ * we'll make the browser ignore mouse events in the deck, but explicitly allow them
+ * on the input elements we care about
+ */
+#app > section {
+    -webkit-pointer-events: none;
+    pointer-events: none;
+}
+
+#switchVideo {
+    -webkit-pointer-events: auto;
+    pointer-events: auto;
+}
+
+.non_selectable {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    -webkit-pointer-events: none;
+    -moz-pointer-events: none;
+    pointer-events: none;
+}

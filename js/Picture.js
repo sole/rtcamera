@@ -1,6 +1,6 @@
 // This class will be used to store and retrieve taken pictures and some
 // associated metadata, using IndexedDB
-var Picture = (function() {
+define(['libs/asyncStorage'], function(notUsed) {
 
     var PICTURES_LIST_KEY = 'pictures_list';
     var PICTURE_PREFIX = 'picture_';
@@ -293,7 +293,6 @@ var Picture = (function() {
 
     };
 
-
     return Pic;
 
-})();
+});

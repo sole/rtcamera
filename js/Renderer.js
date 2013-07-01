@@ -336,6 +336,9 @@ define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
             gl.viewportWidth = w;
             gl.viewportHeight = h;
 
+            canvas.width = w;
+            canvas.height = h;
+
         };
 
         this.prevEffect = function() {

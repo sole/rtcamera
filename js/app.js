@@ -61,7 +61,53 @@ define(['hammer', 'Renderer', 'gumHelper'], function(Hammer, Renderer, gumHelper
         }
 
         function onResize() {
-            // TODO
+
+            var w = window.innerWidth;
+            var h = window.innerHeight;
+            var canvasWidth = inputWidth;
+            var canvasHeight = inputHeight;
+
+            /*// constrain canvas size to be <= window size, and maintain proportions
+            while(canvasWidth > w || canvasHeight > h) {
+
+                canvasWidth /= 2;
+                canvasHeight /= 2;
+
+            }*/
+            var scaleX = w / canvasWidth;
+            var scaleY = h / canvasHeight;
+            var scaleToFit = Math.min(scaleX, scaleY);
+
+            console.log(scaleToFit, scaleToFit | 0);
+
+            canvasWidth = (canvasWidth * scaleToFit) | 0 ;
+            canvasHeight = (canvasHeight * scaleToFit) | 0;
+
+            if(renderer) {
+                renderer.setSize(canvasWidth, canvasHeight);
+            }
+
+            // make canvas dimensions fit the screen
+            // set renderer size to new canvas dimensions
+            // when recording video -> resize down if larger than x,y
+
+            // And then reescale it up with CSS style
+            /*var scaleX = w / canvasWidth;
+            var scaleY = h / canvasHeight;
+            var scaleToFit = Math.min(scaleX, scaleY);
+
+            scaleToFit |= 0;
+
+            if(canvas) {
+
+                canvas.width = canvasWidth;
+                canvas.height = canvasHeight;
+
+                canvas.style.width = (canvasWidth * scaleToFit) + 'px';
+                canvas.style.height = (canvasHeight * scaleToFit) + 'px';
+
+            }*/
+
         }
 
 

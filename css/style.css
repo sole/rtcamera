@@ -159,6 +159,26 @@ h1 span {
     overflow: auto;
 }
 
+#gallery p {
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+#gallery > div {
+    height: 100%;
+    overflow-y: scroll;
+    padding: 0 0.5rem;
+}
+
+#gallery > div div {
+    height: 10rem;
+    width: 10rem;
+    background-color: #ccc;
+    background-position: 50% 50%;
+    background-size: cover;
+    display: inline-block;
+    margin: 0 0.5rem 0.5rem 0.5rem;
+}
 
 #gallery footer, #camera footer {
     position: absolute;
@@ -232,7 +252,7 @@ progress::-moz-progress-bar {
     pointer-events: none;
 }
 
-#switchVideo {
+#switchVideo, #gallery {
     -webkit-pointer-events: auto;
     pointer-events: auto;
 }

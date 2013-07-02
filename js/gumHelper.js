@@ -139,11 +139,12 @@ define([], function() {
 
         }
 
-        if(video !== null) {
+        if(video) {
 
             video.pause();
             // TODO free src url object
             video.src = null;
+            video = null;
 
         }
 

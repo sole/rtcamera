@@ -15,7 +15,8 @@ require(
         var app = new App(reportError, function() {
             
             // TODO url parse and switch to according 'page'
-            app.gotoCamera();
+            // app.gotoCamera();
+            app.gotoGallery();
 
         });
 

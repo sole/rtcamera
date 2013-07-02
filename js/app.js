@@ -15,6 +15,9 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
         var ghostBitmap;
         var ghostCanvas;
 
+        var galleryContainer;
+        var galleryPictures = {};
+
         var renderer;
         var animationFrameId = null;
         var inputElement = null;
@@ -50,7 +53,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
                 pages[id] = page;
             });
 
-            
+
             flasher = document.getElementById('flasher');
             
             function onFlasherAnimationEnd() {
@@ -70,6 +73,8 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
 
             }
 
+            // Canvas for the preview, flasher, ghost canvas ---
+
             flasher.addEventListener('animationend', onFlasherAnimationEnd, false);
             flasher.addEventListener('webkitAnimationEnd', onFlasherAnimationEnd, false);
 
@@ -80,6 +85,23 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
             ghostCanvasContainer.addEventListener('transitionend', function() {
                 ghostCanvas.getContext('2d').clearRect(0, 0, ghostCanvas.width, ghostCanvas.height);
                 ghostCanvasContainer.classList.remove('faded_out');
+            }, false);
+
+
+            // Gallery ---
+
+            galleryContainer = document.querySelector('#gallery > div');
+            // We'll be using 'event delegation' to avoid having to update listeners
+            // if pictures are deleted
+            galleryContainer.addEventListener('click', function(ev) {
+
+                /* TODO var target = ev.target;
+                if(target && target.nodeName === 'IMG') {
+                    showDetails(target.dataset['id']);
+                } else {
+                    closeDetails();
+                }*/
+
             }, false);
 
 
@@ -306,6 +328,42 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
             detachRendererCanvas();
             disableCamera();
             showPage('gallery');
+
+            Picture.getAll(function(pictures) {
+                galleryContainer.innerHTML = '';
+
+                // Show most recent pictures first
+                pictures.reverse();
+
+                var numPictures = pictures.length;
+                galleryPictures = {};
+
+                console.log(numPictures);
+
+                if(false && numPictures) {
+
+                    galleryContainer.classList.remove('empty');
+
+                    pictures.forEach(function(pic, position) {
+
+                        pic.previousPicture = position > 0 ? pictures[position - 1] : null;
+                        pic.nextPicture = position < numPictures - 1 ? pictures[position + 1] : null;
+                        galleryPictures[pic.id] = pic;
+
+                        var div = document.createElement('div');
+                        div.style.backgroundImage = 'url(' + pic.imageData + ')';
+                        galleryContainer.appendChild(div);
+
+                    });
+
+                } else {
+
+                    galleryContainer.classList.add('empty');
+                    galleryContainer.innerHTML = '<p>No pictures (yet)</p>';
+
+                }
+
+            });
         }
 
 

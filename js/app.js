@@ -1,5 +1,5 @@
 // do the require.js dance
-define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer, gumHelper, Picture) {
+define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast'], function(Hammer, Renderer, gumHelper, Picture, Toast) {
     
     'use strict';
 
@@ -19,6 +19,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
         var galleryPictures = {};
 
         var galleryDetails;
+        var IMGUR_KEY = '49c42af902d1fd4';
 
         var renderer;
         var animationFrameId = null;
@@ -215,7 +216,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
          */
         function showDetails(pictureId) {
 
-            // TODO store url
+            // TODO store current url
             gotoDetails();
 
             galleryDetails.innerHTML = 'Loading...';
@@ -235,10 +236,14 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
                     showNextPicture(pictureId);
                 });
 
+            
+            var idDiv = document.createElement('div');
+            idDiv.innerHTML = pictureId;
+
 
             var actions = [
-                /*{ text: 'Share with imgur', action: uploadPicture },
-                { text: 'Download', action: downloadPicture },
+                { text: 'Share with imgur', action: uploadPicture },
+                /*{ text: 'Download', action: downloadPicture },
                 { text: 'Delete', action: deletePicture }*/
             ];
 
@@ -265,6 +270,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
 
             galleryDetails.innerHTML = '';
             galleryDetails.appendChild(img);
+            galleryDetails.appendChild(idDiv);
             galleryDetails.appendChild(actionsDiv);
             actionsDiv.appendChild(urlDiv);
 
@@ -272,6 +278,73 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
 
         }
 
+
+        /**
+         * Upload picture to imgur image sharing service, which allows for cross domain
+         * requests and hence is very JS friendly!
+         */
+        function uploadPicture(pictureId, picture) {
+
+            var image = picture.imageData.replace(/^data:image\/(png|gif);base64,/, "");
+
+            var fd = new FormData();
+            fd.append("image", image);
+
+            var modal = document.createElement('x-modal');
+            modal.innerHTML = 'Uploading...';
+            modal.id = 'galleryUploading';
+            modal.setAttribute('overlay');
+            modal.setAttribute('esc-hide');
+            // TODO cancel button
+
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'https://api.imgur.com/3/upload.json');
+            xhr.setRequestHeader('Authorization', 'Client-ID ' + IMGUR_KEY);
+
+            xhr.onload = function() {
+
+                galleryDetails.removeChild(modal);
+
+                try {
+                    var response = JSON.parse(xhr.responseText);
+                    if(response.success) {
+                        var url = response.data.link;
+                        picture.imgurURL = url;
+                        picture.save(function() {
+                            new Toast('Posted to imgur').show();
+                            showDetails(pictureId);
+                        });
+                    } else {
+                        uploadPictureError();
+                    }
+                } catch(err) {
+                    uploadPictureError();
+                }
+
+            };
+
+            xhr.onerror = function() {
+                galleryDetails.removeChild(modal);
+                uploadPictureError();
+            };
+
+            xhr.send(fd);
+
+            modal.addEventListener('modalhide', function() {
+                if(xhr) {
+                    xhr.abort();
+                }
+                galleryDetails.removeChild(modal);
+            }, false);
+
+            galleryDetails.appendChild(modal);
+
+        }
+
+        function uploadPictureError() {
+            new Toast('Error posting picture :-/').show();
+        }
 
 
         function enableCamera(errorCallback, okCallback) {
@@ -417,8 +490,6 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
 
                 var numPictures = pictures.length;
                 galleryPictures = {};
-
-                console.log(numPictures);
 
                 if(numPictures) {
 

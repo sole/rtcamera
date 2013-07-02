@@ -188,20 +188,16 @@ h1 span {
 }
 
 #details > div {
-    border: 1px solid yellow;
     height: 100%;
     overflow-y: auto;
     width: 100%;
     text-align: center;
 }
 
-.modal {
-    display: block;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+#galleryUploading {
+    padding: 5%;
+    background: #fff;
+    color: #000;
 }
 
 #camera {

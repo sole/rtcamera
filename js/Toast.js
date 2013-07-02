@@ -2,32 +2,38 @@
  * This class is used to display short-lived messages on the screen,
  * Android-toasts style
  */
-var Toast = function(text) {
+define([], function() {
 
-    var div;
-    
-    function hide() {
-        div.classList.add('hidden');
-    }
+    var Toast = function(text) {
 
-    function onTransitionEnd() {
-        document.body.removeChild(div);
-    }
+        var div;
+        
+        function hide() {
+            div.classList.add('hidden');
+        }
 
-    this.show = function(duration) {
+        function onTransitionEnd() {
+            document.body.removeChild(div);
+        }
 
-        duration = duration || 1500;
+        this.show = function(duration) {
 
-        div = document.createElement('div');
-        div.innerHTML = '<span>' + text + '</span>';
-        div.className = 'toast';
+            duration = duration || 1500;
 
-        div.addEventListener('transitionend', onTransitionEnd, false);
-        div.addEventListener('webkitTransitionEnd', onTransitionEnd, false);
+            div = document.createElement('div');
+            div.innerHTML = '<span>' + text + '</span>';
+            div.className = 'toast';
 
-        document.body.appendChild(div);
+            div.addEventListener('transitionend', onTransitionEnd, false);
+            div.addEventListener('webkitTransitionEnd', onTransitionEnd, false);
 
-        setTimeout(hide, duration);
+            document.body.appendChild(div);
 
+            setTimeout(hide, duration);
+
+        };
     };
-};
+
+    return Toast;
+
+});

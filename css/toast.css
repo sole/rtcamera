@@ -1,12 +1,13 @@
 .toast {
     position: absolute;
-    bottom: 2rem;
+    bottom: 3rem;
     left: 0;
     -webkit-transition: 2s ease-out;
     transition: 2s ease-out;
     opacity: 1;
     text-align: center;
     width: 100%;
+    z-index: 1000;
 }
     .toast.hidden {
         opacity: 0;

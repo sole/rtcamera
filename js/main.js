@@ -1,10 +1,13 @@
 
 requirejs.config({
     paths: {
-        'hammer': 'libs/Hammer'
+        'hammer': 'libs/Hammer',
+        'Animated_GIF': 'libs/Animated_GIF/Animated_GIF',
+        'GifWriter': 'libs/Animated_GIF/omggif'
     },
     shim: {
-        'hammer': []
+        'hammer': [],
+        'Animated_GIF': ['GifWriter']
     }
 });
 
@@ -15,8 +18,8 @@ require(
         var app = new App(reportError, function() {
             
             // TODO url parse and switch to according 'page'
-            // app.gotoCamera();
-            app.gotoGallery();
+            app.gotoCamera();
+            // app.gotoGallery();
 
         });
 

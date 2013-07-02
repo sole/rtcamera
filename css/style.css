@@ -186,6 +186,9 @@ h1 span {
     text-align: center;
     width: 100%;
 }
+    #gallery footer button {
+        padding: 1rem;
+    }
 
 #details > div {
     height: 100%;
@@ -214,40 +217,43 @@ h1 span {
     width: 100%;
 }
 
-#video_controls {
+#videoControls {
     opacity: 0;
     display: none;
     transition: opacity 0.3s;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.3);
 }
-#video_controls progress {
+
+#videoControls progress {
     border-width: 0;
     background: rgba(0, 0, 0, 0.8);
     height: 4px;
     vertical-align: middle;
 }
+
 progress::-moz-progress-bar {
     background: #e58f33;
 }
 
-#progress_label span {
+#progressLabel span {
     padding: 0.25rem 0;
     transition: all 0.5s;
 }
 
-.rendering #progress_label span {
+.rendering #progressLabel span {
     background-image: url(spinner.gif);
     background-repeat: no-repeat;
     background-position: 8px 50%;
     padding-left: 32px;
 }
 
-#video_controls input {
+#videoControls input {
     max-width: 24px;
     max-height: 24px;
+    vertical-align: middle;
 }
 
-#video_controls.rendering progress, #video_controls.rendering input {
+#videoControls.rendering progress, #videoControls.rendering input {
     display: none;
 }
 
@@ -265,7 +271,7 @@ progress::-moz-progress-bar {
     pointer-events: none;
 }
 
-#switchVideo, #gallery, #details {
+#switchVideo, #gallery, #details, #btnVideoCancel, #btnVideoDone {
     -webkit-pointer-events: auto;
     pointer-events: auto;
 }

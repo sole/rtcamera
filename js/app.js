@@ -1,5 +1,5 @@
 // do the require.js dance
-define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast'], function(Hammer, Renderer, gumHelper, Picture, Toast) {
+define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF'], function(Hammer, Renderer, gumHelper, Picture, Toast, Animated_GIF) {
     
     'use strict';
 
@@ -10,6 +10,11 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast'], function(Hammer,
         var activePage = null;
         var btnGallery;
         var btnCamera;
+        var videoControls;
+        var btnVideoCancel;
+        var btnVideoDone;
+        var videoProgressBar;
+        var videoProgressSpan;
         var switchVideo;
         var flasher;
         var ghostBitmap;
@@ -30,6 +35,14 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast'], function(Hammer,
         var rendering = false;
         var outputImageNeedsUpdating = false;
         var video = null;
+        var animatedGIF;
+        var gifDelay = 100;
+        var gifLength = 0;
+        var gifMaxLength = 2000;
+        var gifRecordStart;
+        var recordGIFTimeout = null;
+        var TRANSITION_LENGTH = 500;
+
 
         initUI();
 
@@ -129,7 +142,15 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast'], function(Hammer,
 
             // Camera ---
 
+            videoControls = document.getElementById('videoControls');
+            videoProgressBar = document.getElementById('videoProgressBar');
+            btnVideoCancel = document.getElementById('btnVideoCancel');
+            btnVideoDone = document.getElementById('btnVideoDone');
+            videoProgressSpan = document.querySelector('#progressLabel span');
             switchVideo = document.getElementById('switchVideo');
+
+            btnVideoCancel.addEventListener('click', cancelVideoRecording, false);
+            btnVideoDone.addEventListener('click', finishVideoRecording, false);
 
 
         }
@@ -451,11 +472,104 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast'], function(Hammer,
         }
 
         function startVideoRecording() {
-            console.log('start recording TODO');
+
+            // We might already have a half-way recorded video
+            if(!animatedGIF) {
+
+                gifRecordStart = Date.now();
+                gifLength = 0;
+
+                videoControls.classList.remove('rendering');
+                videoProgressBar.value = 0;
+
+                show(videoControls);
+
+                animatedGIF = new Animated_GIF({ workerPath: 'js/libs/Animated_GIF/quantizer.js' });
+                // TODO cap max size here
+                var canvas = renderer.domElement;
+                animatedGIF.setSize(canvas.width, canvas.height);
+                animatedGIF.setDelay(gifDelay);
+                animatedGIF.setRepeat(0);
+
+            }
+
+            addFrameToGIF();
+
         }
 
         function pauseVideoRecording() {
-            console.log('pause TODO');
+            clearTimeout(recordGIFTimeout);
+        }
+        
+        function addFrameToGIF() {
+
+            animatedGIF.addFrame(renderer.domElement);
+            gifLength += gifDelay;
+
+            if(gifLength < gifMaxLength && !animatedGIF.isRendering()) {
+
+                var recordProgress = gifLength * 1.0 / gifMaxLength;
+                videoProgressBar.value = recordProgress;
+                videoProgressSpan.innerHTML = Math.floor(gifLength / 10) / 100 + 's';
+
+                recordGIFTimeout = setTimeout(addFrameToGIF, gifDelay);
+
+            } else {
+
+                finishVideoRecording();
+
+            }
+
+        }
+
+
+        function finishVideoRecording() {
+
+            clearTimeout(recordGIFTimeout);
+
+            videoControls.classList.add('rendering');
+            rendering = true;
+
+            btnVideoCancel.disabled = true;
+            btnVideoDone.disabled = true;
+            switchVideo.disabled = true;
+
+            animatedGIF.onRenderProgress(function(progress) {
+
+                videoProgressSpan.innerHTML = 'rendering ' + Math.floor(progress * 100) + '%';
+                videoProgressBar.value = progress;
+
+            });
+
+            animatedGIF.getBase64GIF(function(gifData) {
+                saveLocalPicture(gifData, true);
+
+                videoProgressSpan.innerHTML = '';
+                hide(videoControls);
+
+                btnVideoCancel.disabled = false;
+                btnVideoDone.disabled = false;
+                switchVideo.disabled = false;
+
+                rendering = false;
+                render();
+
+                // we're done with this instance
+                animatedGIF = null;
+
+            });
+
+        }
+
+
+        function cancelVideoRecording() {
+
+            clearTimeout(recordGIFTimeout);
+            // TODO animatedGIF.reset();
+            hide(videoControls);
+            videoProgressBar.value = 0;
+            animatedGIF = null;
+
         }
 
         
@@ -476,7 +590,6 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast'], function(Hammer,
             });
             
         }
-
 
 
         function requestAnimation() {
@@ -502,6 +615,23 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast'], function(Hammer,
                 renderer.updateTexture(inputElement);
                 outputImageNeedsUpdating = false;
             }
+        }
+
+
+        function hide(element, transitionLength) {
+            transitionLength = transitionLength || TRANSITION_LENGTH;
+            element.style.opacity = 0;
+            setTimeout(function() {
+                element.style.display = 'none';
+            }, transitionLength);
+        }
+
+
+        function show(element) {
+            element.style.display = 'block';
+            setTimeout(function() {
+                element.style.opacity = 1;
+            }, 1);
         }
 
 

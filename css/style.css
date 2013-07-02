@@ -187,6 +187,23 @@ h1 span {
     width: 100%;
 }
 
+#details > div {
+    border: 1px solid yellow;
+    height: 100%;
+    overflow-y: auto;
+    width: 100%;
+    text-align: center;
+}
+
+.modal {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
 #camera {
     text-align: center;
 }
@@ -252,7 +269,7 @@ progress::-moz-progress-bar {
     pointer-events: none;
 }
 
-#switchVideo, #gallery {
+#switchVideo, #gallery, #details {
     -webkit-pointer-events: auto;
     pointer-events: auto;
 }

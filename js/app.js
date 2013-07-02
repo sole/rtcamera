@@ -18,6 +18,8 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
         var galleryContainer;
         var galleryPictures = {};
 
+        var galleryDetails;
+
         var renderer;
         var animationFrameId = null;
         var inputElement = null;
@@ -48,7 +50,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
         function initUI() {
 
             pages = {};
-            ['gallery', 'detail', 'camera', 'pickFile'].forEach(function(id) {
+            ['gallery', 'details', 'camera', 'pickFile'].forEach(function(id) {
                 var page = document.getElementById(id);
                 pages[id] = page;
             });
@@ -95,12 +97,12 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
             // if pictures are deleted
             galleryContainer.addEventListener('click', function(ev) {
 
-                /* TODO var target = ev.target;
-                if(target && target.nodeName === 'IMG') {
+                var target = ev.target;
+                if(target && target.nodeName === 'DIV') {
                     showDetails(target.dataset['id']);
                 } else {
                     closeDetails();
-                }*/
+                }
 
             }, false);
 
@@ -118,11 +120,16 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
                 hideCameraButton();
             }
 
+            document.getElementById('btnPicker').addEventListener('click', gotoStatic, false);
+
+            // Picture details ---
+
+            galleryDetails = document.querySelector('#details > div');
+
+            // Camera ---
 
             switchVideo = document.getElementById('switchVideo');
 
-
-            document.getElementById('btnPicker').addEventListener('click', gotoStatic, false);
 
         }
 
@@ -173,7 +180,6 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
         }
 
 
-
         function showPage(id) {
 
             if(id !== 'gallery') {
@@ -192,6 +198,80 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
         function hideCameraButton() {
             btnCamera.style.display = 'none';
         }
+
+        /**
+         * Returns a picture from the galleryPictures hash. updateGallery must be called at
+         * least once before calling this one for the galleryPictures object to be filled in
+         */
+        function getPictureById(pictureId) {
+            return galleryPictures[pictureId];
+        }
+
+
+        /**
+         * Display the selected picture and allow to perform actions over it too
+         * If the picture has already been shared to imgur, it will show the url of the
+         * picture in imgur
+         */
+        function showDetails(pictureId) {
+
+            // TODO store url
+            gotoDetails();
+
+            galleryDetails.innerHTML = 'Loading...';
+
+            var picture = getPictureById(pictureId);
+            var img = document.createElement('img');
+            img.src = picture.imageData;
+
+            // TODO: this is somehow buggy on Firefox. Must investigate.
+            Hammer(img)
+                .on('swiperight', function(ev) {
+                    ev.gesture.preventDefault();
+                    showPrevPicture(pictureId);
+                })
+                .on('swipeleft', function(ev) {
+                    ev.gesture.preventDefault();
+                    showNextPicture(pictureId);
+                });
+
+
+            var actions = [
+                /*{ text: 'Share with imgur', action: uploadPicture },
+                { text: 'Download', action: downloadPicture },
+                { text: 'Delete', action: deletePicture }*/
+            ];
+
+            var actionsDiv = document.createElement('div');
+            actionsDiv.id = 'actions';
+
+            actions.forEach(function(action) {
+                var input = document.createElement('input');
+                input.value = action.text;
+                input.type = 'button';
+                input.addEventListener('click', function(ev) {
+                    action.action(pictureId, picture);
+                }, false);
+                actionsDiv.appendChild(input);
+            });
+
+            var urlDiv = document.createElement('div');
+
+            if(picture.imgurURL) {
+                var imgur = picture.imgurURL;
+                urlDiv.innerHTML = 'Share: <input type="text" value="' + imgur + '"> ';
+                urlDiv.innerHTML+= '<a href="' + imgur + '" target="_blank">(open)</a>';
+            }
+
+            galleryDetails.innerHTML = '';
+            galleryDetails.appendChild(img);
+            galleryDetails.appendChild(actionsDiv);
+            actionsDiv.appendChild(urlDiv);
+
+            galleryDetails.removeAttribute('hidden');
+
+        }
+
 
 
         function enableCamera(errorCallback, okCallback) {
@@ -340,7 +420,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
 
                 console.log(numPictures);
 
-                if(false && numPictures) {
+                if(numPictures) {
 
                     galleryContainer.classList.remove('empty');
 
@@ -352,6 +432,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
 
                         var div = document.createElement('div');
                         div.style.backgroundImage = 'url(' + pic.imageData + ')';
+                        div.dataset['id'] = pic.id;
                         galleryContainer.appendChild(div);
 
                     });
@@ -367,9 +448,9 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
         }
 
 
-        function gotoDetail() {
+        function gotoDetails() {
             detachRendererCanvas();
-            showPage('detail');
+            showPage('details');
         }
 
 
@@ -393,7 +474,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
         // 'Public' methods
 
         this.gotoGallery = gotoGallery;
-        this.gotoDetail = gotoDetail;
+        this.gotoDetails = gotoDetails;
         this.gotoCamera = gotoCamera;
         this.gotoStatic = gotoStatic;
 

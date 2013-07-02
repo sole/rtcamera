@@ -236,7 +236,9 @@ define(['libs/asyncStorage'], function(notUsed) {
 
         asyncStorage.removeItem(id, function() {
 
-            removeFromPicturesList(id, callback);
+            removeFromPicturesList(id, function() {
+                setTimeout(callback, 10);
+            });
 
         });
 

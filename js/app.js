@@ -243,8 +243,8 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast'], function(Hammer,
 
             var actions = [
                 { text: 'Share with imgur', action: uploadPicture },
-                /*{ text: 'Download', action: downloadPicture },
-                { text: 'Delete', action: deletePicture }*/
+                { text: 'Download', action: downloadPicture },
+                { text: 'Delete', action: deletePicture }
             ];
 
             var actionsDiv = document.createElement('div');
@@ -342,8 +342,36 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast'], function(Hammer,
 
         }
 
+
         function uploadPictureError() {
             new Toast('Error posting picture :-/').show();
+        }
+
+
+        function downloadPicture(pictureId, picture) {
+
+            var a = document.createElement('a');
+            a.setAttribute('href', picture.imageData);
+            a.setAttribute('download', pictureId + picture.getExtension());
+
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+        }
+
+
+        function deletePicture(pictureId) {
+
+            var res = window.confirm('Are you sure you want to delete that?');
+
+            if(res) {
+                Picture.deleteById(pictureId, function() {
+                    gotoGallery();
+                });
+            }
+
         }
 
 

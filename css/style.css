@@ -66,8 +66,8 @@ x-appbar, #app > section {
 
 #ghostCanvasContainer.faded_out {
     /* Why 2rem? For making it look as if we're moving the image into the Gallery button */
-    -webkit-transform: translate(calc(-50% + 2rem), calc(-50% + 1rem)) scale3d(0.01, 0.01, 1) rotateZ(300deg);
-    transform: translate(calc(-50% + 2rem), calc(-50% + 1rem)) scale3d(0.01, 0.01, 1) rotateZ(300deg);
+    -webkit-transform: translate(calc(-50% + 2rem), calc(-50% + 1rem)) scale3d(0.01, 0.01, 1) rotateZ(-300deg);
+    transform: translate(calc(-50% + 2rem), calc(-50% + 1rem)) scale3d(0.01, 0.01, 1) rotateZ(-300deg);
     opacity: 0;
 }
 

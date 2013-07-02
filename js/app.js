@@ -56,7 +56,6 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
             function onFlasherAnimationEnd() {
 
                 flasher.classList.remove('on_animation');
-                //animateGhostPicture(ghostBitmap);
                 
                 var canvas = renderer.domElement;
                 ghostCanvas.width = canvas.width;
@@ -79,23 +78,27 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture'], function(Hammer, Renderer
             var ghostCanvasContainer = document.getElementById('ghostCanvasContainer');
             ghostCanvasContainer.appendChild(ghostCanvas);
             ghostCanvasContainer.addEventListener('transitionend', function() {
-                //ghostCanvas.getContext('2d').clearRect(0, 0, ghostCanvas.width, ghostCanvas.height);
-                //ghostCanvasContainer.classList.remove('faded_out');
+                ghostCanvas.getContext('2d').clearRect(0, 0, ghostCanvas.width, ghostCanvas.height);
+                ghostCanvasContainer.classList.remove('faded_out');
             }, false);
 
 
             btnGallery = document.getElementById('btnGallery');
             btnGallery.addEventListener('click', gotoGallery, false);
 
+
             btnCamera = document.getElementById('btnCamera');
             btnCamera.addEventListener('click', gotoCamera, false);
+
 
             // Hide the camera button is there's likely no support for WebRTC
             if(!navigator.getMedia) {
                 hideCameraButton();
             }
 
+
             switchVideo = document.getElementById('switchVideo');
+
 
             document.getElementById('btnPicker').addEventListener('click', gotoStatic, false);
 

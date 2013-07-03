@@ -326,6 +326,12 @@ progress::-moz-progress-bar {
     width: 40px;
 }
 
+#filePicker {
+    background: #fff;
+    color: #000;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
 
 /* Since the canvas where the processed images are shown is behind everything else,
  * we'll make the browser ignore mouse events in the deck, but explicitly allow them
@@ -336,7 +342,7 @@ progress::-moz-progress-bar {
     pointer-events: none;
 }
 
-#switchVideo, #gallery, #details, #btnVideoCancel, #btnVideoDone, #cameraCoachMarks {
+#switchVideo, #gallery, #details, #btnVideoCancel, #btnVideoDone, #cameraCoachMarks, #filePicker {
     -webkit-pointer-events: auto;
     pointer-events: auto;
 }

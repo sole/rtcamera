@@ -9,12 +9,18 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
         var pages = {};
         var activePage = null;
 
+        // Preview UI
         var flasher;
         var ghostBitmap;
         var ghostCanvas;
 
+        // Gallery UI
         var btnGallery;
-
+        var galleryContainer;
+        var btnCamera;
+        var galleryDetails;
+                
+        // Camera UI
         var videoControls;
         var btnVideoCancel;
         var btnVideoDone;
@@ -24,14 +30,11 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
         var cameraCoachMarksShown = false;
         var switchVideo;
 
-        var galleryContainer;
+        // Static file processing UI
+        var filePicker;
+
+        // Renderer and stuff
         var galleryPictures = {};
-        
-        var btnCamera;
-
-        var galleryDetails;
-        var IMGUR_KEY = '49c42af902d1fd4';
-
         var renderer;
         var animationFrameId = null;
         var inputElement = null;
@@ -47,6 +50,8 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
         var gifMaxLength = 2000;
         var gifRecordStart;
         var recordGIFTimeout = null;
+
+        var IMGUR_KEY = '49c42af902d1fd4';
         var TRANSITION_LENGTH = 500;
 
 
@@ -159,6 +164,10 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
             btnVideoCancel.addEventListener('click', cancelVideoRecording, false);
             btnVideoDone.addEventListener('click', finishVideoRecording, false);
 
+            // Static file
+
+            filePicker = document.getElementById('filePicker');
+            filePicker.querySelector('input').addEventListener('change', onFilePicked, false);
 
         }
 
@@ -601,7 +610,6 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
                 // we're done with this instance
                 animatedGIF = null;
-
             });
 
         }
@@ -617,7 +625,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
         }
 
-        
+
         // data == base64 dataURL 
         function saveLocalPicture(data, isAnimated) {
             
@@ -660,6 +668,34 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
                 renderer.updateTexture(inputElement);
                 outputImageNeedsUpdating = false;
             }
+        }
+
+
+        function onFilePicked() {
+            
+            filePicker.setAttribute('hidden');
+
+            var files = this.files;
+
+            if(files.length > 0 && files[0].type.indexOf('image/') === 0) {
+
+                // get data from picked file
+                // put that into an element
+                var file = files[0];
+                var img = document.createElement('img');
+
+                img.src = window.URL.createObjectURL(file);
+                img.onload = function() {
+                    //window.URL.revokeObjectURL(this.src); // TODO maybe too early?
+
+                    changeInputTo(img, img.width, img.height);
+
+                    outputImageNeedsUpdating = true;
+                    render();
+                };
+
+            }
+
         }
 
 
@@ -740,7 +776,15 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
             clearRenderer();
             attachRendererCanvas();
             showPage('pickFile');
+            
+            filePicker.addEventListener('modalhide', function() {
+                
+            });
+
+
+            filePicker.removeAttribute('hidden');
         }
+
 
         // 'Public' methods
 

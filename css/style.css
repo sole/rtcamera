@@ -294,12 +294,38 @@ progress::-moz-progress-bar {
 
 #camera footer {
     z-index: 100;
+    padding: 1rem 0;
 }
 
 #switchVideo {
     opacity: 0;
     transition: opacity 1s;
+    border-color: #333;
+    border-width: 2px;
+    font-family: 'Roboto Regular', sans-serif;
+    font-size: 1rem;
+    line-height: 1rem;
+    vertical-align: middle;
+    text-shadow: 0 0 2px #000;
+    text-transform: uppercase;
+    color: #aaa;
+    xwidth: 90px;
+    height: 30px;
 }
+
+#switchVideo, #switchVideo[checked], #switchVideo .x-switch-background {
+    background: #222;
+}
+
+.x-switch-text {
+    padding: 0.2rem 0.95rem;
+}
+
+.x-switch-knob {
+    background: #e58f33;
+    width: 40px;
+}
+
 
 /* Since the canvas where the processed images are shown is behind everything else,
  * we'll make the browser ignore mouse events in the deck, but explicitly allow them

@@ -333,6 +333,13 @@ progress::-moz-progress-bar {
     border-radius: 0.5rem;
 }
 
+#filePicker button {
+    display: block;
+    padding: 0.5rem;
+    margin: 1rem 0 0.5rem 0;
+    width: 100%;
+}
+
 /* Since the canvas where the processed images are shown is behind everything else,
  * we'll make the browser ignore mouse events in the deck, but explicitly allow them
  * on the input elements we care about

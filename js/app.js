@@ -167,7 +167,12 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
             // Static file
 
             filePicker = document.getElementById('filePicker');
+            filePicker.addEventListener('modalhide', onFilePickerCanceled, false);
+
             filePicker.querySelector('input').addEventListener('change', onFilePicked, false);
+            filePicker.querySelector('button').addEventListener('click', onFilePickerCanceled, false);
+
+
 
         }
 
@@ -673,6 +678,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
         function onFilePicked() {
             
+            //filePicker.removeEventListener('modalhide', onFilePickerCanceled, false);
             filePicker.setAttribute('hidden');
 
             var files = this.files;
@@ -696,6 +702,11 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
             }
 
+        }
+
+        function onFilePickerCanceled() {
+            filePicker.toggle();
+            gotoGallery();
         }
 
 
@@ -777,11 +788,6 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
             attachRendererCanvas();
             showPage('pickFile');
             
-            filePicker.addEventListener('modalhide', function() {
-                
-            });
-
-
             filePicker.removeAttribute('hidden');
         }
 

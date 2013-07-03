@@ -7,7 +7,7 @@ requirejs.config({
     },
     shim: {
         'hammer': [],
-        'Animated_GIF': ['GifWriter']
+        'Animated_GIF': ['GifWriter'],
     }
 });
 

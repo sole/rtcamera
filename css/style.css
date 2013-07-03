@@ -306,7 +306,7 @@ progress::-moz-progress-bar {
     pointer-events: none;
 }
 
-#switchVideo, #gallery, #details, #btnVideoCancel, #btnVideoDone {
+#switchVideo, #gallery, #details, #btnVideoCancel, #btnVideoDone, #cameraCoachMarks {
     -webkit-pointer-events: auto;
     pointer-events: auto;
 }

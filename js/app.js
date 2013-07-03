@@ -1,5 +1,5 @@
 // do the require.js dance
-define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF'], function(Hammer, Renderer, gumHelper, Picture, Toast, Animated_GIF) {
+define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', 'libs/asyncStorage'], function(Hammer, Renderer, gumHelper, Picture, Toast, Animated_GIF) {
     
     'use strict';
 
@@ -21,6 +21,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF'], 
         var videoProgressBar;
         var videoProgressSpan;
         var cameraCoachMarks;
+        var cameraCoachMarksShown = false;
         var switchVideo;
 
         var galleryContainer;
@@ -401,6 +402,34 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF'], 
 
         }
 
+        function showCameraCoachMarks() {
+
+            asyncStorage.getItem('firstTimeUser', function(firstTimeUser) {
+
+                if(firstTimeUser === null) {
+                    firstTimeUser = true;
+                }
+
+                if(firstTimeUser || !cameraCoachMarksShown) {
+                    show(cameraCoachMarks);
+
+                    if(firstTimeUser) {
+                        cameraCoachMarks.addEventListener('click', function() {
+                            hide(cameraCoachMarks);
+                            asyncStorage.setItem('firstTimeUser', false);
+                            cameraCoachMarksShown = true;
+                        }, false);
+                    } else {
+                        setTimeout(function() {
+                            cameraCoachMarksShown = true;
+                            hide(cameraCoachMarks);
+                        }, 3000);
+                    }
+                }
+
+            });
+
+        }
 
         function enableCamera(errorCallback, okCallback) {
 
@@ -413,6 +442,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF'], 
                 video = videoElement;
                 liveStreaming = true;
                 changeInputTo(videoElement, width, height);
+                showCameraCoachMarks();
                 render();
             });
 
@@ -692,10 +722,6 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF'], 
         function gotoCamera() {
             enableCamera();
             attachRendererCanvas();
-            show(cameraCoachMarks);
-            setTimeout(function() {
-                hide(cameraCoachMarks);
-            }, 3000);
             showPage('camera');
         }
 

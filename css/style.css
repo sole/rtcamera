@@ -292,9 +292,13 @@ progress::-moz-progress-bar {
     margin-top: 2rem;
 }
 
-
 #camera footer {
     z-index: 100;
+}
+
+#switchVideo {
+    opacity: 0;
+    transition: opacity 1s;
 }
 
 /* Since the canvas where the processed images are shown is behind everything else,

@@ -442,6 +442,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
                 video = videoElement;
                 liveStreaming = true;
                 changeInputTo(videoElement, width, height);
+                switchVideo.style.opacity = 1;
                 showCameraCoachMarks();
                 render();
             });
@@ -451,6 +452,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
         function disableCamera() {
             gumHelper.stopVideoStreaming();
+            switchVideo.style.opacity = 0;
         }
 
 

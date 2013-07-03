@@ -466,6 +466,13 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
         }
 
 
+        function clearRenderer() {
+            // To delete the last image from the renderer, we set an empty
+            // canvas as input element.
+            var emptyCanvas = document.createElement('canvas');
+            changeInputTo(emptyCanvas, inputWidth, inputHeight);
+        }
+
         function detachRendererCanvas() {
             var canvas = renderer.domElement;
             if(canvas.parentNode) {
@@ -723,17 +730,14 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
         function gotoCamera() {
             enableCamera();
+            clearRenderer();
             attachRendererCanvas();
             showPage('camera');
         }
 
 
         function gotoStatic() {
-            // To delete the last image from the renderer, we set an empty
-            // canvas as input element.
-            var emptyCanvas = document.createElement('canvas');
-            changeInputTo(emptyCanvas, inputWidth, inputHeight);
-
+            clearRenderer();
             attachRendererCanvas();
             showPage('pickFile');
         }

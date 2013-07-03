@@ -257,6 +257,41 @@ progress::-moz-progress-bar {
     display: none;
 }
 
+#cameraCoachMarks {
+    color: #ddd;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 1em;
+    padding: 1em;
+    opacity: 0;
+    transition: opacity 1s;
+    font-size: 1.2rem;
+    list-style-type: none;
+    list-style-position: inside;
+    width: 90%;
+    max-width: 600px;
+}
+
+#cameraCoachMarks li {
+    background-repeat: no-repeat;
+    background-position: 0 12px;
+    background-size: 48px 48px;
+    padding-left: 64px;
+    padding-top: 12px;
+    padding-bottom: 25px;
+}
+#press {
+    background-image: url(../img/icons/icn-coachmark-press.png);
+}
+
+#arrows {
+    background-image: url(../img/icons/icn-coachmark-arrows.png);
+}
+
+#cameraCoachMarks li + li {
+    margin-top: 2rem;
+}
+
 
 #camera footer {
     z-index: 100;
@@ -283,4 +318,13 @@ progress::-moz-progress-bar {
     -webkit-pointer-events: none;
     -moz-pointer-events: none;
     pointer-events: none;
+}
+
+.modal {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }

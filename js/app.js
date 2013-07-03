@@ -8,20 +8,25 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF'], 
         var that = this;
         var pages = {};
         var activePage = null;
+
+        var flasher;
+        var ghostBitmap;
+        var ghostCanvas;
+
         var btnGallery;
-        var btnCamera;
+
         var videoControls;
         var btnVideoCancel;
         var btnVideoDone;
         var videoProgressBar;
         var videoProgressSpan;
+        var cameraCoachMarks;
         var switchVideo;
-        var flasher;
-        var ghostBitmap;
-        var ghostCanvas;
 
         var galleryContainer;
         var galleryPictures = {};
+        
+        var btnCamera;
 
         var galleryDetails;
         var IMGUR_KEY = '49c42af902d1fd4';
@@ -144,6 +149,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF'], 
 
             videoControls = document.getElementById('videoControls');
             videoProgressBar = document.getElementById('videoProgressBar');
+            cameraCoachMarks = document.getElementById('cameraCoachMarks');
             btnVideoCancel = document.getElementById('btnVideoCancel');
             btnVideoDone = document.getElementById('btnVideoDone');
             videoProgressSpan = document.querySelector('#progressLabel span');
@@ -686,6 +692,10 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF'], 
         function gotoCamera() {
             enableCamera();
             attachRendererCanvas();
+            show(cameraCoachMarks);
+            setTimeout(function() {
+                hide(cameraCoachMarks);
+            }, 3000);
             showPage('camera');
         }
 

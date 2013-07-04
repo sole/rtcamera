@@ -173,7 +173,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
             filePicker.querySelector('button').addEventListener('click', onFilePickerCanceled, false);
             document.getElementById('btnFilePicker').addEventListener('click', openFilePicker, false); 
 
-
+            window.addEventListener('resize', onResize, false);
 
         }
 
@@ -194,6 +194,8 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
             if(renderer) {
                 renderer.setSize(canvasWidth, canvasHeight);
             }
+
+            outputImageNeedsUpdating = true;
 
         }
 

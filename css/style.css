@@ -132,6 +132,7 @@ x-appbar header:after {
     opacity: 1;
     margin: 0.5rem;
     padding: 0.5rem;
+    transition: opacity 0.8s;
 }
 
 #btnGallery.hidden {

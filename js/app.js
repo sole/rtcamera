@@ -512,6 +512,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
         function previousEffect() {
             if(usingTheRenderer()) {
+                outputImageNeedsUpdating = true;
                 renderer.previousEffect();
             }
         }
@@ -519,6 +520,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
         function nextEffect() {
             if(usingTheRenderer()) {
+                outputImageNeedsUpdating = true;
                 renderer.nextEffect();
             }
         }

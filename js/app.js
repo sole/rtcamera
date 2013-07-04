@@ -679,8 +679,10 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
 
         function openFilePicker() {
+            filePicker.querySelector('input').value = '';
             filePicker.removeAttribute('hidden');
         }
+
 
         function onFilePicked() {
             

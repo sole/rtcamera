@@ -486,6 +486,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
             // canvas as input element.
             var emptyCanvas = document.createElement('canvas');
             changeInputTo(emptyCanvas, inputWidth, inputHeight);
+            outputImageNeedsUpdating = true;
         }
 
         function detachRendererCanvas() {

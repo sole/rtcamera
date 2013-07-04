@@ -171,6 +171,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
             filePicker.querySelector('input').addEventListener('change', onFilePicked, false);
             filePicker.querySelector('button').addEventListener('click', onFilePickerCanceled, false);
+            document.getElementById('btnFilePicker').addEventListener('click', openFilePicker, false); 
 
 
 
@@ -676,9 +677,12 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
         }
 
 
+        function openFilePicker() {
+            filePicker.removeAttribute('hidden');
+        }
+
         function onFilePicked() {
             
-            //filePicker.removeEventListener('modalhide', onFilePickerCanceled, false);
             filePicker.setAttribute('hidden');
 
             var files = this.files;
@@ -787,8 +791,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
             clearRenderer();
             attachRendererCanvas();
             showPage('pickFile');
-            
-            filePicker.removeAttribute('hidden');
+            openFilePicker();
         }
 
 

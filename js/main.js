@@ -19,8 +19,8 @@ require(
             
             // TODO url parse and switch to according 'page'
             //app.gotoCamera();
-            //app.gotoGallery();
-            app.gotoStatic();
+            app.gotoGallery();
+            //app.gotoStatic();
 
         });
 

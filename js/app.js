@@ -760,11 +760,15 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
         function gotoGallery() {
             detachRendererCanvas();
             disableCamera();
+
+            galleryContainer.innerHTML = '<p class="loading">Loading</p>';
+
             showPage('gallery');
 
             Picture.getAll(function(pictures) {
-                galleryContainer.innerHTML = '';
 
+                galleryContainer.innerHTML = '';
+                
                 // Show most recent pictures first
                 pictures.reverse();
 

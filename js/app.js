@@ -218,8 +218,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
 
         function onRelease(ev) {
-            console.log('release', ev);
-            
+
             if(switchVideo.checked) {
                 pauseVideoRecording();
             }
@@ -296,9 +295,9 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
             actionsDiv.id = 'actions';
 
             actions.forEach(function(action) {
-                var input = document.createElement('input');
-                input.value = action.text;
-                input.type = 'button';
+                var input = document.createElement('button');
+                input.innerHTML = action.text;
+                //input.type = 'button';
                 input.addEventListener('click', function(ev) {
                     action.action(pictureId, picture);
                 }, false);
@@ -309,8 +308,8 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
             if(picture.imgurURL) {
                 var imgur = picture.imgurURL;
-                urlDiv.innerHTML = 'Share: <input type="text" value="' + imgur + '"> ';
-                urlDiv.innerHTML+= '<a href="' + imgur + '" target="_blank">(open)</a>';
+                //urlDiv.innerHTML = 'Share: <input type="text" value="' + imgur + '"> ';
+                urlDiv.innerHTML = 'Share: <a href="' + imgur + '" target="_blank">' + imgur + '</a>';
             }
 
             galleryDetails.innerHTML = '';

@@ -26,6 +26,10 @@ body {
     font-family: 'Roboto Regular', Helvetica, Arial, sans-serif;
 }
 
+a {
+    color: #e58f33;
+}
+
 #app {
     border: 0 none;
 }
@@ -209,6 +213,24 @@ x-card footer button {
     overflow-y: auto;
     width: 100%;
     text-align: center;
+}
+
+#actions {
+    padding: 0.5rem 0;
+}
+
+#actions button {
+    padding: 0.5rem;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+#actions button + button {
+    margin-left: 1rem;
+}
+
+#actions div {
+    padding: 0.5rem 0;
 }
 
 #galleryUploading {

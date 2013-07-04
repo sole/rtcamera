@@ -324,6 +324,22 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
         }
 
 
+        function showPrevPicture(currentId) {
+            var picture = getPictureById(currentId);
+            if(picture.previousPicture) {
+                showDetails(picture.previousPicture.id);
+            }
+        }
+
+
+        function showNextPicture(currentId) {
+            var picture = getPictureById(currentId);
+            if(picture.nextPicture) {
+                showDetails(picture.nextPicture.id);
+            }
+        }
+
+
         /**
          * Upload picture to imgur image sharing service, which allows for cross domain
          * requests and hence is very JS friendly!
@@ -419,6 +435,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
         }
 
+
         function showCameraCoachMarks() {
 
             asyncStorage.getItem('firstTimeUser', function(firstTimeUser) {
@@ -447,6 +464,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
             });
 
         }
+
 
         function enableCamera(errorCallback, okCallback) {
 
@@ -491,12 +509,14 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
             outputImageNeedsUpdating = true;
         }
 
+
         function detachRendererCanvas() {
             var canvas = renderer.domElement;
             if(canvas.parentNode) {
                 canvas.parentNode.removeChild(canvas);
             }
         }
+
 
         function attachRendererCanvas() {
             var container = document.getElementById('canvasContainer');
@@ -527,14 +547,13 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
             }
         }
 
+
         // Save static image
         function takePicture() {
-
             var bitmapData = renderer.domElement.toDataURL();
-
             saveLocalPicture(bitmapData, false);
-
         }
+
 
         function startVideoRecording() {
 

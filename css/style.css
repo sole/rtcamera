@@ -341,7 +341,6 @@ progress::-moz-progress-bar {
     text-shadow: 0 0 2px #000;
     text-transform: uppercase;
     color: #aaa;
-    xwidth: 90px;
     height: 30px;
 }
 

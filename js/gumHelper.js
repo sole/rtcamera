@@ -73,7 +73,7 @@ define([], function() {
 
             onStreaming();
 
-            if(videoElement.mozSrcObject !== undefined) {
+            if(videoElement.mozSrcObject) {
                 videoElement.mozSrcObject = stream;
             } else {
                 videoElement.src = window.URL.createObjectURL(stream);

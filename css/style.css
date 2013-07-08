@@ -134,7 +134,7 @@ x-appbar header:after {
     top: 0;
     left: 0;
     opacity: 1;
-    margin: 0.5rem;
+    margin: 0.25rem 0.5rem;
     padding: 0.5rem;
     transition: opacity 0.8s;
 }
@@ -155,6 +155,20 @@ h1 span {
     color: #e58f33;
 }
 
+button {
+    font-family: inherit;
+    font-size: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: 1px solid #ccc;
+    padding: 1rem;
+    transition: 0.3s background;
+}
+
+button:hover {
+    background-color: #e58f33;
+}
+
 #app x-deck {
     width: 100%;
     height: 100%;
@@ -172,11 +186,6 @@ x-card footer {
     z-index: 100;
     padding: 1rem 0;
 }
-
-x-card footer button {
-    padding: 1rem;
-}
-
 
 #gallery p {
     font-size: 1.5rem;
@@ -207,7 +216,6 @@ x-card footer button {
     margin: 0 0.5rem 0.5rem 0.5rem;
 }
 
-
 #details > div {
     height: 100%;
     overflow-y: auto;
@@ -217,12 +225,6 @@ x-card footer button {
 
 #actions {
     padding: 0.5rem 0;
-}
-
-#actions button {
-    padding: 0.5rem;
-    font-family: inherit;
-    font-size: inherit;
 }
 
 #actions button + button {
@@ -363,15 +365,14 @@ progress::-moz-progress-bar {
     padding: 1rem;
     border-radius: 0.5rem;
     z-index: 200;
+    width: 90%;
+    max-width: 30rem;
 }
 
 #filePicker button {
-    font-family: inherit;
-    font-size: 100%;
-    display: block;
-    padding: 1rem 0.5rem;
     margin: 1rem 0 0.5rem 0;
     width: 100%;
+    text-align: center;
 }
 
 
@@ -406,3 +407,4 @@ progress::-moz-progress-bar {
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+

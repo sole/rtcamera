@@ -36,6 +36,7 @@ define(
         var filePicker;
 
         // Renderer and stuff
+        var pictureCount;
         var galleryPictures = {};
         var renderer;
         var animationFrameId = null;
@@ -144,7 +145,7 @@ define(
             btnCamera.addEventListener('click', gotoCamera, false);
 
 
-            // Hide the camera button is there's likely no support for WebRTC
+            // Hide the camera button if there's likely no support for WebRTC
             if(!navigator.getMedia) {
                 hideCameraButton();
             }
@@ -274,10 +275,13 @@ define(
             galleryDetails.innerHTML = 'Loading...';
 
             var picture = getPictureById(pictureId);
+
+            var countDiv = document.createElement('div');
+            countDiv.innerHTML = picture.position + ' of ' + pictureCount;
+
             var img = document.createElement('img');
             img.src = picture.imageData;
 
-            // TODO: this is somehow buggy on Firefox. Must investigate.
             Hammer(img, { drag: false })
                 .on('dragstart', function(ev) {
                     // This is for avoiding the drag behaviour where a 'ghost' image
@@ -324,6 +328,7 @@ define(
             }
 
             galleryDetails.innerHTML = '';
+            galleryDetails.appendChild(countDiv);
             galleryDetails.appendChild(img);
             galleryDetails.appendChild(idDiv);
             galleryDetails.appendChild(actionsDiv);
@@ -827,26 +832,27 @@ define(
             Picture.getAll(function(pictures) {
 
                 galleryContainer.innerHTML = '';
-                
+
                 // Show most recent pictures first
                 pictures.reverse();
 
-                var numPictures = pictures.length;
                 galleryPictures = {};
+                pictureCount = pictures.length;
 
-                if(numPictures) {
+                if(pictureCount) {
 
                     galleryContainer.classList.remove('empty');
 
                     pictures.forEach(function(pic, position) {
 
+                        pic.position = position;
                         pic.previousPicture = position > 0 ? pictures[position - 1] : null;
-                        pic.nextPicture = position < numPictures - 1 ? pictures[position + 1] : null;
+                        pic.nextPicture = position < pictureCount - 1 ? pictures[position + 1] : null;
                         galleryPictures[pic.id] = pic;
 
                         var div = document.createElement('div');
                         div.style.backgroundImage = 'url(' + pic.imageData + ')';
-                        div.dataset['id'] = pic.id;
+                        div.dataset.id = pic.id;
                         galleryContainer.appendChild(div);
 
                     });

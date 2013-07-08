@@ -62,6 +62,7 @@ define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
 
         }
 
+
         /**
          * Before we can draw anything with WebGL we need to set up what to draw.
          * WebGL uses the concept of buffers, which are similar to arrays. These are
@@ -88,9 +89,9 @@ define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
             vertexPositionBuffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer);
             var vertices = [
-                1.0,  1.0,  0.0,
+                 1.0,  1.0,  0.0,
                 -1.0,  1.0,  0.0,
-                1.0, -1.0,  0.0,
+                 1.0, -1.0,  0.0,
                 -1.0, -1.0,  0.0
             ];
 
@@ -117,6 +118,7 @@ define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
 
         }
 
+
         /**
          * Since we will just be processing one source of images, we will only
          * need to upload to the graphics card an image each time. The "target" of these
@@ -127,6 +129,7 @@ define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
             texture = gl.createTexture();
 
         }
+
 
         /**
          * Here we'll load first each effect's vertex and fragment shader's source
@@ -164,20 +167,22 @@ define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
 
         }
 
+
         /**
          * We will be loading shader files sequentially. If any of the shaders
          * is not found, we'll just cancel the whole thing and report an error
          * via errorCallback
          */
         function loadShaders(files, errorCallback, doneCallback) {
+
             var directory = 'shaders/';
             var loaded = {};
             var filesToLoad = files.slice(0);
 
             loadNextShader();
-            
+
             //
-            
+
             function loadNextShader() {
 
                 if(filesToLoad.length > 0) {
@@ -191,7 +196,7 @@ define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
             }
 
             function loadShader(filename) {
-                
+
                 // Don't load shaders twice
                 if(loaded.hasOwnProperty(filename)) {
                     loadNextShader(filename);
@@ -212,9 +217,11 @@ define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
 
                     request.send();
                 }
+
             }
 
         }
+
 
         /**
          * We have taken out the parts common to all shaders onto
@@ -222,7 +229,7 @@ define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
          * shaders).
          */
         function initialiseEffects(shadersData) {
-            
+
             var vertexCommonShader = shadersData['common.vs'];
             var fragmentCommonShader = shadersData['common.fs'];
 
@@ -259,6 +266,7 @@ define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
 
         }
 
+
         /**
          * Called when all effects are loaded and ready
          */
@@ -268,7 +276,7 @@ define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
             onReadyCallback();
 
         }
-        
+
 
         /**
          * Each time this function is called it will clear everything on our output canvas
@@ -331,6 +339,7 @@ define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
 
         }
 
+
         this.setSize = function(w, h) {
 
             gl.viewportWidth = w;
@@ -341,23 +350,26 @@ define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
 
         };
 
+
         this.previousEffect = function() {
 
             var index = effects.indexOf(activeEffect);
             var newIndex = --index < 0 ? effects.length - 1 : index;
-            
+
             activeEffect = effects[newIndex];
 
         };
+
 
         this.nextEffect = function() {
 
             var index = effects.indexOf(activeEffect);
             var newIndex = ++index % effects.length;
-            
+
             activeEffect = effects[newIndex];
 
         };
+
 
         /**
          * This is used to upload a copy of the current appearance of the video element

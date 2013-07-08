@@ -82,11 +82,11 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
 
             flasher = document.getElementById('flasher');
-            
+
             function onFlasherAnimationEnd() {
 
                 flasher.classList.remove('on_animation');
-                
+
                 var canvas = renderer.domElement;
                 ghostCanvas.width = canvas.width;
                 ghostCanvas.height = canvas.height;
@@ -106,7 +106,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
             flasher.addEventListener('webkitAnimationEnd', onFlasherAnimationEnd, false);
 
             ghostCanvas = document.createElement('canvas');
-            
+
             var ghostCanvasContainer = document.getElementById('ghostCanvasContainer');
             ghostCanvasContainer.appendChild(ghostCanvas);
             ghostCanvasContainer.addEventListener('transitionend', function() {
@@ -118,6 +118,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
             // Gallery ---
 
             galleryContainer = document.querySelector('#gallery > div');
+
             // We'll be using 'event delegation' to avoid having to update listeners
             // if pictures are deleted
             galleryContainer.addEventListener('click', function(ev) {
@@ -131,10 +132,8 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
             }, false);
 
-
             btnGallery = document.getElementById('btnGallery');
             btnGallery.addEventListener('click', gotoGallery, false);
-
 
             btnCamera = document.getElementById('btnCamera');
             btnCamera.addEventListener('click', gotoCamera, false);
@@ -151,6 +150,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
             galleryDetails = document.querySelector('#details > div');
 
+
             // Camera ---
 
             videoControls = document.getElementById('videoControls');
@@ -163,6 +163,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
             btnVideoCancel.addEventListener('click', cancelVideoRecording, false);
             btnVideoDone.addEventListener('click', finishVideoRecording, false);
+
 
             // Static file
 
@@ -206,8 +207,6 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
                 return;
             }
 
-            console.log('hold');
-
             if(switchVideo.checked) {
                 startVideoRecording();
             } else {
@@ -241,7 +240,9 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
 
         function hideCameraButton() {
+
             btnCamera.style.display = 'none';
+
         }
 
         /**
@@ -249,7 +250,9 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
          * least once before calling this one for the galleryPictures object to be filled in
          */
         function getPictureById(pictureId) {
+
             return galleryPictures[pictureId];
+
         }
 
 
@@ -270,7 +273,12 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
             img.src = picture.imageData;
 
             // TODO: this is somehow buggy on Firefox. Must investigate.
-            Hammer(img)
+            Hammer(img, { drag: false })
+                .on('dragstart', function(ev) {
+                    // This is for avoiding the drag behaviour where a 'ghost' image
+                    // is dragged
+                    ev.preventDefault();
+                })
                 .on('swiperight', function(ev) {
                     ev.gesture.preventDefault();
                     showPrevPicture(pictureId);
@@ -280,7 +288,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
                     showNextPicture(pictureId);
                 });
 
-            
+
             var idDiv = document.createElement('div');
             idDiv.innerHTML = pictureId;
 
@@ -295,20 +303,18 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
             actionsDiv.id = 'actions';
 
             actions.forEach(function(action) {
-                var input = document.createElement('button');
-                input.innerHTML = action.text;
-                //input.type = 'button';
-                input.addEventListener('click', function(ev) {
+                var button = document.createElement('button');
+                button.innerHTML = action.text;
+                button.addEventListener('click', function(ev) {
                     action.action(pictureId, picture);
                 }, false);
-                actionsDiv.appendChild(input);
+                actionsDiv.appendChild(button);
             });
 
             var urlDiv = document.createElement('div');
 
             if(picture.imgurURL) {
                 var imgur = picture.imgurURL;
-                //urlDiv.innerHTML = 'Share: <input type="text" value="' + imgur + '"> ';
                 urlDiv.innerHTML = 'Share: <a href="' + imgur + '" target="_blank">' + imgur + '</a>';
             }
 
@@ -324,18 +330,22 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
 
         function showPrevPicture(currentId) {
+
             var picture = getPictureById(currentId);
             if(picture.previousPicture) {
                 showDetails(picture.previousPicture.id);
             }
+
         }
 
 
         function showNextPicture(currentId) {
+
             var picture = getPictureById(currentId);
             if(picture.nextPicture) {
                 showDetails(picture.nextPicture.id);
             }
+
         }
 
 
@@ -385,17 +395,21 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
             };
 
             xhr.onerror = function() {
+
                 galleryDetails.removeChild(modal);
                 uploadPictureError();
+
             };
 
             xhr.send(fd);
 
             modal.addEventListener('modalhide', function() {
+
                 if(xhr) {
                     xhr.abort();
                 }
                 galleryDetails.removeChild(modal);
+
             }, false);
 
             galleryDetails.appendChild(modal);
@@ -404,7 +418,9 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
 
         function uploadPictureError() {
+
             new Toast('Error posting picture :-/').show();
+
         }
 
 
@@ -485,72 +501,91 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
 
         function disableCamera() {
+
             gumHelper.stopVideoStreaming();
             switchVideo.style.opacity = 0;
+
         }
 
 
         function changeInputTo(element, width, height) {
+
             inputElement = element;
 
             inputWidth = width;
             inputHeight = height;
 
             onResize();
+
         }
 
 
         function clearRenderer() {
+
             // To delete the last image from the renderer, we set an empty
             // canvas as input element.
             var emptyCanvas = document.createElement('canvas');
             changeInputTo(emptyCanvas, inputWidth, inputHeight);
             outputImageNeedsUpdating = true;
+
         }
 
 
         function detachRendererCanvas() {
+
             var canvas = renderer.domElement;
+
             if(canvas.parentNode) {
                 canvas.parentNode.removeChild(canvas);
             }
+
         }
 
 
         function attachRendererCanvas() {
+
             var container = document.getElementById('canvasContainer');
             var canvas = renderer.domElement;
-            
+
             container.appendChild(canvas);
+
         }
 
 
         // TODO maybe this.renderer.isPaused()
         function usingTheRenderer() {
+
             return activePage === 'camera' || activePage === 'pickFile';
+
         }
 
 
         function previousEffect() {
+
             if(usingTheRenderer()) {
                 outputImageNeedsUpdating = true;
                 renderer.previousEffect();
             }
+
         }
 
 
         function nextEffect() {
+
             if(usingTheRenderer()) {
                 outputImageNeedsUpdating = true;
                 renderer.nextEffect();
             }
+
         }
 
 
         // Save static image
         function takePicture() {
+
             var bitmapData = renderer.domElement.toDataURL();
             saveLocalPicture(bitmapData, false);
+
         }
 
 
@@ -580,10 +615,14 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
         }
 
+
         function pauseVideoRecording() {
+
             clearTimeout(recordGIFTimeout);
+
         }
-        
+
+
         function addFrameToGIF() {
 
             animatedGIF.addFrame(renderer.domElement);
@@ -625,6 +664,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
             });
 
             animatedGIF.getBase64GIF(function(gifData) {
+
                 saveLocalPicture(gifData, true);
 
                 videoProgressSpan.innerHTML = '';
@@ -639,6 +679,7 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
                 // we're done with this instance
                 animatedGIF = null;
+
             });
 
         }
@@ -655,9 +696,9 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
         }
 
 
-        // data == base64 dataURL 
+        // data is a base64 encoded dataURL 
         function saveLocalPicture(data, isAnimated) {
-            
+
             var picture = new Picture();
             picture.imageData = data;
             picture.imageIsAnimated = isAnimated;
@@ -675,12 +716,15 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
 
         function requestAnimation() {
+
             cancelAnimationFrame(animationFrameId);
             animationFrameId = requestAnimationFrame(render);
+
         }
 
 
         function render() {
+
             requestAnimation();
 
             if(liveStreaming) {
@@ -697,20 +741,23 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
                 renderer.updateTexture(inputElement);
                 outputImageNeedsUpdating = false;
             }
+
         }
 
 
         function openFilePicker() {
+
             filePicker.querySelector('input').value = '';
             filePicker.removeAttribute('hidden');
+
         }
 
 
         function onFilePicked() {
-            
-            filePicker.setAttribute('hidden');
 
             var files = this.files;
+
+            filePicker.setAttribute('hidden');
 
             if(files.length > 0 && files[0].type.indexOf('image/') === 0) {
 
@@ -733,30 +780,38 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
 
         }
 
+
         function onFilePickerCanceled() {
+
             filePicker.toggle();
             gotoGallery();
+
         }
 
 
         function hide(element, transitionLength) {
+
             transitionLength = transitionLength || TRANSITION_LENGTH;
             element.style.opacity = 0;
             setTimeout(function() {
                 element.style.display = 'none';
             }, transitionLength);
+
         }
 
 
         function show(element) {
+
             element.style.display = 'block';
             setTimeout(function() {
                 element.style.opacity = 1;
             }, 1);
+
         }
 
 
         function gotoGallery() {
+
             detachRendererCanvas();
             disableCamera();
 
@@ -799,28 +854,35 @@ define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', '
                 }
 
             });
+
         }
 
 
         function gotoDetails() {
+
             detachRendererCanvas();
             showPage('details');
+
         }
 
 
         function gotoCamera() {
+
             enableCamera();
             clearRenderer();
             attachRendererCanvas();
             showPage('camera');
+
         }
 
 
         function gotoStatic() {
+
             clearRenderer();
             attachRendererCanvas();
             showPage('pickFile');
             openFilePicker();
+
         }
 
 

@@ -9,15 +9,15 @@
     width: 100%;
     z-index: 1000;
 }
-    .toast.hidden {
-        opacity: 0;
-    }
-    
-    .toast span {
-        background: rgba(50, 50, 50, 0.8);
-        color: #ccc;
-        padding: 1rem;
-        border: 1px solid #fff;
-    }
 
+.toast.hidden {
+    opacity: 0;
+}
+
+.toast span {
+    background: rgba(50, 50, 50, 0.8);
+    color: #ccc;
+    padding: 1rem;
+    border: 1px solid #fff;
+}
 

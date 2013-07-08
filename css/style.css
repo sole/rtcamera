@@ -63,10 +63,11 @@ x-appbar, #app > section {
     -webkit-transform: translate(0, 0);
     transform: translate(0, 0);
 }
-    #ghostCanvasContainer canvas {
-        display: block;
-        margin: 0 auto;
-    }
+
+#ghostCanvasContainer canvas {
+    display: block;
+    margin: 0 auto;
+}
 
 #ghostCanvasContainer.faded_out {
     /* Why 2rem? For making it look as if we're moving the image into the Gallery button */
@@ -74,7 +75,6 @@ x-appbar, #app > section {
     transform: translate(calc(-50% + 2rem), calc(-50% + 1rem)) scale3d(0.01, 0.01, 1) rotateZ(-300deg);
     opacity: 0;
 }
-
 
 #flasher {
     background: rgba(255, 255, 255, 0.5);
@@ -316,6 +316,7 @@ progress::-moz-progress-bar {
     padding-top: 12px;
     padding-bottom: 25px;
 }
+
 #press {
     background-image: url(../img/icons/icn-coachmark-press.png);
 }

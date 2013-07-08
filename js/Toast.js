@@ -7,14 +7,17 @@ define([], function() {
     var Toast = function(text) {
 
         var div;
-        
+
+
         function hide() {
             div.classList.add('hidden');
         }
 
+
         function onTransitionEnd() {
             document.body.removeChild(div);
         }
+
 
         this.show = function(duration) {
 
@@ -32,6 +35,7 @@ define([], function() {
             setTimeout(hide, duration);
 
         };
+
     };
 
     return Toast;

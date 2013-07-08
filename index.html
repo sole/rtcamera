@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -19,7 +19,6 @@
     <link rel="icon" sizes="72x72" href="img/icons/camera-icon-72.png" type="image/png">
     <link rel="icon" href="img/icons/camera-icon-16.png" type="image/png">
     <link rel="shortcut icon" href="favicon.ico" />
-
   </head>
   <body>
     <x-view id="app">
@@ -37,18 +36,19 @@
 
       <section>
         <x-deck>
+
           <x-card id="gallery">
-            <div>
-              <p></p>
-            </div>
+            <div></div>
             <footer>
               <button id="btnCamera">Camera</button>
               <button id="btnPicker">Pick file</button>
             </footer>
           </x-card>
+
           <x-card id="details">
             <div></div>
           </x-card>
+
           <x-card id="camera">
             <header class="controls">
               <div id="videoControls">
@@ -68,6 +68,7 @@
               <x-switch id="switchVideo" onText="VIDEO" offText="CAMERA"></x-switch>
             </footer>
           </x-card>
+
           <x-card id="pickFile">
             <x-modal id="filePicker" overlay esc-hide hidden>
               Select an image
@@ -78,6 +79,7 @@
               <button id="btnFilePicker">Pick a file</button>
             </footer>
           </x-card>
+
         </x-deck>
       </section>
     </x-view>

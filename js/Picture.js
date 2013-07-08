@@ -10,12 +10,11 @@ define(['libs/asyncStorage'], function(notUsed) {
         asyncStorage.getItem(PICTURES_LIST_KEY, function(list) {
             
             if(!list) {
-
                 list = [];
-
             }
 
             callback(list);
+
         });
     }
 
@@ -31,11 +30,10 @@ define(['libs/asyncStorage'], function(notUsed) {
 
             // No duplicates! (for when updating pictures)
             if(list.indexOf(pictureId) === -1) {
-
                 list.push(pictureId);
                 savePicturesList(list);
-
             }
+
         });
 
     }
@@ -48,10 +46,8 @@ define(['libs/asyncStorage'], function(notUsed) {
             var pos = list.indexOf(pictureId);
 
             if(pos !== -1) {
-
                 list.splice(pos, 1);
                 savePicturesList(list, callback);
-
             }
 
         });
@@ -63,9 +59,7 @@ define(['libs/asyncStorage'], function(notUsed) {
         var s = String(v);
 
         if(s.length < 2) {
-
             s = '0' + s;
-
         }
 
         return s;
@@ -96,9 +90,7 @@ define(['libs/asyncStorage'], function(notUsed) {
         var animated = false;
 
         if(data) {
-
             animated = data.indexOf('image/gif') !== -1;
-
         }
 
         return animated;
@@ -107,7 +99,7 @@ define(['libs/asyncStorage'], function(notUsed) {
 
 
     var Pic = function() {
-        
+
         var self = this;
 
         this.id = null;
@@ -116,17 +108,12 @@ define(['libs/asyncStorage'], function(notUsed) {
         this.imgurURL = null;
 
         this.save = function(callback) {
-            
             if(!self.id) {
-
                 self.id = PICTURE_PREFIX + getTimestamp();
-
             }
 
             if(!self.imageIsAnimated) {
-
                 self.imageIsAnimated = guessIsImageAnimated(this.imageData);
-
             }
 
             // Saving stuff
@@ -147,13 +134,9 @@ define(['libs/asyncStorage'], function(notUsed) {
         this.getExtension = function() {
 
             if(self.imageIsAnimated) {
-
                 return '.gif';
-
             } else {
-
                 return '.png';
-
             }
 
         };
@@ -169,29 +152,21 @@ define(['libs/asyncStorage'], function(notUsed) {
             var position = 0; // (page - 1) * numItemsPerPage
             
             if(list.length > 0) {
-
                 loadPicture(position);
-
             } else {
-
                 callback(pictures);
-
             }
 
             function onPictureLoaded(picture, loadedPosition) {
 
                 var nextPosition = loadedPosition + 1;
-                
+
                 pictures.push(picture);
 
                 if(nextPosition >= list.length) {
-
                     callback(pictures);
-
                 } else {
-
                     loadPicture(nextPosition);
-
                 }
 
             }
@@ -199,26 +174,23 @@ define(['libs/asyncStorage'], function(notUsed) {
             function loadPicture(position, callback) {
 
                 Pic.getById(list[position], function(picture) {
-
                     onPictureLoaded(picture, position);
-
                 });
 
             }
+
         });
-        
+
     };
 
 
     Pic.getById = function(id, callback) {
 
         asyncStorage.getItem(id, function(value) {
-            
-            if(value === null) {
 
+            if(value === null) {
                 callback(false);
                 return;
-
             }
 
             var picture = new Pic();
@@ -228,6 +200,7 @@ define(['libs/asyncStorage'], function(notUsed) {
             picture.imgurURL = value.imgurURL || null;
 
             callback(picture);
+
         });
     };
 
@@ -270,19 +243,13 @@ define(['libs/asyncStorage'], function(notUsed) {
                     Pic.getById(index, function(picture) {
 
                         if(picture) {
-
                             outputList.push(index);
-
                         } else {
-
                             invalidList.push(index);
-
                         }
 
                         if(outputList.length + invalidList.length === list.length) {
-
                             savePicturesList(outputList, callback);
-
                         }
 
                     });

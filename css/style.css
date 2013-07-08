@@ -362,7 +362,7 @@ progress::-moz-progress-bar {
     color: #000;
     padding: 1rem;
     border-radius: 0.5rem;
-    z-index: 1000;
+    z-index: 200;
 }
 
 #filePicker button {

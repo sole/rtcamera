@@ -188,7 +188,7 @@ define(['libs/asyncStorage'], function(notUsed) {
 
         asyncStorage.getItem(id, function(value) {
 
-            if(value === null) {
+            if(!value) {
                 callback(false);
                 return;
             }

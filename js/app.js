@@ -1,5 +1,7 @@
 // do the require.js dance
-define(['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', 'libs/asyncStorage'], function(Hammer, Renderer, gumHelper, Picture, Toast, Animated_GIF) {
+define(
+    ['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', 'libs/asyncStorage'],
+    function(Hammer, Renderer, gumHelper, Picture, Toast, Animated_GIF) {
     
     'use strict';
 

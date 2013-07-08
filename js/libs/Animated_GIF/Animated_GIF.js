@@ -4,6 +4,7 @@
 //
 // @author sole / http://soledadpenades.com
 function Animated_GIF(options) {
+
     'use strict';
 
     var width = 160, height = 120, canvas = null, ctx = null, repeat = 0, delay = 250;
@@ -26,6 +27,7 @@ function Animated_GIF(options) {
 
     // ---
 
+
     // Return a worker for processing a frame
     function getWorker() {
         if(availableWorkers.length === 0) {
@@ -35,10 +37,14 @@ function Animated_GIF(options) {
         return availableWorkers.pop();
     }
 
+
     // Restore a worker to the pool
     function freeWorker(worker) {
+
         availableWorkers.push(worker);
+
     }
+
 
     // Faster/closurized bufferToString function
     // (caching the String.fromCharCode values)
@@ -60,6 +66,7 @@ function Animated_GIF(options) {
         });
     })();
 
+
     function startRendering(completeCallback) {
         var numFrames = frames.length;
 
@@ -70,12 +77,14 @@ function Animated_GIF(options) {
         }
     }
 
+
     function processFrame(position) {
+
         var frame;
         var worker;
 
         frame = frames[position];
-        
+
         if(frame.beingProcessed || frame.done) {
             console.error('Frame already being processed or done!', frame.position);
             onFrameFinished();
@@ -83,10 +92,11 @@ function Animated_GIF(options) {
         }
 
         frame.beingProcessed = true;
-        
+
         worker = getWorker();
 
         worker.onmessage = function(ev) {
+
             var data = ev.data;
 
             // Delete original data, and free memory
@@ -101,6 +111,7 @@ function Animated_GIF(options) {
             freeWorker(worker);
 
             onFrameFinished();
+
         };
 
         
@@ -110,6 +121,7 @@ function Animated_GIF(options) {
         //worker.postMessage(frameData, [frameData]);
         worker.postMessage(frameData);
     }
+
 
     function processNextFrame() {
 
@@ -127,6 +139,7 @@ function Animated_GIF(options) {
             processFrame(position);
         }
     }
+
 
     function onFrameFinished() { // ~~~ taskFinished
 
@@ -149,10 +162,11 @@ function Animated_GIF(options) {
         
     }
 
+
     // Takes the already processed data in frames and feeds it to a new
     // GifWriter instance in order to get the binary GIF file
     function generateGIF(frames, callback) {
-        
+
         // TODO: Weird: using a simple JS array instead of a typed array,
         // the files are WAY smaller o_o. Patches/explanations welcome!
         var buffer = []; // new Uint8Array(width * height * frames.length * 5);
@@ -175,9 +189,12 @@ function Animated_GIF(options) {
         generatingGIF = false;
 
         callback(buffer);
+
     }
-    
+
+
     // ---
+
 
     this.setSize = function(w, h) {
         width = w;
@@ -188,15 +205,22 @@ function Animated_GIF(options) {
         ctx = canvas.getContext('2d');
     };
 
+
     // Internally, GIF uses tenths of seconds to store the delay
     this.setDelay = function(seconds) {
+
         delay = seconds * 0.1;
+
     };
+
 
     // From GIF: 0 = loop forever, null = not looping, n > 0 = loop n times and stop
     this.setRepeat = function(r) {
+
         repeat = r;
+
     };
+
 
     this.addFrame = function(element) {
 
@@ -210,6 +234,7 @@ function Animated_GIF(options) {
         this.addFrameImageData(data.data);
     };
 
+
     this.addFrameImageData = function(imageData) {
 
         var dataLength = imageData.length,
@@ -218,13 +243,20 @@ function Animated_GIF(options) {
         frames.push({ data: imageDataArray, done: false, beingProcessed: false, position: frames.length });
     };
 
+
     this.onRenderProgress = function(callback) {
+
         onRenderProgressCallback = callback;
+
     };
 
+
     this.isRendering = function() {
+
         return generatingGIF;
+
     };
+
 
     this.getBase64GIF = function(completeCallback) {
 
@@ -238,4 +270,10 @@ function Animated_GIF(options) {
 
     };
 
+}
+
+if(define) {
+    define([], function() {
+        return Animated_GIF;
+    });
 }

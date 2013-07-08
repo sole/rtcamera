@@ -12,23 +12,9 @@ x-switch[disabled] {
     opacity: 0.5;
 }
 
-x-switch input[type="checkbox"] {
-	position: absolute;
-	border: none;
-	width: 100%;
-    height: 100%;
-	top: 0;
-    left: 0;
-    margin: 0;
-    padding: 0;
-    opacity: 0;
-    z-index: 1;
-	cursor: pointer;
-}
-
 x-switch > div {
-	display: table;
 	overflow: hidden;
+    height: 100%;
 }
 
 x-switch > div > div {
@@ -42,7 +28,7 @@ x-switch > div > div:not(.x-switch-knob) {
 }
 
 .x-switch-text {
-	padding: 2px 4px; 
+	padding: 2px 4px;
 	white-space: nowrap;
 }
 
@@ -71,7 +57,6 @@ x-switch > div > .x-switch-knob:last-child .x-switch-text:last-child:before {
 }
 
 .x-switch-knob {
-	display: table;
 	width: 20px;
 	height: 100%;
 	background: black;
@@ -106,7 +91,7 @@ x-switch > div > .x-switch-knob:last-child > div > div {
 	vertical-align: middle;
 }
 
-x-switch input:checked + div > .x-switch-knob:last-child {
+x-switch[checked] > div > .x-switch-knob:last-child {
 	left: 100%;
 	-webkit-transform: translate(-100%);
 	-moz-transform: translate(-100%);
@@ -124,7 +109,7 @@ x-switch input:checked + div > .x-switch-knob:last-child {
 }
 
 /*** WEBKIT HACK
-Background color state switching workaround for overflow clipping render bug in WebKit: https://bugs.webkit.org/show_bug.cgi?id=77572 - http://code.google.com/p/chromium/issues/detail?id=157218 
+Background color state switching workaround for overflow clipping render bug in WebKit: https://bugs.webkit.org/show_bug.cgi?id=77572 - http://code.google.com/p/chromium/issues/detail?id=157218
 This was coded in such a way that it will gracefully upgrade to the better behavior when WebKit gets its shit together
 ***/
 
@@ -142,4 +127,3 @@ x-switch[checked] {
 }
 
 /*** END WEBKIT HACK ***/
-

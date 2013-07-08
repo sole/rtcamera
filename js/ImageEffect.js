@@ -85,3 +85,7 @@ ImageEffect = function(params) {
 		gl.enableVertexAttribArray(this.attributes.position.id);
 	};
 };
+
+define([], function() {
+    return ImageEffect;
+});

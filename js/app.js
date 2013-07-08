@@ -127,7 +127,10 @@ define(
 
                 var target = ev.target;
                 if(target && target.nodeName === 'DIV') {
-                    showDetails(target.dataset['id']);
+                    var pictureId = target.dataset.id;
+                    if(pictureId) {
+                        showDetails(pictureId);
+                    }
                 } else {
                     closeDetails();
                 }

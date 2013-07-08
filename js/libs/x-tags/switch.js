@@ -1,6 +1,6 @@
 (function(){
 
-  var template =  '<input type="checkbox" />' +
+  var template =  '<input type="hidden" />' +
   '<div>' +
     '<div class="x-switch-text" ontext="ON" offtext="OFF"></div>' +
     '<div><div class="x-switch-knob"><br/></div></div>' +
@@ -18,7 +18,7 @@
       attribute: { name: state + 'text' },
       get: function(){
         var attrValue = this.getAttribute(state + 'text');
-        return attrValue !== undefined ? attrValue : state;
+        return attrValue !== null ? attrValue : state;
       },
       set: function(text){
         xtag.query(this, '[' + state + 'text]').forEach(function(el){
@@ -31,6 +31,7 @@
   xtag.register('x-switch', {
     lifecycle: {
       created: function(){
+        this.setAttribute('tabindex', this.getAttribute('tabindex') || 0);
         this.innerHTML = template;
         this.onText = this.onText;
         this.offText = this.offText;
@@ -44,9 +45,15 @@
       }
     },
     events:{
-      'change': function(e){
-        e.target.focus();
-        this.checked = this.checked;
+      'tapend:preventable:delegate(div)': function(e){
+        if (!e.currentTarget.disabled){
+          e.currentTarget.checked = !e.currentTarget.checked;
+        }
+      },
+      'keydown:preventable:keypass(32)': function(){
+        if (!this.disabled){
+          this.checked = !this.checked;
+        }
       }
     },
     accessors: {
@@ -54,21 +61,12 @@
       offText: textSetter('off'),
       checked: {
         attribute: { boolean: true },
-        get: function(){
-          return this.firstElementChild.checked;
-        },
         set: function(state){
-          this.firstElementChild.checked = state;
+          this.firstElementChild.value = !!state;
         }
       },
       disabled: {
-        attribute: { boolean: true },
-        get: function(){
-          return this.firstElementChild.disabled;
-        },
-        set: function(state){
-          this.firstElementChild.disabled = state;
-        }
+        attribute: { boolean: true, selector: 'input' }
       },
       formName: {
         attribute: { name: 'formname' },

@@ -855,7 +855,7 @@ define(
 
                     pictures.forEach(function(pic, position) {
 
-                        pic.position = position;
+                        pic.position = position + 1; // Humans are not 0-based!
                         pic.previousPicture = position > 0 ? pictures[position - 1] : null;
                         pic.nextPicture = position < pictureCount - 1 ? pictures[position + 1] : null;
                         galleryPictures[pic.id] = pic;

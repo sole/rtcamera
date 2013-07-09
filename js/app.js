@@ -791,10 +791,20 @@ define(
         }
 
 
+        function onFilePickerTransitionEnd() {
+
+            filePicker.removeEventListener('webkitTransitionEnd', onFilePickerTransitionEnd, false);
+            filePicker.removeEventListener('transitionend', onFilePickerTransitionEnd, false);
+            gotoGallery();
+
+        }
+
+
         function onFilePickerCanceled() {
 
-            filePicker.toggle();
-            gotoGallery();
+            filePicker.addEventListener('webkitTransitionEnd', onFilePickerTransitionEnd, false);
+            filePicker.addEventListener('transitionend', onFilePickerTransitionEnd, false);
+            filePicker.setAttribute('hidden', '');
 
         }
 

@@ -375,6 +375,18 @@ progress::-moz-progress-bar {
     text-align: center;
 }
 
+/* Overwriting the defaults to have a nice transition when closing the file picker */
+x-modal {
+    transition: opacity 0.5s;
+    opacity: 1;
+}
+
+x-modal[hidden] {
+    display: block;
+    opacity: 0;
+}
+
+
 
 /* Since the canvas where the processed images are shown is behind everything else,
  * we'll make the browser ignore mouse events in the deck, but explicitly allow them

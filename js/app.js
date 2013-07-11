@@ -1,7 +1,7 @@
 // do the require.js dance
 define(
-    ['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', 'libs/asyncStorage'],
-    function(Hammer, Renderer, gumHelper, Picture, Toast, Animated_GIF) {
+    ['hammer', 'Renderer', 'gumHelper', 'GalleryView', 'Picture', 'Toast', 'Animated_GIF', 'libs/asyncStorage'],
+    function(Hammer, Renderer, gumHelper, GalleryView, Picture, Toast, Animated_GIF) {
     
     'use strict';
 
@@ -18,7 +18,8 @@ define(
 
         // Gallery UI
         var btnGallery;
-        var galleryContainer;
+        //var galleryContainer; // TODO maybe KILL
+        var galleryView;
         var btnCamera;
         var galleryDetails;
                 
@@ -120,23 +121,13 @@ define(
 
             // Gallery ---
 
-            galleryContainer = document.querySelector('#gallery > div');
+            //galleryContainer = document.querySelector('#gallery > div');
+            var galleryPage = document.getElementById('gallery');
+            var galleryFooter = galleryPage.querySelector('footer');
 
-            // We'll be using 'event delegation' to avoid having to update listeners
-            // if pictures are deleted
-            galleryContainer.addEventListener('click', function(ev) {
-
-                var target = ev.target;
-                if(target && target.nodeName === 'DIV') {
-                    var pictureId = target.dataset.id;
-                    if(pictureId) {
-                        showDetails(pictureId);
-                    }
-                } else {
-                    closeDetails();
-                }
-
-            }, false);
+            galleryView = new GalleryView();
+            galleryView.onPictureClicked(showDetails);
+            galleryPage.insertBefore(galleryView.domElement, galleryFooter);
 
             btnGallery = document.getElementById('btnGallery');
             btnGallery.addEventListener('click', gotoGallery, false);
@@ -201,6 +192,8 @@ define(
             if(renderer) {
                 renderer.setSize(canvasWidth, canvasHeight);
             }
+
+            galleryView.resize();
 
             outputImageNeedsUpdating = true;
 
@@ -835,13 +828,13 @@ define(
             detachRendererCanvas();
             disableCamera();
 
-            galleryContainer.innerHTML = '<p class="loading">Loading</p>';
+            // XXX galleryContainer.innerHTML = '<p class="loading">Loading</p>';
 
             showPage('gallery');
 
             Picture.getAll(function(pictures) {
 
-                galleryContainer.innerHTML = '';
+                //galleryContainer.innerHTML = '';
 
                 // Show most recent pictures first
                 pictures.reverse();
@@ -851,7 +844,7 @@ define(
 
                 if(pictureCount) {
 
-                    galleryContainer.classList.remove('empty');
+                    //galleryContainer.classList.remove('empty');
 
                     pictures.forEach(function(pic, position) {
 
@@ -860,19 +853,21 @@ define(
                         pic.nextPicture = position < pictureCount - 1 ? pictures[position + 1] : null;
                         galleryPictures[pic.id] = pic;
 
-                        var div = document.createElement('div');
-                        div.style.backgroundImage = 'url(' + pic.imageData + ')';
-                        div.dataset.id = pic.id;
-                        galleryContainer.appendChild(div);
+                        //var div = document.createElement('div');
+                        //div.style.backgroundImage = 'url(' + pic.imageData + ')';
+                        //div.dataset.id = pic.id;
+                        //galleryContainer.appendChild(div);
 
                     });
 
                 } else {
 
-                    galleryContainer.classList.add('empty');
-                    galleryContainer.innerHTML = '<p>No pictures (yet)</p>';
+                    //galleryContainer.classList.add('empty');
+                    //galleryContainer.innerHTML = '<p>No pictures (yet)</p>';
 
                 }
+
+                galleryView.setPictures(galleryPictures);
 
             });
 

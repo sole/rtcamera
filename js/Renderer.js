@@ -28,7 +28,8 @@ define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
             'Negative': { vertex: 'plane.vs', fragment: 'negative.fs' },
             'Green Monster': { vertex: 'plane.vs', fragment: 'greenmonster.fs' },
             'Black & White': { vertex: 'plane.vs', fragment: 'bw.fs' },
-            'Bad photocopy': { vertex: 'plane.vs', fragment: 'badphotocopy.fs' }
+            'Bad photocopy': { vertex: 'plane.vs', fragment: 'badphotocopy.fs' },
+            'Back to 1980': { vertex: 'plane.vs', fragment: 'backto1980.fs' }
         };
         var activeEffect = null;
         var shadersReady = false;

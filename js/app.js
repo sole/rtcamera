@@ -126,7 +126,13 @@ define(
             galleryCoachMarks = document.getElementById('galleryCoachMarks');
 
             galleryView = new GalleryView();
-            galleryView.onPictureClicked(showDetails);
+            galleryView.onPictureClicked(function(id) {
+
+                if(activePage === 'gallery') {
+                    showDetails(id);
+                }
+
+            });
             galleryContainer.appendChild(galleryView.domElement);
 
             btnGallery = document.getElementById('btnGallery');

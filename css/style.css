@@ -192,7 +192,7 @@ x-card footer {
     text-align: center;
 }
 
-#gallery .loading:before { 
+#gallery .loading:before {
     content: "";
     background-image: url(spinner.gif);
     background-repeat: no-repeat;
@@ -200,13 +200,13 @@ x-card footer {
     padding-left: 32px;
 }
 
-#gallery > div div {
+#galleryContainer > div {
     height: 100%;
     overflow-y: scroll;
     padding: 0 0.5rem;
 }
 
-#gallery > div div div {
+#galleryContainer div div {
     height: 10rem;
     width: 10rem;
     background-color: #ccc;

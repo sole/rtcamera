@@ -6,9 +6,7 @@ float scale = 1.0;
 
 void main() {
 
-    vec3 lum = vec3(0.299, 0.587, 0.114);
     vec3 rgb = texture2D(map, vUv).rgb;
-    float grayscale = dot(rgb, lum);
 
     vec2 xy = gl_FragCoord.xy * scale;
     int x = int(mod(xy.x, 4.0));

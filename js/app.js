@@ -208,6 +208,10 @@ define(
 
         function onHold(ev) {
             
+            if(activePage !== 'camera' && activePage !== 'pickFile') {
+                return;
+            }
+
             if(rendering) {
                 return;
             }

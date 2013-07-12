@@ -1,7 +1,7 @@
 // do the require.js dance
 define(
-    ['hammer', 'Renderer', 'gumHelper', 'Picture', 'Toast', 'Animated_GIF', 'libs/asyncStorage'],
-    function(Hammer, Renderer, gumHelper, Picture, Toast, Animated_GIF) {
+    ['hammer', 'Renderer', 'gumHelper', 'GalleryView', 'Picture', 'Toast', 'Animated_GIF', 'libs/asyncStorage'],
+    function(Hammer, Renderer, gumHelper, GalleryView, Picture, Toast, Animated_GIF) {
     
     'use strict';
 
@@ -19,6 +19,8 @@ define(
         // Gallery UI
         var btnGallery;
         var galleryContainer;
+        var galleryCoachMarks;
+        var galleryView;
         var btnCamera;
         var galleryDetails;
                 
@@ -36,6 +38,7 @@ define(
         var filePicker;
 
         // Renderer and stuff
+        var pictureCount;
         var galleryPictures = {};
         var renderer;
         var animationFrameId = null;
@@ -119,20 +122,18 @@ define(
 
             // Gallery ---
 
-            galleryContainer = document.querySelector('#gallery > div');
+            galleryContainer = document.getElementById('galleryContainer');
+            galleryCoachMarks = document.getElementById('galleryCoachMarks');
 
-            // We'll be using 'event delegation' to avoid having to update listeners
-            // if pictures are deleted
-            galleryContainer.addEventListener('click', function(ev) {
+            galleryView = new GalleryView();
+            galleryView.onPictureClicked(function(id) {
 
-                var target = ev.target;
-                if(target && target.nodeName === 'DIV') {
-                    showDetails(target.dataset['id']);
-                } else {
-                    closeDetails();
+                if(activePage === 'gallery') {
+                    showDetails(id);
                 }
 
-            }, false);
+            });
+            galleryContainer.appendChild(galleryView.domElement);
 
             btnGallery = document.getElementById('btnGallery');
             btnGallery.addEventListener('click', gotoGallery, false);
@@ -141,7 +142,7 @@ define(
             btnCamera.addEventListener('click', gotoCamera, false);
 
 
-            // Hide the camera button is there's likely no support for WebRTC
+            // Hide the camera button and references to it in the gallery coachmarks if there's likely no support for WebRTC
             if(!navigator.getMedia) {
                 hideCameraButton();
             }
@@ -198,6 +199,8 @@ define(
                 renderer.setSize(canvasWidth, canvasHeight);
             }
 
+            galleryView.resize();
+
             outputImageNeedsUpdating = true;
 
         }
@@ -205,6 +208,10 @@ define(
 
         function onHold(ev) {
             
+            if(!usingTheRenderer()) {
+                return;
+            }
+
             if(rendering) {
                 return;
             }
@@ -244,6 +251,8 @@ define(
         function hideCameraButton() {
 
             btnCamera.style.display = 'none';
+            
+            document.getElementById('coachCamera').style.display = 'none';
 
         }
 
@@ -271,10 +280,13 @@ define(
             galleryDetails.innerHTML = 'Loading...';
 
             var picture = getPictureById(pictureId);
+
+            var countDiv = document.createElement('div');
+            countDiv.innerHTML = picture.position + ' of ' + pictureCount;
+
             var img = document.createElement('img');
             img.src = picture.imageData;
 
-            // TODO: this is somehow buggy on Firefox. Must investigate.
             Hammer(img, { drag: false })
                 .on('dragstart', function(ev) {
                     // This is for avoiding the drag behaviour where a 'ghost' image
@@ -321,6 +333,7 @@ define(
             }
 
             galleryDetails.innerHTML = '';
+            galleryDetails.appendChild(countDiv);
             galleryDetails.appendChild(img);
             galleryDetails.appendChild(idDiv);
             galleryDetails.appendChild(actionsDiv);
@@ -783,10 +796,20 @@ define(
         }
 
 
+        function onFilePickerTransitionEnd() {
+
+            filePicker.removeEventListener('webkitTransitionEnd', onFilePickerTransitionEnd, false);
+            filePicker.removeEventListener('transitionend', onFilePickerTransitionEnd, false);
+            gotoGallery();
+
+        }
+
+
         function onFilePickerCanceled() {
 
-            filePicker.toggle();
-            gotoGallery();
+            filePicker.addEventListener('webkitTransitionEnd', onFilePickerTransitionEnd, false);
+            filePicker.addEventListener('transitionend', onFilePickerTransitionEnd, false);
+            filePicker.setAttribute('hidden', '');
 
         }
 
@@ -817,43 +840,37 @@ define(
             detachRendererCanvas();
             disableCamera();
 
-            galleryContainer.innerHTML = '<p class="loading">Loading</p>';
-
+            galleryView.showLoading();
             showPage('gallery');
 
             Picture.getAll(function(pictures) {
 
-                galleryContainer.innerHTML = '';
-                
                 // Show most recent pictures first
                 pictures.reverse();
 
-                var numPictures = pictures.length;
                 galleryPictures = {};
+                pictureCount = pictures.length;
 
-                if(numPictures) {
+                if(pictureCount) {
 
-                    galleryContainer.classList.remove('empty');
+                    hide(galleryCoachMarks);
 
                     pictures.forEach(function(pic, position) {
 
+                        pic.position = position + 1; // Humans are not 0-based!
                         pic.previousPicture = position > 0 ? pictures[position - 1] : null;
-                        pic.nextPicture = position < numPictures - 1 ? pictures[position + 1] : null;
+                        pic.nextPicture = position < pictureCount - 1 ? pictures[position + 1] : null;
                         galleryPictures[pic.id] = pic;
-
-                        var div = document.createElement('div');
-                        div.style.backgroundImage = 'url(' + pic.imageData + ')';
-                        div.dataset['id'] = pic.id;
-                        galleryContainer.appendChild(div);
 
                     });
 
                 } else {
 
-                    galleryContainer.classList.add('empty');
-                    galleryContainer.innerHTML = '<p>No pictures (yet)</p>';
+                    show(galleryCoachMarks);
 
                 }
+
+                galleryView.setPictures(galleryPictures);
 
             });
 

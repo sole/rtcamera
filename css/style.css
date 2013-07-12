@@ -134,7 +134,7 @@ x-appbar header:after {
     top: 0;
     left: 0;
     opacity: 1;
-    margin: 0.5rem;
+    margin: 0.25rem 0.5rem;
     padding: 0.5rem;
     transition: opacity 0.8s;
 }
@@ -155,6 +155,20 @@ h1 span {
     color: #e58f33;
 }
 
+button {
+    font-family: inherit;
+    font-size: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: 1px solid #ccc;
+    padding: 1rem;
+    transition: 0.3s background;
+}
+
+button:hover {
+    background-color: #e58f33;
+}
+
 #app x-deck {
     width: 100%;
     height: 100%;
@@ -173,11 +187,6 @@ x-card footer {
     padding: 1rem 0;
 }
 
-x-card footer button {
-    padding: 1rem;
-}
-
-
 #gallery p {
     font-size: 1.5rem;
     text-align: center;
@@ -191,13 +200,13 @@ x-card footer button {
     padding-left: 32px;
 }
 
-#gallery > div {
+#galleryContainer > div {
     height: 100%;
     overflow-y: scroll;
     padding: 0 0.5rem;
 }
 
-#gallery > div div {
+#galleryContainer div div {
     height: 10rem;
     width: 10rem;
     background-color: #ccc;
@@ -207,6 +216,33 @@ x-card footer button {
     margin: 0 0.5rem 0.5rem 0.5rem;
 }
 
+#galleryCoachMarks {
+    padding: 1rem;
+    color: #ddd;
+    opacity: 0; /* initially hidden */
+}
+
+#galleryCoachMarks p {
+    margin-bottom: 1rem;
+}
+
+#galleryCoachMarks ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    list-style-position: inside;
+}
+
+#galleryCoachMarks li {
+    background-repeat: no-repeat;
+    background-position: 0 0px;
+    background-size: 48px 48px;
+    padding: 12px 0px 25px 64px;
+}
+
+#coachCamera, #coachPick {
+    background-image: url(../img/icons/icn-coachmark-press.png);
+}
 
 #details > div {
     height: 100%;
@@ -217,12 +253,6 @@ x-card footer button {
 
 #actions {
     padding: 0.5rem 0;
-}
-
-#actions button {
-    padding: 0.5rem;
-    font-family: inherit;
-    font-size: inherit;
 }
 
 #actions button + button {
@@ -363,16 +393,27 @@ progress::-moz-progress-bar {
     padding: 1rem;
     border-radius: 0.5rem;
     z-index: 200;
+    width: 90%;
+    max-width: 30rem;
 }
 
 #filePicker button {
-    font-family: inherit;
-    font-size: 100%;
-    display: block;
-    padding: 1rem 0.5rem;
     margin: 1rem 0 0.5rem 0;
     width: 100%;
+    text-align: center;
 }
+
+/* Overwriting the defaults to have a nice transition when closing the file picker */
+x-modal {
+    transition: opacity 0.5s;
+    opacity: 1;
+}
+
+x-modal[hidden] {
+    display: block;
+    opacity: 0;
+}
+
 
 
 /* Since the canvas where the processed images are shown is behind everything else,
@@ -406,3 +447,4 @@ progress::-moz-progress-bar {
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+

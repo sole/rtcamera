@@ -22,8 +22,14 @@ define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
         var gl;
         var effects = [];
         var effectDefinitions = {
+            'Mosaic': { vertex: 'plane.vs', fragment: 'mosaic.fs' },
             'Dithering': { vertex: 'plane.vs', fragment: 'dithering.fs' },
-            'Posterize': { vertex: 'plane.vs', fragment: 'posterize.fs' }
+            'Posterize': { vertex: 'plane.vs', fragment: 'posterize.fs' },
+            'Negative': { vertex: 'plane.vs', fragment: 'negative.fs' },
+            'Green Monster': { vertex: 'plane.vs', fragment: 'greenmonster.fs' },
+            'Black & White': { vertex: 'plane.vs', fragment: 'bw.fs' },
+            'Bad photocopy': { vertex: 'plane.vs', fragment: 'badphotocopy.fs' },
+            'Back to 1980': { vertex: 'plane.vs', fragment: 'backto1980.fs' }
         };
         var activeEffect = null;
         var shadersReady = false;

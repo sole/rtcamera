@@ -237,9 +237,7 @@ x-card footer {
     background-repeat: no-repeat;
     background-position: 0 0px;
     background-size: 48px 48px;
-    padding-left: 64px;
-    padding-top: 12px;
-    padding-bottom: 25px;
+    padding: 12px 0px 25px 64px;
 }
 
 #coachCamera, #coachPick {

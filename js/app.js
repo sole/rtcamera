@@ -18,7 +18,8 @@ define(
 
         // Gallery UI
         var btnGallery;
-        //var galleryContainer; // TODO maybe KILL
+        var galleryContainer;
+        var galleryCoachMarks;
         var galleryView;
         var btnCamera;
         var galleryDetails;
@@ -121,13 +122,12 @@ define(
 
             // Gallery ---
 
-            //galleryContainer = document.querySelector('#gallery > div');
-            var galleryPage = document.getElementById('gallery');
-            var galleryFooter = galleryPage.querySelector('footer');
+            galleryContainer = document.getElementById('galleryContainer');
+            galleryCoachMarks = document.getElementById('galleryCoachMarks');
 
             galleryView = new GalleryView();
             galleryView.onPictureClicked(showDetails);
-            galleryPage.insertBefore(galleryView.domElement, galleryFooter);
+            galleryContainer.appendChild(galleryView.domElement);
 
             btnGallery = document.getElementById('btnGallery');
             btnGallery.addEventListener('click', gotoGallery, false);
@@ -136,7 +136,7 @@ define(
             btnCamera.addEventListener('click', gotoCamera, false);
 
 
-            // Hide the camera button if there's likely no support for WebRTC
+            // Hide the camera button and references to it in the gallery coachmarks if there's likely no support for WebRTC
             if(!navigator.getMedia) {
                 hideCameraButton();
             }
@@ -241,6 +241,8 @@ define(
         function hideCameraButton() {
 
             btnCamera.style.display = 'none';
+            
+            document.getElementById('coachCamera').style.display = 'none';
 
         }
 
@@ -828,13 +830,10 @@ define(
             detachRendererCanvas();
             disableCamera();
 
-            // XXX galleryContainer.innerHTML = '<p class="loading">Loading</p>';
-
+            galleryView.showLoading();
             showPage('gallery');
 
             Picture.getAll(function(pictures) {
-
-                //galleryContainer.innerHTML = '';
 
                 // Show most recent pictures first
                 pictures.reverse();
@@ -844,7 +843,7 @@ define(
 
                 if(pictureCount) {
 
-                    //galleryContainer.classList.remove('empty');
+                    hide(galleryCoachMarks);
 
                     pictures.forEach(function(pic, position) {
 
@@ -853,17 +852,11 @@ define(
                         pic.nextPicture = position < pictureCount - 1 ? pictures[position + 1] : null;
                         galleryPictures[pic.id] = pic;
 
-                        //var div = document.createElement('div');
-                        //div.style.backgroundImage = 'url(' + pic.imageData + ')';
-                        //div.dataset.id = pic.id;
-                        //galleryContainer.appendChild(div);
-
                     });
 
                 } else {
 
-                    //galleryContainer.classList.add('empty');
-                    //galleryContainer.innerHTML = '<p>No pictures (yet)</p>';
+                    show(galleryCoachMarks);
 
                 }
 

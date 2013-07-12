@@ -192,7 +192,7 @@ x-card footer {
     text-align: center;
 }
 
-#gallery .loading:before {
+#gallery .loading:before { 
     content: "";
     background-image: url(spinner.gif);
     background-repeat: no-repeat;
@@ -200,13 +200,13 @@ x-card footer {
     padding-left: 32px;
 }
 
-#gallery > div {
+#gallery > div div {
     height: 100%;
     overflow-y: scroll;
     padding: 0 0.5rem;
 }
 
-#gallery > div div {
+#gallery > div div div {
     height: 10rem;
     width: 10rem;
     background-color: #ccc;
@@ -214,6 +214,36 @@ x-card footer {
     background-size: cover;
     display: inline-block;
     margin: 0 0.5rem 0.5rem 0.5rem;
+}
+
+#galleryCoachMarks {
+    padding: 1rem;
+    color: #ddd;
+    opacity: 0; /* initially hidden */
+}
+
+#galleryCoachMarks p {
+    margin-bottom: 1rem;
+}
+
+#galleryCoachMarks ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    list-style-position: inside;
+}
+
+#galleryCoachMarks li {
+    background-repeat: no-repeat;
+    background-position: 0 0px;
+    background-size: 48px 48px;
+    padding-left: 64px;
+    padding-top: 12px;
+    padding-bottom: 25px;
+}
+
+#coachCamera, #coachPick {
+    background-image: url(../img/icons/icn-coachmark-press.png);
 }
 
 #details > div {

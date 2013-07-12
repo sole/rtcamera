@@ -71,7 +71,17 @@ define([], function() {
 
         }
         
+
+        // ~~~
+
+        
         this.domElement = root;
+
+
+        // Used when we want to display a loading indicator while we retrieve data
+        this.showLoading = function() {
+            root.innerHTML = '<p class="loading">Loading</p>';
+        };
 
 
         this.setPictures = function(pictures) {

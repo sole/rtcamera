@@ -208,7 +208,7 @@ define(
 
         function onHold(ev) {
             
-            if(activePage !== 'camera' && activePage !== 'pickFile') {
+            if(!usingTheRenderer()) {
                 return;
             }
 

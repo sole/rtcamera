@@ -122,8 +122,12 @@ x-appbar, #app > section {
 }
 
 x-appbar {
-    background: rgba(0, 0, 0, 0.3);
+    /*background: rgba(0, 0, 0, 0.3);*/
+    background: #600;
 }
+    x-appbar > * {
+        z-index: 0;
+    }
 
 x-appbar header:after {
     display: none;

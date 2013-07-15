@@ -774,6 +774,10 @@ define(
 
             filePicker.setAttribute('hidden');
 
+            // XXX
+            document.querySelector('x-appbar').style.background = '#060';
+            document.querySelector('x-appbar').style.border = '1px solid red';
+
             if(files.length > 0 && files[0].type.indexOf('image/') === 0) {
 
                 // get data from picked file

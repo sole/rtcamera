@@ -200,7 +200,7 @@ x-card footer {
     padding-left: 32px;
 }
 
-#galleryContainer > div {
+#galleryContainer {
     height: 100%;
     overflow-y: scroll;
     padding: 0 0.5rem;

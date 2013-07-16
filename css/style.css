@@ -122,8 +122,7 @@ x-appbar, #app > section {
 }
 
 x-appbar {
-    /*background: rgba(0, 0, 0, 0.3);*/
-    background: #600;
+    background: rgba(0, 0, 0, 0.3);
 }
     x-appbar > * {
         z-index: 0;

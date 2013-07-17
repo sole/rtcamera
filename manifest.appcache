@@ -1,4 +1,5 @@
 CACHE MANIFEST
+# r2
 
 css/fonts/Roboto-Condensed.ttf
 css/fonts/Roboto-Regular.ttf
@@ -50,6 +51,7 @@ js/libs/x-tags/shiftbox.js
 js/libs/x-tags/switch.js
 js/libs/x-tags/view.js
 js/main.js
+js/MiniRouter.js
 js/Picture.js
 js/Renderer.js
 js/Swipable.js

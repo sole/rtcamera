@@ -1,7 +1,7 @@
 // do the require.js dance
 define(
-    ['hammer', 'Renderer', 'gumHelper', 'GalleryView', 'Picture', 'Toast', 'Animated_GIF', 'libs/asyncStorage'],
-    function(Hammer, Renderer, gumHelper, GalleryView, Picture, Toast, Animated_GIF) {
+    ['hammer', 'Renderer', 'gumHelper', 'GalleryView', 'Picture', 'Toast', 'Animated_GIF', 'MiniRouter', 'libs/asyncStorage'],
+    function(Hammer, Renderer, gumHelper, GalleryView, Picture, Toast, Animated_GIF, MiniRouter) {
     
     'use strict';
 
@@ -59,6 +59,13 @@ define(
         var IMGUR_KEY = '49c42af902d1fd4';
         var TRANSITION_LENGTH = 500;
 
+        var router = new MiniRouter();
+        // TODO ideally going to gallery should be 'root' and erase previous state entries
+        router.add('gallery', '#', gotoGallery);
+        router.add('details', '#picture/:id', gotoDetails);
+        router.add('static', '#static', gotoStatic);
+        router.add('camera', '#camera', gotoCamera);
+        router.attachTo(window);
 
         initUI();
 
@@ -129,17 +136,17 @@ define(
             galleryView.onPictureClicked(function(id) {
 
                 if(activePage === 'gallery') {
-                    showDetails(id);
+                    navigateToDetails(id);
                 }
 
             });
             galleryContainer.appendChild(galleryView.domElement);
 
             btnGallery = document.getElementById('btnGallery');
-            btnGallery.addEventListener('click', gotoGallery, false);
+            btnGallery.addEventListener('click', navigateToGallery, false);
 
             btnCamera = document.getElementById('btnCamera');
-            btnCamera.addEventListener('click', gotoCamera, false);
+            btnCamera.addEventListener('click', navigateToCamera, false);
 
 
             // Hide the camera button and references to it in the gallery coachmarks if there's likely no support for WebRTC
@@ -147,7 +154,7 @@ define(
                 hideCameraButton();
             }
 
-            document.getElementById('btnPicker').addEventListener('click', gotoStatic, false);
+            document.getElementById('btnPicker').addEventListener('click', navigateToStatic, false);
 
             // Picture details ---
 
@@ -274,9 +281,6 @@ define(
          */
         function showDetails(pictureId) {
 
-            // TODO store current url
-            gotoDetails();
-
             galleryDetails.innerHTML = 'Loading...';
 
             var picture = getPictureById(pictureId);
@@ -348,7 +352,7 @@ define(
 
             var picture = getPictureById(currentId);
             if(picture.previousPicture) {
-                showDetails(picture.previousPicture.id);
+                navigateToDetails(picture.previousPicture.id);
             }
 
         }
@@ -358,7 +362,7 @@ define(
 
             var picture = getPictureById(currentId);
             if(picture.nextPicture) {
-                showDetails(picture.nextPicture.id);
+                navigateToDetails(picture.nextPicture.id);
             }
 
         }
@@ -459,7 +463,7 @@ define(
 
             if(res) {
                 Picture.deleteById(pictureId, function() {
-                    gotoGallery();
+                    navigateToGallery();
                 });
             }
 
@@ -800,7 +804,7 @@ define(
 
             filePicker.removeEventListener('webkitTransitionEnd', onFilePickerTransitionEnd, false);
             filePicker.removeEventListener('transitionend', onFilePickerTransitionEnd, false);
-            gotoGallery();
+            navigateToGallery();
 
         }
 
@@ -877,10 +881,11 @@ define(
         }
 
 
-        function gotoDetails() {
-
+        function gotoDetails(args) {
+            
             detachRendererCanvas();
             showPage('details');
+            showDetails(args.id);
 
         }
 
@@ -904,15 +909,43 @@ define(
 
         }
 
+        //
+
+        function navigateToGallery() {
+            router.navigate('gallery');
+        }
+
+
+        function navigateToDetails(id) {
+            router.navigate('details', { id: id });
+        }
+
+
+        function navigateToCamera() {
+            router.navigate('camera');
+        }
+
+
+        function navigateToStatic() {
+            router.navigate('static');
+        }
+
+
+        function restoreLast() {
+            // TODO
+        }
+
 
         // 'Public' methods
 
-        this.gotoGallery = gotoGallery;
-        this.gotoDetails = gotoDetails;
-        this.gotoCamera = gotoCamera;
-        this.gotoStatic = gotoStatic;
+        this.openGallery = navigateToGallery;
+        this.openCamera = navigateToCamera;
+        this.openStatic = navigateToStatic;
+
+        this.restoreLast = restoreLast;
 
     };
 
     return App;
+
 });

@@ -406,6 +406,11 @@ progress::-moz-progress-bar {
     text-align: center;
 }
 
+x-deck > x-card:not([selected]):not([leaving]) {
+    display: none;
+    pointer-events: none;
+}
+
 /* Overwriting the defaults to have a nice transition when closing the file picker */
 x-modal {
     transition: opacity 0.5s;
@@ -415,6 +420,10 @@ x-modal {
 x-modal[hidden] {
     display: block;
     opacity: 0;
+}
+
+x-modal[hidden] input, x-modal[hidden] button {
+    pointer-events: none;
 }
 
 

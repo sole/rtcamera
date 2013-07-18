@@ -766,8 +766,37 @@ define(
 
         function openFilePicker() {
 
-            filePicker.querySelector('input').value = '';
-            filePicker.removeAttribute('hidden');
+            // Can we use an input type=file? Some early releases of Firefox OS
+            // cannot! So detect that out by checking the actual type of the input
+            // When a browser doesn't implement a type, it's reset to 'text'
+            // instead of the type we expected
+            var input = filePicker.querySelector('input');
+
+            if(input.type !== 'file') {
+
+                // Not supported, so let's use a Web activity instead
+                var activity = new MozActivity({
+                    name: 'pick',
+                    data: {
+                        type: 'image/jpeg'
+                    }
+                });
+
+                activity.onsuccess = function() {
+                    var picture = this.result;
+                    loadImageFromBlob(picture.blob);
+                };
+
+                activity.onerror = function() {
+                    navigateToGallery();
+                };
+
+            } else {
+
+                input.value = '';
+                filePicker.removeAttribute('hidden');
+
+            }
 
         }
 
@@ -783,19 +812,25 @@ define(
                 // get data from picked file
                 // put that into an element
                 var file = files[0];
-                var img = document.createElement('img');
-
-                img.src = window.URL.createObjectURL(file);
-                img.onload = function() {
-                    //window.URL.revokeObjectURL(this.src); // TODO maybe too early?
-
-                    changeInputTo(img, img.width, img.height);
-
-                    outputImageNeedsUpdating = true;
-                    render();
-                };
+                loadImageFromBlob(file);
 
             }
+
+        }
+
+
+        function loadImageFromBlob(blob) {
+            var img = document.createElement('img');
+
+            img.src = window.URL.createObjectURL(blob);
+            img.onload = function() {
+                //window.URL.revokeObjectURL(this.src); // TODO maybe too early?
+
+                changeInputTo(img, img.width, img.height);
+
+                outputImageNeedsUpdating = true;
+                render();
+            };
 
         }
 

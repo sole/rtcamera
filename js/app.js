@@ -71,7 +71,7 @@ define(
 
         renderer = new Renderer(errorCallback, function() {
 
-            Hammer(document)
+            Hammer(document, { swipevelocity: 0.1 })
                 .on('hold', onHold)
                 .on('release', onRelease)
                 .on('swipeleft', previousEffect)

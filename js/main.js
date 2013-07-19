@@ -17,8 +17,7 @@ require(
 
         var app = new App(reportError, function() {
             
-            // TODO url parse and switch to according 'page'
-            app.gotoGallery();
+            app.openGallery();
 
         });
 

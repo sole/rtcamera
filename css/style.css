@@ -124,6 +124,9 @@ x-appbar, #app > section {
 x-appbar {
     background: rgba(0, 0, 0, 0.3);
 }
+    x-appbar > * {
+        z-index: 0;
+    }
 
 x-appbar header:after {
     display: none;
@@ -200,7 +203,7 @@ x-card footer {
     padding-left: 32px;
 }
 
-#galleryContainer > div {
+#galleryContainer {
     height: 100%;
     overflow-y: scroll;
     padding: 0 0.5rem;
@@ -403,6 +406,11 @@ progress::-moz-progress-bar {
     text-align: center;
 }
 
+x-deck > x-card:not([selected]):not([leaving]) {
+    display: none;
+    pointer-events: none;
+}
+
 /* Overwriting the defaults to have a nice transition when closing the file picker */
 x-modal {
     transition: opacity 0.5s;
@@ -412,6 +420,10 @@ x-modal {
 x-modal[hidden] {
     display: block;
     opacity: 0;
+}
+
+x-modal[hidden] input, x-modal[hidden] button {
+    pointer-events: none;
 }
 
 

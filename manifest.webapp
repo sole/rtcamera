@@ -9,8 +9,8 @@
     "128": "/img/icons/camera-icon-128.png"
   },
   "developer": {
-    "name": "Mozilla",
-    "url": "http://mozilla.org"
+    "name": "Soledad Penadés",
+    "url": "http://soledadpenades.com"
   },
   "installs_allowed_from": ["*"]
 }

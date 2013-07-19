@@ -1,0 +1,78 @@
+x-layout {
+	display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+	display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+	display: -ms-flexbox;      /* TWEENER - IE 10 */
+	display: -webkit-flex;     /* NEW - Chrome */
+	display: flex;             /* NEW, Spec - Opera 12.1, Firefox 20+ */
+	width: 100%;
+	height: 100%;
+	border: 1px solid #999;
+	overflow: hidden;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-box-orient: vertical;
+	-moz-box-orient: vertical;
+	-ms-box-orient: vertical;
+	box-orient: vertical;
+	-webkit-flex-direction: column;
+	-moz-flex-direction: column;
+	-ms-flex-direction: column;
+	flex-direction: column;
+}
+
+x-layout > header, x-layout > footer {
+	overflow: hidden;
+	z-index: 1;
+}
+
+x-layout > header, x-layout > footer {
+	-webkit-transition: margin 0.2s ease-in-out
+	-moz-transition: margin 0.2s ease-in-out;
+	-ms-transition: margin 0.2s ease-in-out;
+	transition: margin 0.2s ease-in-out;
+}
+
+x-layout[maxcontent] > header, x-layout[maxcontent] > footer  {
+
+}
+
+x-layout[maxcontent] > header {
+
+}
+
+x-layout[maxcontent] > footer {
+
+}
+
+x-layout > section {
+	-webkit-box-flex: 1;
+	-moz-box-flex: 1;
+	-webkit-flex: 1;
+	-ms-flex: 1;
+	flex: 1;
+	overflow: auto;
+	position: relative;
+}
+
+x-layout > section > *:only-child { 
+	position: absolute;	
+}
+
+x-layout > *[input-spinner] {
+	display: block;
+	width: 0;
+	min-width: 0;
+	margin: 0;
+	padding: 0;
+	background: url(spinner-14.gif) no-repeat right center;
+	opacity: 0;
+	-webkit-transition: width 0.2s, opacity 0.3s;
+	-moz-transition: width 0.2s, opacity 0.3s;
+	-ms-transition: width 0.2s, opacity 0.3s;
+	transition: width 0.2s, opacity 0.3s;
+}
+
+
+

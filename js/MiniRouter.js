@@ -14,7 +14,6 @@ function MiniRouter() {
 
     this.add = function(name, path, callback) {
 
-        console.log('add', name, path);
         routes[name] = {
             path: path,
             callback: callback
@@ -24,8 +23,6 @@ function MiniRouter() {
 
 
     this.navigate = function(name, args) {
-
-        console.log('navigate to', name, args);
 
         if(routes[name]) {
 
@@ -54,13 +51,10 @@ function MiniRouter() {
 
     this.attachTo = function(win) {
 
-        console.log('attach to', win);
-        
         windowObject = win;
 
         windowObject.addEventListener('popstate', function(e) {
 
-            console.log('pop!', e);
             var state = e.state;
 
             if(state.name) {
@@ -75,8 +69,11 @@ function MiniRouter() {
 
 }
 
+
 if(define) {
+
     define([], function() {
         return MiniRouter;
     });
+
 }

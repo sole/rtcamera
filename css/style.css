@@ -243,6 +243,14 @@ x-card footer {
     padding: 12px 0px 25px 64px;
 }
 
+#btnCamera {
+    display: none;
+}
+
+#coachCamera {
+    display: none;
+}
+
 #coachCamera, #coachPick {
     background-image: url(../img/icons/icn-coachmark-press.png);
 }

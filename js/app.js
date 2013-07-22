@@ -149,9 +149,9 @@ define(
             btnCamera.addEventListener('click', navigateToCamera, false);
 
 
-            // Hide the camera button and references to it in the gallery coachmarks if there's likely no support for WebRTC
-            if(!navigator.getMedia) {
-                hideCameraButton();
+            // The camera button is initially hidden. We'll show it and the references to the camera in the coachmarks if there's likely support for WebRTC
+            if(navigator.getMedia) {
+                showCameraButton();
             }
 
             document.getElementById('btnPicker').addEventListener('click', navigateToStatic, false);
@@ -254,14 +254,15 @@ define(
 
         }
 
+        
+        function showCameraButton() {
 
-        function hideCameraButton() {
-
-            btnCamera.style.display = 'none';
+            btnCamera.style.display = 'inline';
             
-            document.getElementById('coachCamera').style.display = 'none';
+            document.getElementById('coachCamera').style.display = 'inline';
 
         }
+
 
         /**
          * Returns a picture from the galleryPictures hash. updateGallery must be called at

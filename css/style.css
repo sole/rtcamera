@@ -8,6 +8,11 @@
     src: url(fonts/Roboto-Regular.ttf);
 }
 
+@font-face {
+    font-family: 'Roboto Light';
+    src: url(fonts/Roboto-Light.ttf);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -22,12 +27,20 @@ html, body {
 body {
     overflow: hidden;
     color: #fff;
-    background: #000;
+    background: #2C2C2C;
     font-family: 'Roboto Regular', Helvetica, Arial, sans-serif;
 }
 
 a {
     color: #e58f33;
+}
+
+.small {
+  font-size: 1rem;
+}
+
+.large {
+  font-size: 1.5rem;
 }
 
 #app {
@@ -122,7 +135,9 @@ x-appbar, #app > section {
 }
 
 x-appbar {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(30, 30, 30, 0.5);
+    height: 54px;
+    margin-bottom:20px;
 }
     x-appbar > * {
         z-index: 0;
@@ -140,6 +155,15 @@ x-appbar header:after {
     margin: 0.25rem 0.5rem;
     padding: 0.5rem;
     transition: opacity 0.8s;
+    background-image: url(../img/icons/icn-back-arrow@2x.png);
+    background-repeat:no-repeat;
+    border:0px;
+    background-color:rgba(0,0,0,0);
+    background-size:13px 20px;
+    background-position:left center;
+    margin-left:10px;
+    font-family: 'Roboto Light', sans-serif;
+    padding:12px 15px; 
 }
 
 #btnGallery.hidden {
@@ -150,7 +174,7 @@ h1 {
     font-weight: normal;
     font-size: 2rem;
     padding: 0.25rem 0;
-    font-family: 'Roboto Condensed';
+    font-family: 'Roboto Light', sans-serif;    
     text-align: center;
 }
 
@@ -172,6 +196,26 @@ button:hover {
     background-color: #e58f33;
 }
 
+button#btnCamera {
+  background-image: url(../img/icons/icn-camera@2x.png);
+  background-repeat:no-repeat;
+  border:0px;
+  background-color:rgba(0,0,0,0);
+  background-size:37px 29px;
+  background-position:center;
+  margin-right:20px;
+}
+
+button#btnPicker {
+  background-image: url(../img/icons/icn-filepicker@2x.png);
+  background-repeat:no-repeat;
+  border:0px;
+  background-color:rgba(0,0,0,0);
+  background-size:31px 29px;
+  background-position:center;
+  margin-left:20px;
+}
+
 #app x-deck {
     width: 100%;
     height: 100%;
@@ -188,11 +232,14 @@ x-card footer {
     width: 100%;
     z-index: 100;
     padding: 1rem 0;
+    background:rgba(30,30,30,0.5);
+    height:44px;
 }
 
 #gallery p {
-    font-size: 1.5rem;
     text-align: center;
+    opacity:0.5;
+    font-family: 'Roboto Light', sans-serif;
 }
 
 #gallery .loading:before {
@@ -210,13 +257,16 @@ x-card footer {
 }
 
 #galleryContainer div div {
-    height: 10rem;
-    width: 10rem;
+    height: 150px;
+    width: 150px;
     background-color: #ccc;
     background-position: 50% 50%;
     background-size: cover;
     display: inline-block;
     margin: 0 0.5rem 0.5rem 0.5rem;
+    border-radius:2px;
+    border:1px solid #979797;
+    box-shadow:0px 2px 2px rgba(0,0,0,0.5);
 }
 
 #galleryCoachMarks {
@@ -225,8 +275,22 @@ x-card footer {
     opacity: 0; /* initially hidden */
 }
 
+p.imgmarker img {
+  height:97px;
+}
+
+img.galleryCoachMarkscamera {
+  height:14px;
+}
+
+img.galleryCoachMarksfilepicker {
+  height:14px;
+}
+
+
 #galleryCoachMarks p {
     margin-bottom: 1rem;
+    line-height:24px;
 }
 
 #galleryCoachMarks ul {
@@ -255,7 +319,8 @@ x-card footer {
 }
 
 #actions {
-    padding: 0.5rem 0;
+    padding: 10px 0;
+    background:rgba(30,30,30,0.5);
 }
 
 #actions button + button {
@@ -375,6 +440,7 @@ progress::-moz-progress-bar {
     text-transform: uppercase;
     color: #aaa;
     height: 30px;
+    border-radius:2px;
 }
 
 #switchVideo, #switchVideo[checked], #switchVideo .x-switch-background {

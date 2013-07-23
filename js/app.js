@@ -259,7 +259,7 @@ define(
 
             btnCamera.style.display = 'inline';
             
-            document.getElementById('coachCamera').style.display = 'inline';
+            document.getElementById('galleryCoachMessage').innerHTML = 'Take a photo with the camera or pick an image file.';
 
         }
 

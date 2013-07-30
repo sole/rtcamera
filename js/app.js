@@ -311,12 +311,19 @@ define(
             var idDiv = document.createElement('div');
             idDiv.innerHTML = pictureId;
 
+            var actions = [];
 
-            var actions = [
-                { text: 'Share with imgur', action: uploadPicture },
-                { text: 'Download', action: downloadPicture },
-                { text: 'Delete', action: deletePicture }
-            ];
+            if(window.MozActivity) {
+                actions.push({ text: 'Share', action: sharePicture });
+            } else {
+                actions.push({ text: 'Share with imgur', action: uploadPicture });
+            }
+
+            //var actions = [
+            //    { text: 'Share with imgur', action: uploadPicture },
+            actions.push({ text: 'Download', action: downloadPicture });
+            actions.push({ text: 'Delete', action: deletePicture });
+            
 
             var actionsDiv = document.createElement('div');
             actionsDiv.id = 'actions';
@@ -440,6 +447,66 @@ define(
         function uploadPictureError() {
 
             new Toast('Error posting picture :-/').show();
+
+        }
+
+
+        function b64ToBlob(b64Data, contentType, sliceSize) {
+    contentType = contentType || '';
+    sliceSize = sliceSize || 1024;
+console.log('aaa');
+    function charCodeFromCharacter(c) {
+        return c.charCodeAt(0);
+    }
+
+    var byteCharacters = atob(b64Data);
+    var byteArrays = [];
+console.log('bbb');
+    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+        var slice = byteCharacters.slice(offset, offset + sliceSize);
+        var byteNumbers = Array.prototype.map.call(slice, charCodeFromCharacter);
+        var byteArray = new Uint8Array(byteNumbers);
+
+        byteArrays.push(byteArray);
+    }
+console.log('ccc');
+    var blob = new Blob(byteArrays, {type: contentType});
+    return blob;
+}
+
+        function sharePicture(pictureId, picture) {
+
+            console.log('hey');
+            var blob = b64ToBlob(picture.imageData.replace('data:image/png;base64,', ''));
+            var filename = pictureId + '.png';
+
+            // tmp
+            var blobUrl = URL.createObjectURL(blob);
+            window.location = blobUrl;
+            // ---
+
+            console.log('share pic', filename, blob);
+
+            var activity = new MozActivity({
+                name: 'share',
+                data: {
+                    type: 'image/png',
+                    number: 1,
+                    blobs: [ blob ],
+                    filenames: [ filename ],
+                    fullpaths: [ filename ]
+                }
+            });
+
+            activity.onerror = function(e) {
+                if(activity.error.name === 'NO_PROVIDER') {
+                    alert('no provider');
+                } else {
+                    alert('errorrrr', activity.error.name);
+                    console.log(activity.error);
+                }
+            };
+            
 
         }
 

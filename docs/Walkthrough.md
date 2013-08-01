@@ -30,15 +30,15 @@ Not that it doesn't look attractive in its own special way (I personally like it
 
 ## Make it into an app
 
-The prototype was getting better. But it was still very far away from feeling like an app. It was a website that could make a GIF using video from your webcam and then trigger a download by using the [download](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attr-download) attribute in an A element created on the fly for that very purpose. That is _neat_ by itself (as you don't need to mingle with server side processing, or Content-Type headers, etc), but still, doesn't make it an app.
+The prototype was getting better. But it was still very far away from feeling like an app. It was a website that could make a GIF using video from your webcam and then trigger a download by using the [download](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attr-download) attribute in an A element created on the fly for that very purpose. That is _neat_ by itself (as you don't need to mingle with server side processing, or Content-Type headers, etc), but still, doesn't make it into an app.
 
 So... what makes an app, an app? Probably some sense of containing/controlling its own data. This called for having an in-app gallery, where images could be stored away as we captured them, and viewed later on. Of course, that led us to two unavoidable matters: persistent storage in the browser, and having a proper UI.
 
 ### Storage
 
-As we would be storing potentially large images (encoded as base64 strings), we couldn't use cookies. An alternative could have been [localStorage](https://developer.mozilla.org/en-US/docs/Web/Guide/DOM/Storage), but that is limited in size, and is also a blocking API. So what else is left? The answer was [IndexedDB](https://developer.mozilla.org/en-US/docs/IndexedDB), which allows to store data on the browser, just like ```localStorage```, but in a nicer, asynchronous way. So, again, it won't block the whole thread while saving an image, keeping the whole responsiveness perception up all the time.
+As we would be storing potentially large images (encoded as base64 strings), we couldn't use cookies. An alternative could have been [localStorage](https://developer.mozilla.org/en-US/docs/Web/Guide/DOM/Storage), but that is limited in size, and is also a blocking API. So what else is left? The answer was [IndexedDB](https://developer.mozilla.org/en-US/docs/IndexedDB), which allows to store data on the browser, just like ```localStorage```, but in a nicer, asynchronous way. So, again, it won't block the whole thread while saving an image, keeping the app responsive all the time.
 
-However, the ```asyncStorage``` API is slightly more involved than ```localStorage```'s. Not willing to reinvent the wheel, we ended up using [asyncStorage.js](../js/libs/asyncStorage), a class taken from the Firefox OS source code.
+However, the ```asyncStorage``` API is slightly more involved than ```localStorage```'s. Not willing to reinvent the wheel, I ended up using [asyncStorage.js](../js/libs/asyncStorage), a class taken from the Firefox OS source code.
 
 I could have invoked ```asyncStorage``` directly from the gallery view code, but that would have meant that if I decided to change the storage layer, I would have to change the gallery code. That is definitely not a good sign.
 
@@ -121,9 +121,9 @@ To test I was generating the file properly, I needed to completely erase the cac
 
 Sadly, sometimes the cutting-edge technologies won't work for people who prefer stable and proven technologies. Ah, if everyone was on Nightly! But that is not the case. Thus, we need to make sure that the new and nifty features are available before using them. If they are, *great*. If they are not, then we should try to either degrade, or hide things so that the app not only does not break, but still makes sense.
 
-For our particular case, there were two fundamental technologies without which the app can't work: WebGL and WebRTC. WebGL is already present in Firefox OS, which is incredibly great, but here's the downside: WebRTC is not available there yet. But we figured out that you could still use the app in that case, by picking existing images to process them _with_ WebGL. Granted, it's not the same funny and exciting experience as processing images in real time, but it still provides value to the user.
+For our particular case, there were two fundamental technologies without which the app can't work: WebGL and WebRTC. WebGL is already present in Firefox OS, which is incredibly great, but here's the downside: WebRTC is not available there _yet_, so we can't get a live camera stream. But we figured out that you could still use the app in that case, by picking existing images to process them _with_ WebGL. Granted, it's not the same funny and exciting experience as processing images in real time, but it still provides value to the user.
 
-I factored the code that dealt with the webcam into a file funnily called gumHelper. No, it doesn't have anything to do with teeth; it stands for _getUserMediaHelper_, where getUserMedia is the part of WebRTC that allows us to access the computer's webcam (with the user's permission, of course). This little class tries to be a bit smart and compensate for shortcomings in some implementations, apart from also providing us with a unified, unprefixed way to access the webcam. Thus, I used it to detect if gUM support was present. If it is, the "Camera" button is shown. Otherwise, it remains hidden. A simplified workflow that checks for support and then starts streaming could look like this:
+I factored the code that dealt with the webcam into a file funnily called [gumHelper.js](../js/gumHelper.js). No, it doesn't have anything to do with gums or keeping your teeth healthy; it stands for _getUserMediaHelper_, where ```getUserMedia``` is the part of WebRTC that allows us to access the computer's webcam (with the user's permission, of course). This little class tries to be a bit smart and compensate for shortcomings in some implementations, besides also providing us with a unified, unprefixed way to access the webcam. Thus, I used it to detect if ```getUserMedia``` support was present. If it is, the _Camera_ button is shown. Otherwise, it remains hidden. A simplified workflow that checks for support and then starts streaming could look like this:
 
 ```javascript
 if(navigator.getMedia) {
@@ -180,9 +180,9 @@ There are better solutions, but for now I am just listening to the window ```scr
 
 #### Be minimal
 
-Keeping in line with our goal of being nice to less powerful devices, I avoided as much as possible the use of big libraries. This slightly scared me initially, as I was quite used to rely on Three.js for all my WebGL needs, but as they say, you don't learn if you don't get out of your comfort zone.
+Keeping in line with our goal of being nice to less powerful devices, I avoided as much as possible the use of big libraries. This slightly scared me initially, as I was quite used to rely on [Three.js](http://threejs.org) for all my WebGL needs, but as they say, you don't learn if you don't get out of your comfort zone.
 
-So I rolled up my sleeves and whipped out something that would use almost raw WebGL. Since I had experience on OpenGL and OpenGL ES, it wasn't too complicated, just a little bit tedious, because Three.js abstracts all the concepts in a very nice and friendly manner. In exchange, I got a minimal [Renderer](../js/Renderer.js) that sets up a WebGL context, loaded a series of ImageEffects containing shaders, accepted any HTML element as input, and drawn it into a rectangle using the active effect. That's all it does. No SceneGraphs, nor Geometry abstractions, nor utils or anything else. It's intentionally limited in nature, because we don't need anything else for this app.
+So I rolled up my sleeves and whipped out something that would use almost raw WebGL. Since I had experience on OpenGL and OpenGL ES, it wasn't too complicated, just a little bit tedious, because Three.js abstracts all the concepts in a very nice and friendly manner. In exchange, I got a minimal [Renderer](../js/Renderer.js) that sets up a WebGL context, loaded a series of ImageEffects containing shaders, accepted any HTML element as input, and drawn it into a rectangle using the active effect. That's all it does. No Scene Graphs, nor Geometry abstractions, or anything else. It's intentionally limited in nature, because we don't need anything else for this app.
 
 ## The future
 

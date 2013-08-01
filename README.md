@@ -33,6 +33,8 @@ The app will be accessible at ```http://localhost:8000/```
 
 You will need to find out your computer's IP address if you want to try it on your mobile device. Once you know the address, replace ```localhost``` with it and try that on your device. For example, assuming the address is 192.168.0.10, you'd browse to ```http://192.168.0.10:8000``` on your device.
 
+A [developer walkthrough](./docs/Walkthrough.md) is also available.
+
 ## Bugs
 
 We're using the mighty Bugzilla for filing bugs on this project.

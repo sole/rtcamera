@@ -48,4 +48,5 @@ You can also see [the current list of bugs](https://bugzilla.mozilla.org/buglist
 ## Thanks
 
 * [Jen Fong](http://ednapiranha.com/) - for the myriad code reviews on Monday!
+* [Fred Wenzel](http://fredericiana.com/) - so many good ideas and discussions!
 * [tofumatt](http://lonelyvegan.com/), [potch](http://potch.me/), [Francisco Jordano](http://www.ardeenelinfierno.com/) and [Myk Melez](http://www.mykzilla.org/) - for all the work and help on the Firefox OS simulator, Gaia and answering all my questions!

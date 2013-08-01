@@ -56,7 +56,7 @@ So you can define the whole structure of your app in HTML, _including_ custom UI
 
 When I finally got hold of a Firefox OS developer phone, I found that file inputs (```i.e. input type=file```) were not implemented in that particular version of Firefox OS (1.0.1). I could have flashed the phone with a newer version of the system, but considering that most of the consumer phones are running 1.0.1 currently, I wouldn't be running a similar environment to the one customers would. I think it's important to keep this in mind when you develop for mobile: you can't just flash away and forget, as that will leave users away from your app. You should at least try to degrade gracefully.
 
-In this case, the situation was hinting heavily towards using [Web Activities](https://developer.mozilla.org/en-US/docs/WebAPI/Web_Activities). In case you don't know what a Web Activity is, it's basically a way for Firefox OS applications to interoperate between them, allowing an app to use some part of another app in a nice and decoupled way. A classic example could be the Gallery app exposing its _view_ activity, so if you want to display an image in the device but don't want to code a viewer, you can simply launch an activity with ```type = 'view'```, and the system will display a list of applications that can handle that type of activities, and allow the user to select which one she wants to use, if there are more than one registered apps for this type. If you have done any Android programming, you might already know this concept as [intents](https://developer.android.com/reference/android/content/Intent.html).
+In this case, the situation was hinting heavily towards using [Web Activities](https://developer.mozilla.org/en-US/docs/WebAPI/Web_Activities). In case you don't know what a Web Activity is, it's basically a way for Firefox OS applications to interoperate between them, allowing an app to use some part of another app in a nice and decoupled way. A classic example could be the Gallery app exposing its _view_ activity, so if you want to display an image in the device but don't want to code a viewer, you can simply launch an activity with ```type = 'view'```, and the system will display a list of applications that can handle that type of activities, and allow the user to select which one she wants to use, if there is more than one registered app for this activity type. If you have done any Android programming, you might already know this concept as [intents](https://developer.android.com/reference/android/content/Intent.html).
 
 Therefore, I added support for Web Activities if present--which at the time of writing this, means just Firefox OS environments. Otherwise, it just shows up a normal file picker. You can do it in your app too:
 
@@ -102,7 +102,7 @@ xhr.setRequestHeader('Authorization', 'Client-ID ' + IMGUR_KEY);
 ```
 
 
-### Appcache is your friend. No, it really is.
+### AppCache is your friend. No, it really is.
 
 After an embarrassing situation where I enthusiastically tried to show the app on my mobile phone to some friends while not having data connection, and the app failed miserably because the code wasn't cached, I fought back by implementing [AppCache](https://developer.mozilla.org/en-US/docs/HTML/Using_the_application_cache).
 
@@ -182,7 +182,7 @@ There are better solutions, but for now I am just listening to the window ```scr
 
 Keeping in line with our goal of being nice to less powerful devices, I avoided as much as possible the use of big libraries. This slightly scared me initially, as I was quite used to rely on [Three.js](http://threejs.org) for all my WebGL needs, but as they say, you don't learn if you don't get out of your comfort zone.
 
-So I rolled up my sleeves and whipped out something that would use almost raw WebGL. Since I had experience on OpenGL and OpenGL ES, it wasn't too complicated, just a little bit tedious, because Three.js abstracts all the concepts in a very nice and friendly manner. In exchange, I got a minimal [Renderer](../js/Renderer.js) that sets up a WebGL context, loaded a series of ImageEffects containing shaders, accepted any HTML element as input, and drawn it into a rectangle using the active effect. That's all it does. No Scene Graphs, nor Geometry abstractions, or anything else. It's intentionally limited in nature, because we don't need anything else for this app.
+So I rolled up my sleeves and whipped out something that would use almost raw WebGL. Since I had experience with OpenGL and OpenGL ES, it wasn't too complicated, just a little bit tedious, because Three.js abstracts all the concepts in a very nice and friendly manner. In exchange, I got a minimal [Renderer](../js/Renderer.js) that sets up a WebGL context, loads a series of ImageEffects containing shaders, accepts any HTML element as input, and draws it into a rectangle using the active effect. That's all it does. No Scene Graphs, nor Geometry abstractions, or anything else. It's intentionally limited in nature, because we don't need anything else for this app.
 
 ## The future
 
@@ -190,4 +190,4 @@ We have tried to make this app as clear, self-explanatory and/or commented as po
 
 Adding a new effect is as simple as creating two shader files and adding a line to the Renderer's list of effect definitions. And most of the times you can just start with an existing shader that you like, and modify it to see what happens. Also, [GLSL Sandbox](http://glsl.heroku.com/) and [Shader Toy](https://www.shadertoy.com/) are another two great places to get _glInspiration_!
 
-Something else I've been doing (and haven't even finished yet) is extracting parts from the app and making them into reusable components. So far Animated_GIF and gumHelper have been _promoted_ to modules.
+Something else I've been doing (and haven't even finished yet) is extracting parts from the app and making them into reusable components. So far [Animated_GIF](https://github.com/sole/Animated_GIF) and [gumHelper](https://github.com/sole/gumhelper) have been _promoted_ to modules.

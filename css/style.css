@@ -47,10 +47,6 @@ a {
     border: 0 none;
 }
 
-x-appbar, #app > section {
-    z-index: 10;
-}
-
 #ghostCanvasContainer, #canvasContainer {
     position: absolute;
     top: 0;
@@ -135,9 +131,9 @@ x-appbar, #app > section {
 }
 
 x-appbar {
-    background: rgba(30, 30, 30, 0.5);
-    height: 54px;
-    margin-bottom:20px;
+    background: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    z-index: 20;
 }
     x-appbar > * {
         z-index: 0;
@@ -146,6 +142,7 @@ x-appbar {
 x-appbar header:after {
     display: none;
 }
+
 
 #btnGallery {
     position: absolute;
@@ -224,6 +221,7 @@ x-card footer {
     -webkit-align-items: center;
 }
 
+
 #gallery p {
     text-align: center;
     opacity:0.5;
@@ -245,8 +243,10 @@ x-card footer {
 }
 
 #galleryContainer div div {
-    height: 150px;
-    width: 150px;
+    xheight: 150px;
+    xwidth: 150px;
+    height: 10rem;
+    width: 10rem;
     background-color: #ccc;
     background-position: 50% 50%;
     background-size: cover;
@@ -481,6 +481,11 @@ progress::-moz-progress-bar {
     text-align: center;
 }
 
+#galleryContainer, #details {
+    padding-top: 4rem;
+}
+
+
 x-deck > x-card:not([selected]):not([leaving]) {
     display: none;
     pointer-events: none;
@@ -510,6 +515,11 @@ x-modal[hidden] input, x-modal[hidden] button {
 #app > section {
     -webkit-pointer-events: none;
     pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
 }
 
 #switchVideo, #gallery, #details, #btnVideoCancel, #btnVideoDone, #cameraCoachMarks, #filePicker, #btnFilePicker {
@@ -534,4 +544,3 @@ x-modal[hidden] input, x-modal[hidden] button {
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
-

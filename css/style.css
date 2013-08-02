@@ -221,6 +221,9 @@ x-card footer {
     -webkit-align-items: center;
 }
 
+x-card footer button + button {
+    margin-left: 1rem;
+}
 
 #gallery p {
     text-align: center;
@@ -327,6 +330,7 @@ img.galleryCoachMarksfilepicker {
     text-align: center;
 }
 
+/* TODO might need to delete */
 #actions {
     padding: 10px 0;
     background:rgba(30,30,30,0.5);
@@ -481,8 +485,10 @@ progress::-moz-progress-bar {
     text-align: center;
 }
 
+/* Add padding to some cards so that their content is not initially obscured by the fancy and     translucent app bar */
+
 #galleryContainer, #details {
-    padding-top: 4rem;
+    padding-top: 3rem;
 }
 
 

@@ -23,6 +23,7 @@ define(
         var galleryView;
         var btnCamera;
         var galleryDetails;
+        var galleryDetailsFooter;
                 
         // Camera UI
         var videoControls;
@@ -159,6 +160,7 @@ define(
             // Picture details ---
 
             galleryDetails = document.querySelector('#details > div');
+            galleryDetailsFooter = document.querySelector('#details > footer');
 
 
             // Camera ---
@@ -307,19 +309,13 @@ define(
                     showNextPicture(pictureId);
                 });
 
-
-            var idDiv = document.createElement('div');
-            idDiv.innerHTML = pictureId;
-
-
             var actions = [
                 { text: 'Share with imgur', action: uploadPicture },
                 { text: 'Download', action: downloadPicture },
                 { text: 'Delete', action: deletePicture }
             ];
 
-            var actionsDiv = document.createElement('div');
-            actionsDiv.id = 'actions';
+            galleryDetailsFooter.innerHTML = '';
 
             actions.forEach(function(action) {
                 var button = document.createElement('button');
@@ -327,22 +323,20 @@ define(
                 button.addEventListener('click', function(ev) {
                     action.action(pictureId, picture);
                 }, false);
-                actionsDiv.appendChild(button);
+                galleryDetailsFooter.appendChild(button);
             });
 
-            var urlDiv = document.createElement('div');
+            /*var urlDiv = document.createElement('div');
 
             if(picture.imgurURL) {
                 var imgur = picture.imgurURL;
                 urlDiv.innerHTML = 'Share: <a href="' + imgur + '" target="_blank">' + imgur + '</a>';
-            }
+            }*/
 
             galleryDetails.innerHTML = '';
             galleryDetails.appendChild(countDiv);
             galleryDetails.appendChild(img);
-            galleryDetails.appendChild(idDiv);
-            galleryDetails.appendChild(actionsDiv);
-            actionsDiv.appendChild(urlDiv);
+            //actionsDiv.appendChild(urlDiv);
 
             galleryDetails.removeAttribute('hidden');
 

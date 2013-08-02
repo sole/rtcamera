@@ -182,6 +182,7 @@ h1 span {
     color: #e58f33;
 }
 
+/* TODO: might need to delete this one */
 button {
     font-family: inherit;
     font-size: 100%;
@@ -194,26 +195,6 @@ button {
 
 button:hover {
     background-color: #e58f33;
-}
-
-button#btnCamera {
-    background-image: url(../img/icons/icn-camera@2x.png);
-    background-repeat:no-repeat;
-    border:0px;
-    background-color:rgba(0,0,0,0);
-    background-size:37px 29px;
-    background-position:center;
-    margin-right:20px;
-}
-
-button#btnPicker {
-    background-image: url(../img/icons/icn-filepicker@2x.png);
-    background-repeat:no-repeat;
-    border:0px;
-    background-color:rgba(0,0,0,0);
-    background-size:31px 29px;
-    background-position:center;
-    margin-left:20px;
 }
 
 #app x-deck {
@@ -231,9 +212,16 @@ x-card footer {
     text-align: center;
     width: 100%;
     z-index: 100;
-    padding: 1rem 0;
-    background:rgba(30,30,30,0.5);
-    height:44px;
+    padding: 0.5rem 0;
+    background: rgba(30, 30, 30, 0.5);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    display: -webkit-flex;
+    -webkit-flex-direction: row;
+    -webkit-justify-content: center;
+    -webkit-align-items: center;
 }
 
 #gallery p {
@@ -264,9 +252,9 @@ x-card footer {
     background-size: cover;
     display: inline-block;
     margin: 0 0.5rem 0.5rem 0.5rem;
-    border-radius:2px;
-    border:1px solid #979797;
-    box-shadow:0px 2px 2px rgba(0,0,0,0.5);
+    border-radius: 2px;
+    border: 1px solid #979797;
+    box-shadow: 0px 2px 2px rgba(0,0,0,0.5);
 }
 
 #galleryCoachMarks {
@@ -276,7 +264,8 @@ x-card footer {
     width: 90%;
 }
 
-p.imgmarker img {
+/* TODO review these */
+/*p.imgmarker img {
     height:97px;
 }
 
@@ -286,7 +275,7 @@ img.galleryCoachMarkscamera {
 
 img.galleryCoachMarksfilepicker {
     height:14px;
-}
+}*/
 
 #galleryCoachMarks p {
     margin-bottom: 1rem;
@@ -311,9 +300,25 @@ img.galleryCoachMarksfilepicker {
     background-image: url(../img/icons/icn-coachmark-press.png);
 }
 
+#btnCamera, #btnPicker {
+    background-repeat: no-repeat;
+    border: 0px;
+    background-color:rgba(0,0,0,0);
+    background-position:center;
+    margin: 0 0.5rem;
+}
+
 #btnCamera {
     display: none;
+    background-image: url(../img/icons/icn-camera@2x.png);
+    background-size: 37px 29px;
 }
+
+#btnPicker {
+    background-image: url(../img/icons/icn-filepicker@2x.png);
+    background-size: 31px 29px;
+}
+
 
 #details > div {
     height: 100%;

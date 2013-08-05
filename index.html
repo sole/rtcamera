@@ -24,6 +24,10 @@
     <x-layout id="app">
 
       <div id="canvasContainer"></div>
+      <!--<div id="additionalControls">
+        <input id="prevFilter" type="image" src="img/icons/icn-back-arrow@2x.png">
+        <input id="nextFilter" type="image" src="img/icons/icn-forward-arrow@2x.png">
+      </div>-->
       <div id="ghostCanvasContainer" class="non_selectable"></div>
       <div id="flasher" class="non_selectable"></div>
 
@@ -92,7 +96,12 @@
           </x-card>
 
         </x-deck>
-      </section>
+        </section>
+        <div id="additionalControls">
+          <input id="prevFilter" type="image" src="img/icons/icn-back-arrow@2x.png">
+          <input id="nextFilter" type="image" src="img/icons/icn-forward-arrow@2x.png">
+        </div>
+
     </x-layout>
 
     <script src="js/libs/x-tags/core.js"></script>

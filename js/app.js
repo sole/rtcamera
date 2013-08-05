@@ -12,6 +12,9 @@ define(
         var activePage = null;
 
         // Preview UI
+        var additionalControls;
+        var btnPrevFilter;
+        var btnNextFilter;
         var flasher;
         var ghostBitmap;
         var ghostCanvas;
@@ -125,6 +128,19 @@ define(
             ghostCanvasContainer.addEventListener('transitionend', function() {
                 ghostCanvas.getContext('2d').clearRect(0, 0, ghostCanvas.width, ghostCanvas.height);
                 ghostCanvasContainer.classList.remove('faded_out');
+            }, false);
+
+            additionalControls = document.getElementById('additionalControls');
+            btnPrevFilter = document.getElementById('prevFilter');
+            
+            btnPrevFilter.addEventListener('click', function() {
+                console.log('prev');
+                previousEffect();
+            }, false);
+            btnNextFilter = document.getElementById('nextFilter');
+            btnNextFilter.addEventListener('click', function() {
+                console.log('next');
+                nextEffect();
             }, false);
 
 

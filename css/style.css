@@ -65,6 +65,28 @@ a {
     -ms-interpolation-mode: nearest-neighbor;
 }
 
+#additionalControls {
+    display: none;
+
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    border: 1px solid red;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    display: -webkit-flex;
+    -webkit-flex-direction: row;
+    -webkit-justify-content: space-between;
+    -webkit-align-items: center;
+    z-index: 10;
+}
+    #additionalControls > input {
+        padding: 0 0.5rem;
+    }
+
 #ghostCanvasContainer {
     -webkit-transition: 0.8s ease-out;
     transition: 0.8s ease-out;
@@ -246,8 +268,6 @@ x-card footer button + button {
 }
 
 #galleryContainer div div {
-    xheight: 150px;
-    xwidth: 150px;
     height: 10rem;
     width: 10rem;
     background-color: #ccc;
@@ -518,7 +538,7 @@ x-modal[hidden] input, x-modal[hidden] button {
  * we'll make the browser ignore mouse events in the deck, but explicitly allow them
  * on the input elements we care about
  */
-#app > section {
+#app > section, #additionalControls {
     -webkit-pointer-events: none;
     pointer-events: none;
     position: absolute;
@@ -528,7 +548,7 @@ x-modal[hidden] input, x-modal[hidden] button {
     width: 100%;
 }
 
-#switchVideo, #gallery, #details, #btnVideoCancel, #btnVideoDone, #cameraCoachMarks, #filePicker, #btnFilePicker {
+#switchVideo, #gallery, #details, #btnVideoCancel, #btnVideoDone, #cameraCoachMarks, #filePicker, #btnFilePicker, #additionalControls > * {
     -webkit-pointer-events: auto;
     pointer-events: auto;
 }

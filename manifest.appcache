@@ -1,8 +1,7 @@
 CACHE MANIFEST
-# r4
+# r5
 
-css/fonts/Roboto-Condensed.ttf
-css/fonts/Roboto-Regular.ttf
+css/fonts/Roboto-Light.ttf
 css/spinner.gif
 css/style.css
 css/toast.css
@@ -24,6 +23,10 @@ img/icons/ic_action_cancel.png
 img/icons/ic_action_done.png
 img/icons/ic_action_photo.png
 img/icons/ic_action_video.png
+img/icons/icn-back-arrow@2x.png
+img/icons/icn-camera@2x.png
+img/icons/icn-filepicker@2x.png
+img/icons/icn-forward-arrow@2x.png
 img/icons/icn-coachmark-arrows.png
 img/icons/icn-coachmark-press.png
 img/icons/spinner.gif

@@ -1,10 +1,5 @@
 
 @font-face {
-    font-family: 'Roboto Regular';
-    src: url(fonts/Roboto-Regular.ttf);
-}
-
-@font-face {
     font-family: 'Roboto Light';
     src: url(fonts/Roboto-Light.ttf);
 }
@@ -13,6 +8,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 
 html, body {
@@ -24,7 +21,7 @@ body {
     overflow: hidden;
     color: #fff;
     background: #2C2C2C;
-    font-family: 'Roboto Regular', Helvetica, Arial, sans-serif;
+    font-family: 'Roboto Light', Helvetica, Arial, sans-serif;
 }
 
 a {
@@ -67,13 +64,13 @@ a {
     height: 100%;
     width: 100%;
     position: absolute;
-    flex-direction: row;
+    /*flex-direction: row;
     justify-content: space-between;
     align-content: center;
     align-items: center;
     -webkit-flex-direction: row;
     -webkit-justify-content: space-between;
-    -webkit-align-items: center;
+    -webkit-align-items: center;*/
 }
 
 #additionalControls > div input {
@@ -202,7 +199,6 @@ x-appbar header:after {
     background-color: rgba(0,0,0,0);
     background-size: 0.88rem 1.2rem;
     background-position: left center;
-    font-family: 'Roboto Light', sans-serif;
     cursor: pointer;
 }
 
@@ -214,7 +210,6 @@ h1 {
     font-weight: normal;
     font-size: 2rem;
     padding: 0.25rem 0;
-    font-family: 'Roboto Light', sans-serif;    
     text-align: center;
     width: 100%;
 }
@@ -244,7 +239,7 @@ button:hover {
 }
 
 #app x-card {
-    overflow: auto;
+    overflow-y: auto;
 }
 
 x-card footer {
@@ -271,8 +266,7 @@ x-card footer button + button {
 
 #gallery p {
     text-align: center;
-    opacity:0.5;
-    font-family: 'Roboto Light', sans-serif;
+    color: #ccc;
 }
 
 #gallery .loading:before {
@@ -487,7 +481,7 @@ progress::-moz-progress-bar {
     transition: opacity 1s;
     border-color: #333;
     border-width: 2px;
-    font-family: 'Roboto Regular', sans-serif;
+    font-family: inherit;
     font-size: 1rem;
     line-height: 1rem;
     vertical-align: middle;
@@ -581,7 +575,6 @@ x-modal[hidden] input, x-modal[hidden] button {
     -moz-user-select: none;
     user-select: none;
     -webkit-pointer-events: none;
-    -moz-pointer-events: none;
     pointer-events: none;
 }
 

@@ -339,12 +339,13 @@ img.galleryCoachMarksfilepicker {
     background-image: url(../img/icons/icn-coachmark-press.png);
 }
 
-#btnCamera, #btnPicker {
+#btnCamera, #btnPicker, #btnFilePicker {
     background-repeat: no-repeat;
     border: 0px;
     background-color:rgba(0,0,0,0);
     background-position:center;
     margin: 0 0.5rem;
+    cursor: pointer;
 }
 
 #btnCamera {
@@ -353,7 +354,7 @@ img.galleryCoachMarksfilepicker {
     background-size: 37px 29px;
 }
 
-#btnPicker {
+#btnPicker, #btnFilePicker {
     background-image: url(../img/icons/icn-filepicker@2x.png);
     background-size: 31px 29px;
 }

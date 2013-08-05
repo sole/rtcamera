@@ -193,18 +193,17 @@ x-appbar header:after {
     top: 0;
     left: 0;
     opacity: 1;
-    margin: 0.25rem 0.5rem;
-    padding: 0.5rem;
+    margin: 0.25rem;
+    padding: 0.5rem 1.2rem;
     transition: opacity 0.8s;
     background-image: url(../img/icons/icn-back-arrow@2x.png);
-    background-repeat:no-repeat;
-    border:0px;
-    background-color:rgba(0,0,0,0);
-    background-size:13px 20px;
-    background-position:left center;
-    margin-left:10px;
+    background-repeat: no-repeat;
+    border: 0px;
+    background-color: rgba(0,0,0,0);
+    background-size: 0.88rem 1.2rem;
+    background-position: left center;
     font-family: 'Roboto Light', sans-serif;
-    padding:12px 15px;
+    cursor: pointer;
 }
 
 #btnGallery.hidden {

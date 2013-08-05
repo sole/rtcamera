@@ -133,15 +133,9 @@ define(
             additionalControls = document.getElementById('additionalControls');
             btnPrevFilter = document.getElementById('prevFilter');
             
-            btnPrevFilter.addEventListener('click', function() {
-                console.log('prev');
-                previousEffect();
-            }, false);
+            btnPrevFilter.addEventListener('click', previousEffect, false);
             btnNextFilter = document.getElementById('nextFilter');
-            btnNextFilter.addEventListener('click', function() {
-                console.log('next');
-                nextEffect();
-            }, false);
+            btnNextFilter.addEventListener('click', nextEffect, false);
 
 
             // Gallery ---
@@ -279,6 +273,16 @@ define(
             
             document.getElementById('galleryCoachMessage').innerHTML = 'Take a photo with the camera or pick an image file.';
 
+        }
+
+        
+        function enableAdditionalControls() {
+            additionalControls.classList.add('active');
+        }
+
+
+        function disableAdditionalControls() {
+            additionalControls.classList.remove('active');
         }
 
 
@@ -887,6 +891,7 @@ define(
 
         function gotoGallery() {
 
+            disableAdditionalControls();
             detachRendererCanvas();
             disableCamera();
 
@@ -929,6 +934,7 @@ define(
 
         function gotoDetails(args) {
             
+            disableAdditionalControls();
             detachRendererCanvas();
             showPage('details');
             showDetails(args.id);
@@ -939,6 +945,7 @@ define(
         function gotoCamera() {
 
             enableCamera();
+            enableAdditionalControls();
             clearRenderer();
             attachRendererCanvas();
             showPage('camera');
@@ -949,6 +956,7 @@ define(
         function gotoStatic() {
 
             clearRenderer();
+            enableAdditionalControls();
             attachRendererCanvas();
             showPage('pickFile');
             openFilePicker();

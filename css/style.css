@@ -1,7 +1,3 @@
-@font-face {
-    font-family: 'Roboto Condensed';
-    src: url(fonts/Roboto-Condensed.ttf);
-}
 
 @font-face {
     font-family: 'Roboto Regular';
@@ -71,21 +67,24 @@ a {
     height: 100%;
     width: 100%;
     position: absolute;
-    border: 1px solid red;
-    display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-content: center;
     align-items: center;
-    display: -webkit-flex;
     -webkit-flex-direction: row;
     -webkit-justify-content: space-between;
     -webkit-align-items: center;
-    z-index: 10;
 }
-    #additionalControls > input {
-        padding: 0 0.5rem;
-    }
+
+#additionalControls > input {
+    padding: 0 0.5rem;
+}
+
+#additionalControls.active {
+    display: flex;
+    display: -webkit-flex;
+}
+
 
 #ghostCanvasContainer {
     -webkit-transition: 0.8s ease-out;

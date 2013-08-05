@@ -57,7 +57,7 @@ function MiniRouter() {
 
             var state = e.state;
 
-            if(state.name) {
+            if(state && state.name) {
 
                 that.navigate(state.name, state.args);
 

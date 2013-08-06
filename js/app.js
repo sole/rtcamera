@@ -527,6 +527,7 @@ define(
                 liveStreaming = true;
                 changeInputTo(videoElement, width, height);
                 switchVideo.style.opacity = 1;
+                enableAdditionalControls();
                 showCameraCoachMarks();
                 render();
             });
@@ -837,6 +838,8 @@ define(
         function loadImageFromBlob(blob) {
             var img = document.createElement('img');
 
+            enableAdditionalControls();
+
             img.src = window.URL.createObjectURL(blob);
             img.onload = function() {
                 //window.URL.revokeObjectURL(this.src); // TODO maybe too early?
@@ -945,7 +948,6 @@ define(
         function gotoCamera() {
 
             enableCamera();
-            enableAdditionalControls();
             clearRenderer();
             attachRendererCanvas();
             showPage('camera');
@@ -956,7 +958,6 @@ define(
         function gotoStatic() {
 
             clearRenderer();
-            enableAdditionalControls();
             attachRendererCanvas();
             showPage('pickFile');
             openFilePicker();

@@ -503,7 +503,6 @@ progress::-moz-progress-bar {
 }
 
 #filePicker {
-    font-size: inherit;
     background: #fff;
     color: #000;
     padding: 1rem;
@@ -512,6 +511,15 @@ progress::-moz-progress-bar {
     width: 90%;
     max-width: 30rem;
 }
+
+#filePicker input[type=file] {
+   font-size: inherit;
+   display: block;
+   padding: 1rem 0;
+   border: none;
+   background: transparent;
+}
+
 
 #filePicker button {
     margin: 1rem 0 0.5rem 0;

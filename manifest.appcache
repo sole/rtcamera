@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# r5
+# r6
 
 css/fonts/Roboto-Light.ttf
 css/spinner.gif
@@ -23,10 +23,11 @@ img/icons/ic_action_cancel.png
 img/icons/ic_action_done.png
 img/icons/ic_action_photo.png
 img/icons/ic_action_video.png
+img/icons/icn-arrow-left.png
+img/icons/icn-arrow-right.png
 img/icons/icn-back-arrow@2x.png
 img/icons/icn-camera@2x.png
 img/icons/icn-filepicker@2x.png
-img/icons/icn-forward-arrow@2x.png
 img/icons/icn-coachmark-arrows.png
 img/icons/icn-coachmark-press.png
 img/icons/spinner.gif

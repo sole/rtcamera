@@ -17,6 +17,10 @@ html, body {
     position: relative;
 }
 
+html {
+    overflow: hidden;
+}
+
 body {
     overflow: hidden;
     color: #fff;
@@ -250,14 +254,6 @@ x-card footer {
     z-index: 100;
     padding: 0.5rem 0;
     background: rgba(30, 30, 30, 0.5);
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    display: -webkit-flex;
-    -webkit-flex-direction: row;
-    -webkit-justify-content: center;
-    -webkit-align-items: center;
 }
 
 x-card footer button + button {

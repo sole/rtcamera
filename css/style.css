@@ -222,19 +222,14 @@ h1 span {
     color: #e58f33;
 }
 
-/* TODO: might need to delete this one */
 button {
     font-family: inherit;
     font-size: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: transparent;
     color: #fff;
-    border: 1px solid #ccc;
+    border: none;
     padding: 1rem;
     transition: 0.3s background;
-}
-
-button:hover {
-    background-color: #e58f33;
 }
 
 #app x-deck {
@@ -256,8 +251,8 @@ x-card footer {
     background: rgba(30, 30, 30, 0.5);
 }
 
-x-card footer button + button {
-    margin-left: 1rem;
+x-card footer button {
+    margin: 0 1rem;
 }
 
 #gallery p {
@@ -337,10 +332,7 @@ img.galleryCoachMarksfilepicker {
 
 #btnCamera, #btnPicker, #btnFilePicker {
     background-repeat: no-repeat;
-    border: 0px;
-    background-color:rgba(0,0,0,0);
-    background-position:center;
-    margin: 0 0.5rem;
+    background-position: center;
     cursor: pointer;
 }
 
@@ -363,18 +355,24 @@ img.galleryCoachMarksfilepicker {
     text-align: center;
 }
 
-/* TODO might need to delete */
-#actions {
-    padding: 10px 0;
-    background:rgba(30,30,30,0.5);
+#details footer button {
+    border: none;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: 1rem;
+    height: 0.8rem;
 }
 
-#actions button + button {
-    margin-left: 1rem;
+#btn_delete {
+    background-image: url(../img/icons/icn-trash@2x.png);
 }
 
-#actions div {
-    padding: 0.5rem 0;
+#btn_download {
+    background-image: url(../img/icons/icn-download@2x.png);
+}
+
+#btn_share {
+    background-image: url(../img/icons/icn-shuffle@2x.png);
 }
 
 #galleryUploading {

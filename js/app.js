@@ -330,20 +330,23 @@ define(
                 });
 
             var actions = [
-                { text: 'Share with imgur', action: uploadPicture },
-                { text: 'Download', action: downloadPicture },
-                { text: 'Delete', action: deletePicture }
+                { text: 'Share with imgur', action: uploadPicture, id: 'share' },
+                { text: 'Download', action: downloadPicture, id: 'download' },
+                { text: 'Delete', action: deletePicture, id: 'delete' }
             ];
 
             galleryDetailsFooter.innerHTML = '';
 
             actions.forEach(function(action) {
-                var button = document.createElement('button');
-                button.innerHTML = action.text;
-                button.addEventListener('click', function(ev) {
+                var elem = document.createElement('button');
+                elem.type = 'image';
+                elem.id = 'btn_' + action.id;
+                elem.title = action.text;
+
+                elem.addEventListener('click', function(ev) {
                     action.action(pictureId, picture);
                 }, false);
-                galleryDetailsFooter.appendChild(button);
+                galleryDetailsFooter.appendChild(elem);
             });
 
             /*var urlDiv = document.createElement('div');
@@ -518,8 +521,8 @@ define(
         function enableCamera(errorCallback, okCallback) {
 
             gumHelper.startVideoStreaming(function() {
+
                 // Error!
-                hideCameraButton();
                 // TODO: show error, and on OK => gotoGallery
 
             }, function(stream, videoElement, width, height) {

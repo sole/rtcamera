@@ -36,6 +36,7 @@ define(
         var videoProgressSpan;
         var cameraCoachMarks;
         var cameraCoachMarksShown = false;
+        var btnCameraCapture;
         var switchVideo;
 
         // Static file processing UI
@@ -181,7 +182,12 @@ define(
             btnVideoCancel = document.getElementById('btnVideoCancel');
             btnVideoDone = document.getElementById('btnVideoDone');
             videoProgressSpan = document.querySelector('#progressLabel span');
+            btnCameraCapture = document.querySelector('#camera footer .btnCapture');
             switchVideo = document.getElementById('switchVideo');
+
+            Hammer(btnCameraCapture)
+                .on('hold', onHold)
+                .on('release', onRelease);
 
             btnVideoCancel.addEventListener('click', cancelVideoRecording, false);
             btnVideoDone.addEventListener('click', finishVideoRecording, false);
@@ -255,9 +261,9 @@ define(
         function showPage(id) {
 
             if(id !== 'gallery') {
-                btnGallery.classList.remove('hidden');
+                show(btnGallery);
             } else {
-                btnGallery.classList.add('hidden');
+                hide(btnGallery);
             }
 
             activePage = id;
@@ -269,7 +275,7 @@ define(
         
         function showCameraButton() {
 
-            btnCamera.style.display = 'inline';
+            btnCamera.classList.remove('hidden');
             
             document.getElementById('galleryCoachMessage').innerHTML = 'Take a photo with the camera or pick an image file.';
 
@@ -531,6 +537,7 @@ define(
                 changeInputTo(videoElement, width, height);
                 switchVideo.style.opacity = 1;
                 enableAdditionalControls();
+                btnCameraCapture.classList.remove('hidden');
                 showCameraCoachMarks();
                 render();
             });
@@ -542,6 +549,7 @@ define(
 
             gumHelper.stopVideoStreaming();
             switchVideo.style.opacity = 0;
+            btnCameraCapture.classList.add('hidden');
 
         }
 

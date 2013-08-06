@@ -68,13 +68,6 @@ a {
     height: 100%;
     width: 100%;
     position: absolute;
-    /*flex-direction: row;
-    justify-content: space-between;
-    align-content: center;
-    align-items: center;
-    -webkit-flex-direction: row;
-    -webkit-justify-content: space-between;
-    -webkit-align-items: center;*/
 }
 
 #additionalControls > div input {
@@ -82,10 +75,6 @@ a {
 }
 
 #additionalControls.active {
-    /* Booo no flex support in FxOS yet (?) */
-    /*display: -moz-flex;
-    display: -webkit-flex;
-    display: flex;*/
     display: table;
     z-index: 10;
 }
@@ -188,6 +177,15 @@ x-appbar header:after {
     display: none;
 }
 
+button {
+    font-family: inherit;
+    font-size: 100%;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    background-repeat: no-repeat;
+    transition: 0.3s background;
+}
 
 #btnGallery {
     position: absolute;
@@ -198,16 +196,9 @@ x-appbar header:after {
     padding: 0.5rem 1.2rem;
     transition: opacity 0.8s;
     background-image: url(../img/icons/icn-back-arrow@2x.png);
-    background-repeat: no-repeat;
-    border: 0px;
-    background-color: rgba(0,0,0,0);
     background-size: 0.88rem 1.2rem;
     background-position: left center;
     cursor: pointer;
-}
-
-#btnGallery.hidden {
-    opacity: 0;
 }
 
 h1 {
@@ -220,16 +211,6 @@ h1 {
 
 h1 span {
     color: #e58f33;
-}
-
-button {
-    font-family: inherit;
-    font-size: 100%;
-    background-color: transparent;
-    color: #fff;
-    border: none;
-    padding: 1rem;
-    transition: 0.3s background;
 }
 
 #app x-deck {
@@ -251,8 +232,14 @@ x-card footer {
     background: rgba(30, 30, 30, 0.5);
 }
 
+x-card footer > * {
+    vertical-align: middle;
+}
+
 x-card footer button {
     margin: 0 1rem;
+    min-width: 2.2rem;
+    min-height: 2rem;
 }
 
 #gallery p {
@@ -294,19 +281,6 @@ x-card footer button {
     width: 90%;
 }
 
-/* TODO review these */
-/*p.imgmarker img {
-    height:97px;
-}
-
-img.galleryCoachMarkscamera {
-    height:14px;
-}
-
-img.galleryCoachMarksfilepicker {
-    height:14px;
-}*/
-
 #galleryCoachMarks p {
     margin-bottom: 1rem;
     line-height:24px;
@@ -336,10 +310,15 @@ img.galleryCoachMarksfilepicker {
     cursor: pointer;
 }
 
-#btnCamera {
-    display: none;
+/* btnCapture is a class and not an id because we have 2 buttons that look the same */
+/* TODO: refactor all identically looking buttons into classes */
+#btnCamera, .btnCapture {
     background-image: url(../img/icons/icn-camera@2x.png);
-    background-size: 37px 29px;
+    background-size: 100% 100%;
+}
+
+button.hidden {
+    display: none;
 }
 
 #btnPicker, #btnFilePicker {
@@ -520,7 +499,9 @@ progress::-moz-progress-bar {
 
 
 #filePicker button {
+    background-color: #e58f33;
     margin: 1rem 0 0.5rem 0;
+    padding: 1rem 0;
     width: 100%;
     text-align: center;
 }
@@ -568,7 +549,7 @@ x-modal[hidden] input, x-modal[hidden] button {
     width: 100%;
 }
 
-#switchVideo, #gallery, #details, #btnVideoCancel, #btnVideoDone, #cameraCoachMarks, #filePicker, #btnFilePicker, #additionalControls > div * {
+#switchVideo, #gallery, #details, #btnVideoCancel, #btnVideoDone, #cameraCoachMarks, #filePicker, #btnFilePicker, .btnCapture, #additionalControls > div * {
     -webkit-pointer-events: auto;
     pointer-events: auto;
 }

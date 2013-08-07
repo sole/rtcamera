@@ -319,10 +319,6 @@ x-card footer button {
     padding: 12px 0px 25px 64px;
 }
 
-#coachCamera, #coachPick {
-    background-image: url(../img/icons/icn-coachmark-press.png);
-}
-
 #btnCamera, #btnPicker, #btnFilePicker {
     background-repeat: no-repeat;
     background-position: center;

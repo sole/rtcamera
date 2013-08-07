@@ -177,7 +177,7 @@ a {
 }
 
 x-appbar {
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(30, 30, 30, 0.5);
     position: absolute;
     top: 0;
     left: 0;
@@ -319,12 +319,21 @@ x-card footer button {
     padding: 12px 0px 25px 64px;
 }
 
+#galleryCoachMarks .imgmarker img {
+  max-height: 6rem;
+  opacity: 0.5;
+}
+
 #galleryCoachMarks .galleryCoachMarkscamera {
-  max-height:1rem;
+  max-height: 1rem;
+  opacity: 0.5;
+  vertical-align: middle;
 }
 
 #galleryCoachMarks .galleryCoachMarksfilepicker {
-  max-height:1rem;
+  max-height: 1rem;
+  opacity: 0.5;
+  vertical-align: middle;
 }
 
 #btnCamera, #btnPicker, #btnFilePicker {

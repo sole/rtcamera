@@ -222,8 +222,8 @@ button {
 
 h1 {
     font-weight: normal;
-    font-size: 2rem;
-    padding: 0.25rem 0;
+    font-size: 1.8rem;
+    padding: 0.25rem 0 0.6rem;
     text-align: center;
     width: 100%;
 }
@@ -257,7 +257,7 @@ x-card footer > * {
 
 x-card footer button {
     margin: 0 1rem;
-    min-width: 2.2rem;
+    min-width: 2rem;
     min-height: 2rem;
 }
 
@@ -319,6 +319,14 @@ x-card footer button {
     padding: 12px 0px 25px 64px;
 }
 
+#galleryCoachMarks .galleryCoachMarkscamera {
+  max-height:1rem;
+}
+
+#galleryCoachMarks .galleryCoachMarksfilepicker {
+  max-height:1rem;
+}
+
 #btnCamera, #btnPicker, #btnFilePicker {
     background-repeat: no-repeat;
     background-position: center;
@@ -338,7 +346,7 @@ button.hidden {
 
 #btnPicker, #btnFilePicker {
     background-image: url(../img/icons/icn-filepicker@2x.png);
-    background-size: 31px 29px;
+    background-size: 100% 100%;
 }
 
 

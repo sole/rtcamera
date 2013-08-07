@@ -554,14 +554,15 @@ define(
         }
 
 
-        function enableCamera(errorCallback, okCallback) {
+        function enableCamera() {
 
             gumHelper.startVideoStreaming(function() {
 
                 // Error!
-                // TODO: show error, and on OK => gotoGallery
+                errorCallback("Can't access the camera :-(");
 
             }, function(stream, videoElement, width, height) {
+
                 video = videoElement;
                 liveStreaming = true;
                 changeInputTo(videoElement, width, height);
@@ -570,6 +571,7 @@ define(
                 btnCameraCapture.classList.remove('hidden');
                 showCameraCoachMarks();
                 render();
+
             });
 
         }

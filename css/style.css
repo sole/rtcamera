@@ -365,7 +365,7 @@ button.hidden {
     background-image: url(../img/icons/icn-shuffle@2x.png);
 }
 
-#galleryUploading {
+#galleryUploading, #showImgur {
     padding: 5%;
     background: #fff;
     color: #000;

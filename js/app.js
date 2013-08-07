@@ -339,8 +339,12 @@ define(
                     showNextPicture(pictureId);
                 });
 
+            // If the picture has already been uploaded to imgur we'll just show the
+            // existing imgur URL
+            var uploadAction = picture.imgurURL ? showImgurPicture : uploadPicture;
+
             var actions = [
-                { text: 'Share with imgur', action: uploadPicture, id: 'share' },
+                { text: 'Share with imgur', action: uploadAction, id: 'share' },
                 { text: 'Download', action: downloadPicture, id: 'download' },
                 { text: 'Delete', action: deletePicture, id: 'delete' }
             ];
@@ -467,6 +471,28 @@ define(
         function uploadPictureError() {
 
             new Toast('Error posting picture :-/').show();
+
+        }
+
+
+        function showImgurPicture(pictureId, picture) {
+
+            var existingModal = document.getElementById('showImgur');
+            if(existingModal) {
+                existingModal.parentNode.removeChild(existingModal);
+            }
+
+            var modal = document.createElement('x-modal');
+            modal.innerHTML = 'imgur: <a href="' + picture.imgurURL + '" target="_blank">' + picture.imgurURL + '</a>';
+            modal.setAttribute('overlay');
+            modal.setAttribute('esc-hide');
+            modal.id = 'showImgur';
+
+            modal.addEventListener('modalhide', function() {
+                galleryDetails.removeChild(modal);
+            }, false);
+
+            galleryDetails.appendChild(modal);
 
         }
 

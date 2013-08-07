@@ -24,8 +24,24 @@ require(
 
         // ~~~
 
-        function reportError(e) {
-            console.log('aaah the drama!', e);
+        function reportError(message) {
+
+            var error = document.createElement('div');
+            error.className = 'modal error';
+
+            if(typeof message === 'string') {
+                error.innerHTML = message.replace(/\n/g, '<br />');
+            } else {
+                var txt = 'Error trying to access the camera.<br /><br />Are you trying to run this locally?';
+                if(message.code) {
+                    txt += '<br /><br />(Error code = ' + message.code + ')';
+                }
+                
+                error.innerHTML = txt;
+            }
+
+            document.body.appendChild(error);
+
         }
 
     }

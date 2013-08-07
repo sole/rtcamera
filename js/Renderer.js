@@ -45,6 +45,12 @@ define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
         this.domElement = canvas;
 
         gl = initWebGL(canvas);
+
+        if(gl === null) {
+            errorCallback('Looks like WebGL is not available in this browser');
+            return;
+        }
+
         initWebGLBuffers();
         initTexture();
         loadEffects();
@@ -59,10 +65,13 @@ define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
             var options = { preserveDrawingBuffer: true };
 
             gl = canvas.getContext("webgl", options) || canvas.getContext("experimental-webgl", options);
-            gl.viewportWidth = canvas.width;
-            gl.viewportHeight = canvas.height;
 
-            gl.shadersCache = {};
+            if(gl) {
+                gl.viewportWidth = canvas.width;
+                gl.viewportHeight = canvas.height;
+
+                gl.shadersCache = {};
+            }
 
             return gl;
 

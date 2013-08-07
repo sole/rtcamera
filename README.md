@@ -47,6 +47,17 @@ You can also see [the current list of bugs](https://bugzilla.mozilla.org/buglist
 * [Soledad Penadés](http://soledadpenades.com)
 * [Aaron Druck](http://www.whatthedruck.com/)
 
+## Used libraries
+
+This app wouldn't be possible without these wonderful libraries. Many thanks to their authors!
+
+* [Animated_GIF](https://github.com/sole/Animated_GIF)
+* [asyncStorage.js](https://github.com/mozilla-b2g/gaia/blob/master/shared/js/async_storage.js)
+* [glMatrix](http://glmatrix.net/)
+* [Hammer.js](http://eightmedia.github.io/hammer.js/)
+* [require.js](http://requirejs.org/)
+* [x-tag](http://x-tags.org/) and a bunch of [tags from Mozilla Brick](https://github.com/mozilla/brick)
+
 ## Thanks
 
 * [Jen Fong](http://ednapiranha.com/) - for the myriad code reviews on Monday!

@@ -14,7 +14,7 @@ requirejs.config({
 require(
     ['app'],
     function(App) {
-
+        
         var app = new App(reportError, function() {
             
             app.openGallery();

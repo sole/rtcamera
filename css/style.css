@@ -53,18 +53,29 @@ a {
     z-index: 0;
 }
 
+#canvasContainer {
+    text-align: center;
+}
+
+#canvasContainer:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -0.25em;
+}
+
 #canvasContainer canvas {
-    display: block;
-    margin: 0 auto;
     image-rendering: crisp-edges;
     image-rendering: -moz-crisp-edges;
     image-rendering: -webkit-optimize-contrast;
     -ms-interpolation-mode: nearest-neighbor;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 #additionalControls {
     display: none;
-
     height: 100%;
     width: 100%;
     position: absolute;

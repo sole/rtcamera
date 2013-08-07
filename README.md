@@ -14,6 +14,8 @@ On Firefox OS, WebRTC support is not ready yet, so the live image processing fea
 
 Chrome should work out of the box on desktop, but WebRTC is not supported on the stable Chrome Mobile yet. You have to use Chrome Mobile Beta, and also go to ```chrome://flags``` and enable WebGL.
 
+Safari doesn't seem to have support for WebRTC, we have to emulate IndexedDB using a shim (because it's not supported either) and WebGL needs to be manually enabled after enabling the Developer menu. But then it fails in weird places. If you can fix it, feel free to send a pull request and I'll merge the changes in :-)
+
 ## How to run it
 
 Get the code by cloning it:

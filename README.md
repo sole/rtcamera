@@ -6,13 +6,13 @@ A fun camera app to process images in real time, using Web technologies. [Check 
 
 ## Requirements
 
-You need a browser with support for WebRTC and WebGL, and a connected camera for maximum fun.
+You need a browser with support for WebRTC's getUserMedia and WebGL, and a connected camera for maximum fun.
 
-If you're running Firefox (either Desktop or Mobile) you might need to explicitly enable WebRTC. Go to about:config and set ```media.peerconnection.enabled``` to ```true```, and possibly use a Nightly build, from the [Nightly builds](http://nightly.mozilla.org/) website. **NOTE:** This is a temporary requirement, as WebRTC should get *out of beta* soon in Firefox, and you won't need to do that to run this app.
+Firefox for desktop has ```getUserMedia``` enabled by default starting on Firefox 22. If you want to run this on your Android device, you'll need to get a (Nightly](http://nightly.mozilla.org/) or [Aurora](http://aurora.mozilla.org) version.
 
 On Firefox OS, WebRTC support is not ready yet, so the live image processing feature is not available, but you can still pick existing images, modify them and save the ones you like.
 
-Chrome should work out of the box on desktop, but WebRTC is not supported on mobile yet.
+Chrome should work out of the box on desktop, but WebRTC is not supported on the stable Chrome Mobile yet. You have to use Chrome Mobile Beta, and also go to ```chrome://flags``` and enable WebGL.
 
 ## How to run it
 

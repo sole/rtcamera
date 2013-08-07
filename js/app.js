@@ -41,6 +41,7 @@ define(
 
         // Static file processing UI
         var filePicker;
+        var btnStaticCapture;
 
         // Renderer and stuff
         var pictureCount;
@@ -201,6 +202,9 @@ define(
             filePicker.querySelector('input').addEventListener('change', onFilePicked, false);
             filePicker.querySelector('button').addEventListener('click', onFilePickerCanceled, false);
             document.getElementById('btnFilePicker').addEventListener('click', openFilePicker, false); 
+
+            btnStaticCapture = document.querySelector('#pickFile .btnCapture');
+            btnStaticCapture.addEventListener('click', onHold, false);
 
             window.addEventListener('resize', onResize, false);
 
@@ -834,6 +838,8 @@ define(
 
             filePicker.setAttribute('hidden');
 
+            btnStaticCapture.classList.remove('hidden');
+
             if(files.length > 0 && files[0].type.indexOf('image/') === 0) {
 
                 // get data from picked file
@@ -971,6 +977,7 @@ define(
             clearRenderer();
             attachRendererCanvas();
             showPage('pickFile');
+            btnStaticCapture.classList.add('hidden');
             openFilePicker();
 
         }

@@ -559,7 +559,7 @@ define(
             gumHelper.startVideoStreaming(function() {
 
                 // Error!
-                errorCallback("Can't access the camera :-(");
+                errorCallback("Oops! Can't access the camera :-(");
 
             }, function(stream, videoElement, width, height) {
 

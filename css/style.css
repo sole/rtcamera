@@ -33,10 +33,11 @@ a {
 }
 
 .error {
-    border: 3px solid #c00;
+    border-radius: 0.2rem;
+    box-shadow: 0px 1px 1px rgba(0,0,0,0.5);
+    color: rgb(255, 255, 255);
+    background: rgba(197, 65, 51,0.5);
     padding: 1rem;
-    color: #222;
-    background: #fff;
     z-index: 100;
 }
 
@@ -91,11 +92,16 @@ a {
 
 #additionalControls > div input {
     padding: 0 0.5rem;
+    max-height: 2rem;
 }
 
 #additionalControls.active {
     display: table;
     z-index: 10;
+}
+
+#addtionalControls #prevFilter {
+  
 }
 
 #additionalControls > div {
@@ -211,7 +217,7 @@ button {
     top: 0;
     left: 0;
     opacity: 1;
-    margin: 0.25rem;
+    margin: 0.25rem 0.5rem;
     padding: 0.5rem 1.2rem;
     transition: opacity 0.8s;
     background-image: url(../img/icons/icn-back-arrow@2x.png);
@@ -261,6 +267,11 @@ x-card footer button {
     min-height: 2rem;
 }
 
+footer .capture-footer {
+  width: 90%;
+  margin: 0 auto;
+}
+
 #gallery p {
     text-align: center;
     color: #ccc;
@@ -287,9 +298,9 @@ x-card footer button {
     background-position: 50% 50%;
     background-size: cover;
     display: inline-block;
-    margin: 0 0.5rem 0.5rem 0.5rem;
+    margin: 1rem 0.5rem 0.5rem 0.5rem;
     border-radius: 2px;
-    border: 1px solid #979797;
+    border: 0.1rem solid rgba(0,0,0,0.5);
     box-shadow: 0px 2px 2px rgba(0,0,0,0.5);
 }
 
@@ -344,9 +355,19 @@ x-card footer button {
 
 /* btnCapture is a class and not an id because we have 2 buttons that look the same */
 /* TODO: refactor all identically looking buttons into classes */
-#btnCamera, .btnCapture {
+#btnCamera {
     background-image: url(../img/icons/icn-camera@2x.png);
     background-size: 100% 100%;
+}
+
+/*  this is a separate button */
+.btnCapture {
+    background-image: url(../img/icons/icn-take-photo@2x.png);
+    background-size: 100% 100%;
+    margin-left:auto;
+    margin-right:auto;
+    min-width: 4.5rem;
+    min-height: 3rem;
 }
 
 button.hidden {
@@ -487,16 +508,19 @@ progress::-moz-progress-bar {
     opacity: 0;
     transition: opacity 1s;
     border-color: #333;
-    border-width: 2px;
+    border-width: 1px;
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 0.7rem;
     line-height: 1rem;
     vertical-align: middle;
     text-shadow: 0 0 2px #000;
     text-transform: uppercase;
     color: #aaa;
-    height: 30px;
-    border-radius:2px;
+    height: 18px;
+    border-radius: 1rem;
+    position: absolute;
+    right:1rem;
+    margin-top: 1rem;
 }
 
 #switchVideo, #switchVideo[checked], #switchVideo .x-switch-background {
@@ -504,12 +528,13 @@ progress::-moz-progress-bar {
 }
 
 .x-switch-text {
-    padding: 0.2rem 0.95rem;
+    padding: 0rem 0.40rem;
 }
 
 .x-switch-knob {
     background: #e58f33;
-    width: 40px;
+    width: 1rem;
+    border-radius: 1rem;
 }
 
 #filePicker {

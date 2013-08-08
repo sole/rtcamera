@@ -58,7 +58,7 @@ x-switch > div > .x-switch-knob:last-child .x-switch-text:last-child:before {
 
 .x-switch-knob {
 	width: 20px;
-	height: 1rem;
+	height: 100%;
 	background: black;
 }
 

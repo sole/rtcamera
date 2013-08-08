@@ -183,7 +183,7 @@ a {
 }
 
 x-appbar {
-    background: rgba(30, 30, 30, 0.5);
+    background: rgba(30, 30, 30, 0.8);
     position: absolute;
     top: 0;
     left: 0;
@@ -204,7 +204,7 @@ x-appbar header:after {
 
 button {
     font-family: inherit;
-    font-size: 100%;
+    font-size: 80%;
     background-color: transparent;
     color: #fff;
     border: none;
@@ -217,8 +217,8 @@ button {
     top: 0;
     left: 0;
     opacity: 1;
-    margin: 0.25rem 0.5rem;
-    padding: 0.5rem 1.2rem;
+    margin: 0.45rem 0.5rem;
+    padding: 0.5rem 1.0rem;
     transition: opacity 0.8s;
     background-image: url(../img/icons/icn-back-arrow@2x.png);
     background-size: 0.88rem 1.2rem;
@@ -254,7 +254,7 @@ x-card footer {
     width: 100%;
     z-index: 100;
     padding: 0.5rem 0;
-    background: rgba(30, 30, 30, 0.5);
+    background: rgba(30, 30, 30, 0.8);
 }
 
 x-card footer > * {
@@ -300,8 +300,8 @@ footer .capture-footer {
     display: inline-block;
     margin: 1rem 0.5rem 0.5rem 0.5rem;
     border-radius: 2px;
-    border: 0.1rem solid rgba(0,0,0,0.5);
-    box-shadow: 0px 2px 2px rgba(0,0,0,0.5);
+    border: 0.1rem solid rgba(0,0,0,0.2);
+    //box-shadow: 0px 2px 2px rgba(0,0,0,0.5);
 }
 
 #galleryCoachMarks {
@@ -360,7 +360,7 @@ footer .capture-footer {
     background-size: 100% 100%;
 }
 
-/*  this is a separate button */
+/*  this is a separate button for taking the photo */
 .btnCapture {
     background-image: url(../img/icons/icn-take-photo@2x.png);
     background-size: 100% 100%;
@@ -374,7 +374,14 @@ button.hidden {
     display: none;
 }
 
-#btnPicker, #btnFilePicker {
+/* button for going to the uploader screen */
+#btnPicker {
+    background-image: url(../img/icons/icn-filepicker@2x.png);
+    background-size: 100% 100%;
+}
+
+/* button for uploading a new photo */
+#btnFilePicker {
     background-image: url(../img/icons/icn-filepicker@2x.png);
     background-size: 100% 100%;
 }
@@ -385,6 +392,12 @@ button.hidden {
     overflow-y: auto;
     width: 100%;
     text-align: center;
+}
+
+#details .picNumber div {
+  padding: 0.6rem;
+  font-size: 0.8rem;
+  opacity: 0.5;
 }
 
 #details footer button {
@@ -404,7 +417,7 @@ button.hidden {
 }
 
 #btn_share {
-    background-image: url(../img/icons/icn-shuffle@2x.png);
+    background-image: url(../img/icons/icn-share@2x.png);
 }
 
 #galleryUploading, #showImgur {
@@ -476,11 +489,12 @@ progress::-moz-progress-bar {
     padding: 1em;
     opacity: 0;
     transition: opacity 1s;
-    font-size: 1.2rem;
+    font-size: 1.0rem;
     list-style-type: none;
     list-style-position: inside;
     width: 90%;
     max-width: 600px;
+    line-height: 1.6rem;
 }
 
 #cameraCoachMarks li {
@@ -519,7 +533,7 @@ progress::-moz-progress-bar {
     height: 18px;
     border-radius: 1rem;
     position: absolute;
-    right:1rem;
+    right: 1rem;
     margin-top: 1rem;
 }
 
@@ -545,10 +559,17 @@ progress::-moz-progress-bar {
     z-index: 200;
     width: 90%;
     max-width: 30rem;
+    border-radius: 2px;
+}
+
+#filePicker .modal-header {
+  font-size: 1.25rem;
+  border-bottom:1px solid rgba(0,0,0,0.1);
+  padding-bottom: 14px;
 }
 
 #filePicker input[type=file] {
-   font-size: inherit;
+   font-size: 0.875rem;
    display: block;
    padding: 1rem 0;
    border: none;
@@ -558,10 +579,12 @@ progress::-moz-progress-bar {
 
 #filePicker button {
     background-color: #e58f33;
-    margin: 1rem 0 0.5rem 0;
+    margin: 0rem 0 0.5rem 0;
     padding: 1rem 0;
     width: 100%;
     text-align: center;
+    font-size: 0.875rem;
+    border-radius: 2px;   
 }
 
 /* Add padding to some cards so that their content is not initially obscured by the fancy and     translucent app bar */

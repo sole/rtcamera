@@ -281,7 +281,7 @@ define(
 
             btnCamera.classList.remove('hidden');
             
-            document.getElementById('galleryCoachMessage').innerHTML = 'Take a photo with the camera or pick an image file.';
+            document.getElementById('galleryCoachMessage').innerHTML = 'You can add photos by tapping <img src="img/icons/icn-camera@2x.png" class="galleryCoachMarkscamera"> or <img src="img/icons/icn-filepicker@2x.png" class="galleryCoachMarksfilepicker">';
 
         }
 
@@ -559,7 +559,7 @@ define(
             gumHelper.startVideoStreaming(function() {
 
                 // Error!
-                errorCallback("Can't access the camera :-(");
+                errorCallback("Oops! Can't access the camera :-(");
 
             }, function(stream, videoElement, width, height) {
 

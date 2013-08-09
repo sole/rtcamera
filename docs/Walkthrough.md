@@ -2,7 +2,7 @@
 
 ## Motivation
 
-Back when I joined Mozilla two months ago, I was given a simple task for getting up to speed with the team and the procedures: take one of my already existing Android apps, and build something similar, but using only Web technologies. I wasn't sure about what to do, but when I heard that WebRTC had just been implemented in Firefox Nightly, it was all obvious to me: I'd build a realtime-effects camera app, sort of similar to my [Nerdstalgia](http://5013.es/p/7/) app, but _doing it right_ this time: implementing all the image processing with WebGL, instead of manipulating individual pixels in a canvas.
+Back when I joined Mozilla two months ago, I was given a simple task for getting up to speed with the team and the procedures: take one of my already existing Android apps, and build something similar, but using only Web technologies. I wasn't sure about what to do, but when I heard that WebRTC had just been implemented in Nightly builds of Firefox for Android, it was all obvious to me: I'd build a realtime-effects camera app, sort of similar to my [Nerdstalgia](http://5013.es/p/7/) app, but _doing it right_ this time: implementing all the image processing with WebGL, instead of manipulating individual pixels in a canvas.
 
 ## First prototype
 

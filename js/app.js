@@ -281,7 +281,7 @@ define(
 
             btnCamera.classList.remove('hidden');
             
-            document.getElementById('galleryCoachMessage').innerHTML = 'You can add photos by tapping <img src="img/icons/icn-camera@2x.png" class="galleryCoachMarkscamera"> or <img src="img/icons/icn-filepicker@2x.png" class="galleryCoachMarksfilepicker">';
+            document.getElementById('galleryCoachMessage').innerHTML = 'You can add photos by tapping <img src="img/icons/icn-camera@2x.png" id="galleryCoachMarksCamera"> or <img src="img/icons/icn-filepicker@2x.png" id="galleryCoachMarksFilePicker">';
 
         }
 

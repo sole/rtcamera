@@ -100,10 +100,6 @@ a {
     z-index: 10;
 }
 
-#addtionalControls #prevFilter {
-  
-}
-
 #additionalControls > div {
     display: table-cell;
     vertical-align: middle;
@@ -267,10 +263,7 @@ x-card footer button {
     min-height: 2rem;
 }
 
-footer .capture-footer {
-  width: 90%;
-  margin: 0 auto;
-}
+
 
 #gallery p {
     text-align: center;
@@ -300,8 +293,7 @@ footer .capture-footer {
     display: inline-block;
     margin: 1rem 0.5rem 0.5rem 0.5rem;
     border-radius: 2px;
-    border: 0.1rem solid rgba(0,0,0,0.2);
-    //box-shadow: 0px 2px 2px rgba(0,0,0,0.5);
+    border: 1px solid #222;
 }
 
 #galleryCoachMarks {
@@ -313,38 +305,17 @@ footer .capture-footer {
 
 #galleryCoachMarks p {
     margin-bottom: 1rem;
-    line-height:24px;
 }
 
-#galleryCoachMarks ul {
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
-    list-style-position: inside;
+#galleryCoachMarks .imgMarker img {
+    max-height: 6rem;
+    opacity: 0.5;
 }
 
-#galleryCoachMarks li {
-    background-repeat: no-repeat;
-    background-position: 0 0px;
-    background-size: 48px 48px;
-    padding: 12px 0px 25px 64px;
-}
-
-#galleryCoachMarks .imgmarker img {
-  max-height: 6rem;
-  opacity: 0.5;
-}
-
-#galleryCoachMarks .galleryCoachMarkscamera {
-  max-height: 1rem;
-  opacity: 0.5;
-  vertical-align: middle;
-}
-
-#galleryCoachMarks .galleryCoachMarksfilepicker {
-  max-height: 1rem;
-  opacity: 0.5;
-  vertical-align: middle;
+#galleryCoachMarksCamera, #galleryCoachMarksFilePicker {
+    max-height: 1rem;
+    opacity: 0.5;
+    vertical-align: middle;
 }
 
 #btnCamera, #btnPicker, #btnFilePicker {
@@ -364,8 +335,8 @@ footer .capture-footer {
 .btnCapture {
     background-image: url(../img/icons/icn-take-photo@2x.png);
     background-size: 100% 100%;
-    margin-left:auto;
-    margin-right:auto;
+    margin-left: auto;
+    margin-right: auto;
     min-width: 4.5rem;
     min-height: 3rem;
 }
@@ -394,7 +365,9 @@ button.hidden {
     text-align: center;
 }
 
-#details .picNumber div {
+/* First div inside details is for showing the current picture number,
+ * and total number of pictures */
+#details > div > div {
   padding: 0.6rem;
   font-size: 0.8rem;
   opacity: 0.5;
@@ -494,7 +467,7 @@ progress::-moz-progress-bar {
     list-style-position: inside;
     width: 90%;
     max-width: 600px;
-    line-height: 1.6rem;
+    line-height: 1.6;
 }
 
 #cameraCoachMarks li {
@@ -518,23 +491,34 @@ progress::-moz-progress-bar {
     margin-top: 2rem;
 }
 
+#camera footer > div {
+    width: 90%;
+    margin: 0 auto;
+    vertical-align: middle;
+}
+
+#camera footer button {
+    vertical-align: middle;
+}
+
+#switchVideoContainer {
+    vertical-align: middle;
+    display: inline-block;
+}
+
 #switchVideo {
     opacity: 0;
     transition: opacity 1s;
     border-color: #333;
     border-width: 1px;
     font-family: inherit;
-    font-size: 0.7rem;
+    font-size: 1rem;
     line-height: 1rem;
     vertical-align: middle;
     text-shadow: 0 0 2px #000;
     text-transform: uppercase;
     color: #aaa;
-    height: 18px;
     border-radius: 1rem;
-    position: absolute;
-    right: 1rem;
-    margin-top: 1rem;
 }
 
 #switchVideo, #switchVideo[checked], #switchVideo .x-switch-background {
@@ -542,7 +526,7 @@ progress::-moz-progress-bar {
 }
 
 .x-switch-text {
-    padding: 0rem 0.40rem;
+    padding: 0.2rem 0.40rem;
 }
 
 .x-switch-knob {
@@ -562,10 +546,10 @@ progress::-moz-progress-bar {
     border-radius: 2px;
 }
 
-#filePicker .modal-header {
-  font-size: 1.25rem;
-  border-bottom:1px solid rgba(0,0,0,0.1);
-  padding-bottom: 14px;
+#filePicker header {
+    font-size: 1.25rem;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 1rem;
 }
 
 #filePicker input[type=file] {

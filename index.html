@@ -41,13 +41,9 @@
             <div id="galleryContainer"></div>
 
             <div id="galleryCoachMarks" class="modal non_selectable coachmarks">
-              <p class="imgmarker"><img src="img/icons/icn-gallery-main.png"></p>
-              <p><span class="large">No Photos</span></p>
-              <p id="galleryCoachMessage">Pick an image file.</p>
-              
-              <!--<p class="imgmarker"><img src="img/icons/icn-gallery-main.png"></p>
+              <p class="imgMarker"><img src="img/icons/icn-gallery-main.png"></p>
               <p class="large">No Photos</p>
-              <p class="small">You can add photos by tapping <img src="img/icons/icn-camera@2x.png" class="galleryCoachMarkscamera"> or <img src="img/icons/icn-filepicker@2x.png" class="galleryCoachMarksfilepicker"></p>-->
+              <p id="galleryCoachMessage">Pick an image file.</p>
             </div>
             
             <footer>
@@ -57,7 +53,7 @@
           </x-card>
 
           <x-card id="details">
-            <div class="picNumber"></div>
+            <div></div>
             <footer></footer>
           </x-card>
 
@@ -77,16 +73,18 @@
             </ul>
 
             <footer>
-              <div class="capture-footer">
+              <div>
                 <button class="btnCapture hidden"></button>
-                <x-switch id="switchVideo" onText="VIDEO" offText="CAMERA"></x-switch>
+                <div id="switchVideoContainer">
+                  <x-switch id="switchVideo" onText="VIDEO" offText="CAMERA"></x-switch>
+                </div>
               </div>
             </footer>
           </x-card>
 
           <x-card id="pickFile">
             <x-modal id="filePicker" overlay esc-hide hidden>
-              <div class="modal-header">Select an image</div>
+              <header>Select an image</header>
               <input type="file" accept="image/*">
               <button>Cancel</button>
             </x-modal>

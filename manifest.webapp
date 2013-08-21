@@ -6,11 +6,11 @@
   "icons": {
     "16": "/img/icons/camera-icon-16.png",
     "48": "/img/icons/camera-icon-48.png",
+    "60": "/img/icons/camera-icon-60.png",
     "128": "/img/icons/camera-icon-128.png"
   },
   "developer": {
     "name": "Soledad Penadés",
     "url": "http://5013.es"
   },
-  "installs_allowed_from": ["*"]
-}
+  "installs_allowed_from": ["https://marketplace.firefox.com"]

@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# r9
+# r10
 
 css/fonts/Roboto-Light.ttf
 css/spinner.gif
@@ -18,6 +18,7 @@ img/icons/camera-icon-144.png
 img/icons/camera-icon-16.png
 img/icons/camera-icon-48.png
 img/icons/camera-icon-512.png
+img/icons/camera-icon-60.png
 img/icons/camera-icon-72.png
 img/icons/ic_action_cancel.png
 img/icons/ic_action_done.png

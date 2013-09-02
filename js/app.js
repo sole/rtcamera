@@ -194,7 +194,7 @@ define(
             btnVideoDone.addEventListener('click', finishVideoRecording, false);
 
 
-            // Static file
+            // Static file ---
 
             filePicker = document.getElementById('filePicker');
             filePicker.addEventListener('modalhide', onFilePickerCanceled, false);
@@ -343,11 +343,16 @@ define(
             // existing imgur URL
             var uploadAction = picture.imgurURL ? showImgurPicture : uploadPicture;
 
-            var actions = [
-                { text: 'Share with imgur', action: uploadAction, id: 'share' },
-                { text: 'Download', action: downloadPicture, id: 'download' },
-                { text: 'Delete', action: deletePicture, id: 'delete' }
-            ];
+            var actions = [];
+
+            if(window.MozActivity) {
+                actions.push({ text: 'Share', action: shareAction, id: 'share' });
+            } else {
+                actions.push({ text: 'Share with imgur', action: uploadAction, id: 'share' });
+                actions.push({ text: 'Download', action: downloadPicture, id: 'download' });
+            }
+
+            actions.push({ text: 'Delete', action: deletePicture, id: 'delete' });
 
             galleryDetailsFooter.innerHTML = '';
 
@@ -493,6 +498,60 @@ define(
             }, false);
 
             galleryDetails.appendChild(modal);
+
+        }
+
+        function b64ToBlob(b64Data, contentType, sliceSize) {
+
+            contentType = contentType || '';
+            sliceSize = sliceSize || 1024;
+            
+            function charCodeFromCharacter(c) {
+                return c.charCodeAt(0);
+            }
+
+            var byteCharacters = atob(b64Data);
+            var byteArrays = [];
+            
+            for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                var slice = byteCharacters.slice(offset, offset + sliceSize);
+                var byteNumbers = Array.prototype.map.call(slice, charCodeFromCharacter);
+                var byteArray = new Uint8Array(byteNumbers);
+
+                byteArrays.push(byteArray);
+            }
+            
+            var blob = new Blob(byteArrays, {type: contentType});
+            return blob;
+
+        }
+
+        /**
+         * Share picture using a native Activity
+         */
+        function shareAction(pictureId, picture) {
+            
+            var blob = b64ToBlob(picture.imageData.replace('data:image/png;base64,', ''), 'image/png');
+            var filename = pictureId + '.png';
+
+            var activity = new MozActivity({
+                name: 'share',
+                data: {
+                    type: 'image/*',
+                    number: 1,
+                    blobs: [ blob ],
+                    filenames: [ filename ]
+                }
+            });
+
+            activity.onerror = function(e) {
+                if(activity.error.name === 'NO_PROVIDER') {
+                    alert('no provider');
+                } else {
+                    alert('Sorry-error when sharing', activity.error.name);
+                    console.log('the error', activity.error);
+                }
+            };
 
         }
 

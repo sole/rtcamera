@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# r10
+# r12
 
 css/fonts/Roboto-Light.ttf
 css/spinner.gif
@@ -49,7 +49,6 @@ js/libs/Animated_GIF/NeuQuant.js
 js/libs/Animated_GIF/omggif.js
 js/libs/Animated_GIF/quantizer.js
 js/libs/asyncStorage.js
-js/libs/FileSaver.js
 js/libs/glmatrix.min.js
 js/libs/Hammer.js
 js/libs/IndexedDBShim.js

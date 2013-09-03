@@ -925,8 +925,6 @@ define(
 
             filePicker.setAttribute('hidden');
 
-            btnStaticCapture.classList.remove('hidden');
-
             if(files.length > 0 && files[0].type.indexOf('image/') === 0) {
 
                 // get data from picked file
@@ -940,9 +938,12 @@ define(
 
 
         function loadImageFromBlob(blob) {
+
             var img = document.createElement('img');
 
             enableAdditionalControls();
+            btnStaticCapture.classList.remove('hidden');
+
 
             img.src = window.URL.createObjectURL(blob);
             img.onload = function() {

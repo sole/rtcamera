@@ -1,5 +1,5 @@
 {
-  "version": "0.1.1",
+  "version": "0.1.2",
   "name": "rtcamera",
   "description": "A fun camera app to apply effects on the fly",
   "launch_path": "/index.html",

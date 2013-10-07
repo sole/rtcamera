@@ -32,6 +32,15 @@ a {
     color: #e58f33;
 }
 
+button:active {
+    opacity: 0.8;
+}
+
+button:target {
+    opacity: 0.8;
+}
+
+
 .error {
     border-radius: 0.2rem;
     box-shadow: 0px 1px 1px rgba(0,0,0,0.5);
@@ -567,7 +576,7 @@ progress::-moz-progress-bar {
     width: 100%;
     text-align: center;
     font-size: 0.875rem;
-    border-radius: 2px;   
+    border-radius: 2px;
 }
 
 /* Add padding to some cards so that their content is not initially obscured by the fancy and     translucent app bar */

@@ -200,7 +200,7 @@ x-appbar header:after {
 
 button {
     font-family: inherit;
-    font-size: 80%;
+    font-size: 100%;
     background-color: transparent;
     color: #fff;
     border: none;
@@ -213,8 +213,8 @@ button {
     top: 0;
     left: 0;
     opacity: 1;
-    margin: 0.45rem 0.5rem;
-    padding: 0.5rem 1.0rem;
+    margin: 0.45rem 0.7rem;
+    padding: 0.5rem 1.2rem;
     transition: opacity 0.8s;
     background-image: url(../img/icons/icn-back-arrow@2x.png);
     background-size: 0.88rem 1.2rem;
@@ -259,8 +259,8 @@ x-card footer > * {
 
 x-card footer button {
     margin: 0 1rem;
-    min-width: 2rem;
-    min-height: 2rem;
+    min-width: 2.8rem;
+    min-height: 2.8rem;
 }
 
 
@@ -567,7 +567,7 @@ progress::-moz-progress-bar {
     width: 100%;
     text-align: center;
     font-size: 0.875rem;
-    border-radius: 2px;   
+    border-radius: 2px;
 }
 
 /* Add padding to some cards so that their content is not initially obscured by the fancy and     translucent app bar */

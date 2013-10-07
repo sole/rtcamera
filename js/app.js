@@ -2,7 +2,7 @@
 define(
     ['hammer', 'Renderer', 'gumHelper', 'GalleryView', 'Picture', 'Toast', 'Animated_GIF', 'MiniRouter', 'libs/IndexedDBShim', 'libs/asyncStorage'],
     function(Hammer, Renderer, gumHelper, GalleryView, Picture, Toast, Animated_GIF, MiniRouter) {
-    
+
     'use strict';
 
     var App = function(errorCallback, readyCallback) {
@@ -27,7 +27,7 @@ define(
         var btnCamera;
         var galleryDetails;
         var galleryDetailsFooter;
-                
+
         // Camera UI
         var videoControls;
         var btnVideoCancel;
@@ -134,7 +134,7 @@ define(
 
             additionalControls = document.getElementById('additionalControls');
             btnPrevFilter = document.getElementById('prevFilter');
-            
+
             btnPrevFilter.addEventListener('click', previousEffect, false);
             btnNextFilter = document.getElementById('nextFilter');
             btnNextFilter.addEventListener('click', nextEffect, false);
@@ -187,7 +187,7 @@ define(
             switchVideo = document.getElementById('switchVideo');
 
             Hammer(btnCameraCapture)
-                .on('hold', onHold)
+                .on('click', onHold)
                 .on('release', onRelease);
 
             btnVideoCancel.addEventListener('click', cancelVideoRecording, false);
@@ -201,7 +201,7 @@ define(
 
             filePicker.querySelector('input').addEventListener('change', onFilePicked, false);
             filePicker.querySelector('button').addEventListener('click', onFilePickerCanceled, false);
-            document.getElementById('btnFilePicker').addEventListener('click', openFilePicker, false); 
+            document.getElementById('btnFilePicker').addEventListener('click', openFilePicker, false);
 
             btnStaticCapture = document.querySelector('#pickFile .btnCapture');
             btnStaticCapture.addEventListener('click', onHold, false);
@@ -276,16 +276,16 @@ define(
 
         }
 
-        
+
         function showCameraButton() {
 
             btnCamera.classList.remove('hidden');
-            
+
             document.getElementById('galleryCoachMessage').innerHTML = 'You can add photos by tapping <img src="img/icons/icn-camera@2x.png" id="galleryCoachMarksCamera"> or <img src="img/icons/icn-filepicker@2x.png" id="galleryCoachMarksFilePicker">';
 
         }
 
-        
+
         function enableAdditionalControls() {
             additionalControls.classList.add('active');
         }
@@ -505,14 +505,14 @@ define(
 
             contentType = contentType || '';
             sliceSize = sliceSize || 1024;
-            
+
             function charCodeFromCharacter(c) {
                 return c.charCodeAt(0);
             }
 
             var byteCharacters = atob(b64Data);
             var byteArrays = [];
-            
+
             for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
                 var slice = byteCharacters.slice(offset, offset + sliceSize);
                 var byteNumbers = Array.prototype.map.call(slice, charCodeFromCharacter);
@@ -520,7 +520,7 @@ define(
 
                 byteArrays.push(byteArray);
             }
-            
+
             var blob = new Blob(byteArrays, {type: contentType});
             return blob;
 
@@ -530,7 +530,7 @@ define(
          * Share picture using a native Activity
          */
         function shareAction(pictureId, picture) {
-            
+
             var blob = b64ToBlob(picture.imageData.replace('data:image/png;base64,', ''), 'image/png');
             var filename = pictureId + '.png';
 
@@ -833,7 +833,7 @@ define(
         }
 
 
-        // data is a base64 encoded dataURL 
+        // data is a base64 encoded dataURL
         function saveLocalPicture(data, isAnimated) {
 
             var picture = new Picture();
@@ -848,7 +848,7 @@ define(
                 flasher.classList.add('on_animation');
 
             });
-            
+
         }
 
 
@@ -1041,7 +1041,7 @@ define(
 
 
         function gotoDetails(args) {
-            
+
             disableAdditionalControls();
             detachRendererCanvas();
             showPage('details');

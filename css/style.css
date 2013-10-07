@@ -503,6 +503,9 @@ progress::-moz-progress-bar {
 #switchVideoContainer {
     vertical-align: middle;
     display: inline-block;
+    position: absolute;
+    right: 1rem;
+    top: 1.3rem;
 }
 
 #switchVideo {
@@ -511,7 +514,7 @@ progress::-moz-progress-bar {
     border-color: #333;
     border-width: 1px;
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 0.6rem;
     line-height: 1rem;
     vertical-align: middle;
     text-shadow: 0 0 2px #000;
@@ -525,12 +528,12 @@ progress::-moz-progress-bar {
 }
 
 .x-switch-text {
-    padding: 0.2rem 0.40rem;
+    padding: 0.2rem 0.20rem;
 }
 
 .x-switch-knob {
     background: #e58f33;
-    width: 1rem;
+    width: 1.4rem;
     border-radius: 1rem;
 }
 
@@ -567,7 +570,7 @@ progress::-moz-progress-bar {
     width: 100%;
     text-align: center;
     font-size: 0.875rem;
-    border-radius: 2px;   
+    border-radius: 2px;
 }
 
 /* Add padding to some cards so that their content is not initially obscured by the fancy and     translucent app bar */

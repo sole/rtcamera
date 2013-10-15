@@ -45,7 +45,7 @@
               <p class="large">No Photos</p>
               <p id="galleryCoachMessage">Pick an image file.</p>
             </div>
-            
+
             <footer>
               <button id="btnCamera" class="hidden"></button>
               <button id="btnPicker"></button>
@@ -66,10 +66,12 @@
                 <div id="progressLabel"><span></span></div>
               </div>
             </header>
-            
+
             <ul id="cameraCoachMarks" class="modal non_selectable">
-              <li id="press">Press the screen to take a photo or record video.</li>
-              <li id="arrows">Swipe left or right to change between effects.</li>
+              <div class="innerCoachmarkCopy">
+                <li id="press">Press the photo button below to take a photo or video.</li>
+                <li id="arrows">Swipe left or right to change between filter effects.</li>
+              </div>
             </ul>
 
             <footer>
@@ -112,6 +114,6 @@
     <script src="js/libs/x-tags/switch.js"></script>
     <script src="js/libs/x-tags/modal.js"></script>
     <script src="js/libs/require.js" data-main="js/main.js"></script>
-  
+
   </body>
 </html>

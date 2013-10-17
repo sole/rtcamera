@@ -13,9 +13,12 @@
  * Visit http://webgl.org if you want to learn more about WebGL.
  */
 // do the require.js dance
-define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
+//define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
 
-    var Renderer = function(errorCallback, readyCallback) {
+var ImageEffect = require('./ImageEffect');
+var glMatrix = require('./libs/glmatrix.min');
+
+function Renderer(errorCallback, readyCallback) {
         'use strict';
 
         var canvas = document.createElement('canvas');
@@ -411,6 +414,5 @@ define(['ImageEffect', 'libs/glmatrix.min'], function(ImageEffect, glMatrix) {
 
     };
 
-
-    return Renderer;
-});
+module.exports = Renderer;
+//});

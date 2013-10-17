@@ -1,7 +1,7 @@
 /* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- /
 /* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
 
-'use strict';
+//'use strict';
 
 /**
  * This file defines an asynchronous version of the localStorage API, backed by
@@ -44,7 +44,8 @@
  * Unit tests are in apps/gallery/test/unit/asyncStorage_test.js
  */
 
-this.asyncStorage = (function() {
+//this.asyncStorage = (function() {
+var asyncStorage = (function() {
 
   var DBNAME = 'asyncStorage';
   var DBVERSION = 1;
@@ -185,3 +186,7 @@ this.asyncStorage = (function() {
   };
 }());
 
+
+window.asyncStorage = asyncStorage;
+
+module.exports = asyncStorage;

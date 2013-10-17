@@ -1,6 +1,8 @@
 // This class will be used to store and retrieve taken pictures and some
 // associated metadata, using IndexedDB
-define(['libs/asyncStorage'], function(notUsed) {
+//define(['libs/asyncStorage'], function(notUsed) {
+
+var asyncStorage = require('./libs/asyncStorage');
 
     var PICTURES_LIST_KEY = 'pictures_list';
     var PICTURE_PREFIX = 'picture_';
@@ -262,6 +264,6 @@ define(['libs/asyncStorage'], function(notUsed) {
 
     };
 
-    return Pic;
+module.exports = Pic;
 
-});
+//});

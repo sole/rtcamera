@@ -1,4 +1,4 @@
-define([], function() {
+//define([], function() {
 
     function GalleryView() {
 
@@ -118,5 +118,7 @@ define([], function() {
 
     }
 
-    return GalleryView;
-});
+//    return GalleryView;
+//} );
+//
+module.exports = GalleryView;

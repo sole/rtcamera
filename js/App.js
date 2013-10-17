@@ -1,11 +1,20 @@
 // do the require.js dance
-define(
-    ['hammer', 'Renderer', 'gumHelper', 'GalleryView', 'Picture', 'Toast', 'Animated_GIF', 'MiniRouter', 'libs/IndexedDBShim', 'libs/asyncStorage'],
-    function(Hammer, Renderer, gumHelper, GalleryView, Picture, Toast, Animated_GIF, MiniRouter) {
+//define(
+//    ['hammer', 'Renderer', 'gumHelper', 'GalleryView', 'Picture', 'Toast', 'Animated_GIF', 'MiniRouter', 'libs/IndexedDBShim', 'libs/asyncStorage'],
+//    function(Hammer, Renderer, gumHelper, GalleryView, Picture, Toast, Animated_GIF, MiniRouter) {
 
-    'use strict';
+//    'use strict';
 
-    var App = function(errorCallback, readyCallback) {
+var Hammer = require('./libs/Hammer');
+var Renderer = require('./Renderer');
+var gumHelper = require('./gumHelper');
+var GalleryView = require('./GalleryView');
+var Picture = require('./Picture');
+var Toast = require('./Toast');
+var Animated_GIF = require('./libs/Animated_GIF/Animated_GIF');
+var MiniRouter = require('./MiniRouter');
+
+    function App(errorCallback, readyCallback) {
 
         var that = this;
         var pages = {};
@@ -1107,6 +1116,8 @@ define(
 
     };
 
-    return App;
+    //return App;
 
-});
+// });
+//
+module.exports = App;

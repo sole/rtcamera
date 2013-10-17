@@ -2,9 +2,9 @@
  * This class is used to display short-lived messages on the screen,
  * Android-toasts style
  */
-define([], function() {
+//define([], function() {
 
-    var Toast = function(text) {
+function Toast(text) {
 
         var div;
 
@@ -36,8 +36,7 @@ define([], function() {
 
         };
 
-    };
+    }
 
-    return Toast;
+module.exports = Toast;
 
-});

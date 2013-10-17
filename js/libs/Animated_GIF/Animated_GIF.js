@@ -272,8 +272,10 @@ function Animated_GIF(options) {
 
 }
 
-if(define) {
+/*if(define) {
     define([], function() {
         return Animated_GIF;
     });
-}
+}*/
+
+module.exports = Animated_GIF;

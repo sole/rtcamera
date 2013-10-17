@@ -1,4 +1,4 @@
-ImageEffect = function(params) {
+function ImageEffect(params) {
 	
 	params = params || {};
 
@@ -84,8 +84,10 @@ ImageEffect = function(params) {
 		gl.enableVertexAttribArray(this.attributes.uv.id);
 		gl.enableVertexAttribArray(this.attributes.position.id);
 	};
-};
+}
 
-define([], function() {
+/*define([], function() {
     return ImageEffect;
-});
+});*/
+
+module.exports = ImageEffect;

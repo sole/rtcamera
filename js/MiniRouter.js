@@ -70,10 +70,12 @@ function MiniRouter() {
 }
 
 
-if(define) {
+/*if(define) {
 
     define([], function() {
         return MiniRouter;
     });
 
-}
+}*/
+
+module.exports = MiniRouter;
